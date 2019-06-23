@@ -19,25 +19,31 @@ __The mission of the Bioinformatics Core facility is to facilitate outstanding o
 
 ## Workshop Goals
 
-* End to End understanding of RNAseq differential
+* End to End understanding of scRNAseq Analysis
   * Discussions/lectures
   * Technologies
   * Experimental design
   * Cost estimation
   * Workflow
-  * mRNA gene expression analysis
+  * scRNA gene expression analysis
 * To work through a complete experiment, starting from raw data to completion, including making a few figures.
 * Goal is 30-40% lecture/discussion 60-70% hands-on
 
 ## Internet
 
-You will need to access the UCSF wireless via your laptop to participate in the hands-on exercises. Please review https://it.ucsf.edu/services/wireless-service for access instructions.
+### UCD Guest Wireless
 
-Many academic (and some non-academic) institutions are part of Eduroam. (See "List of Institutions" under
-"Members" at https://www.eduroam.us/ to find out if your institution is a member.) Please make sure you
-can log into Eduroam with your device at your home institution, which will make things easier once you come to UCSF.
+You will need to access the UCSF wireless via your laptop to participate in the hands-on exercises. Please review http://itcatalog.ucdavis.edu/service/wireless-guest-access	for access instructions.
 
-If your institution is not a member of Eduroam, you can still access the open wireless through "UCSFguest".
+### UCSF Guest
+
+You will need to access the UCSF wireless via your laptop to participate in the hands-on exercises. Please review https://it.ucsf.edu/services/ucsfguest-open-wireless for access instructions.
+
+### Eduroam
+
+Many academic (and some non-academic) institutions are a part of Eduroam. (See "List of Institutions" under "Members" at https://www.eduroam.us/ to find out if your institution is a member.) Please make sure you can log into Eduroam with your device at your home institution, which will make things easier once you come to UCD/UCSF.
+
+If your institution is not a member of Eduroam, you can still access the open wireless through ("UCD Guest")[#UCD Guest Wireless] ("UCSFguest")[#UCSF Guest Wireless].
 
 ## Workshop Materials
 
@@ -48,11 +54,12 @@ http://bioinformatics.ucdavis.edu/training/events/
 * Github main page:
 
 	https://github.com/ucdavis-bioinformatics-training
-* This RNAseq Workshop
 
-  https://ucdavis-bioinformatics-training.github.io/2018-June-RNA-Seq-Workshop/  
+* This scRNAseq Workshop
 
-  https://github.com/ucdavis-bioinformatics-training/2018-June-RNA-Seq-Workshop
+  https://ucdavis-bioinformatics-training.github.io/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/
+
+  https://github.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF
 
 ## Computing Cluster
 
@@ -64,17 +71,16 @@ https://computing.genomecenter.ucdavis.edu
 
 Request an account -> sponsor "Bioinformatics Core Workshop"
 
-If you already have an account on our systems, then please tell us your username.
+If you already have an account on our system, then please do **NOT** create a new account and instead tell us your username and we will add you to the workshop.
 
-Cluster usage will be under the slurm reservation  ‘workshop’
+This course does not utilize the cluster.
 
-Reservation will last 1 full week after the workshop and allow you to practice or run analyze your own data.
+## Industry Sponsors Lunch and Learns and Wednesday (UCD) Social
 
-**workshop       ACTIVE  2019-03-09T10:46:16  2019-03-22T00:00:00  12-12:13:44  drove-[4,13,18]**
-
-## Industry Sponsor Lunch and Learns
-
-* [Lexogen](https://www.lexogen.com/)
-* [Qiagen](https://www.qiagen.com/us/)
-* [Illumina](https://www.illumina.com/)
+### Lunch and Learns
 * [10X * Genomics](https://www.10xgenomics.com/)
+* [Qiagen](https://www.qiagen.com/us/)
+* [Celcee](https://www.celsee.com/)
+
+### Wednesday Social @ UCD only
+* [Illumina](https://www.illumina.com/)

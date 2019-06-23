@@ -26,9 +26,7 @@
 * Get to know to your data, develop and test expectations
 * Result, you’ll spend much less time (and less money) extracting biological significance and results during analysis.
 
-## Workshop Week 2 reservation
-
-**workshop       ACTIVE  2019-03-09T10:46:16  2019-03-22T00:00:00  12-12:13:44  drove-[4,13,18]**
+## Next Steps
 
 My recommendation is to follow all of the instructions again, from the beginning on your own and send emails to
 
@@ -36,14 +34,12 @@ bioinformatics.training@ucdavis.edu
 
 And we will be responsive to answering questions
 
-
 ##  Upcoming Workshops
 
 Now in our 12th year of training researchers, the UC Davis Bioinformatics Core invites you to attend one or more of our 2019 workshops. The following workshops are suitable for beginners, and are also of interest to those with some data analysis experience.
 
 For more information on these and other events, and to register, go to https://registration.genomecenter.ucdavis.edu/
 
-**March 11-14: RNA-Seq Workshop @ UCSF**  
 **August 19-23: RNA-Seq Workshop @ UC Davis**
 
 This popular workshop contains a rich collection of lectures and hands-on sessions, covering both theory and tools associated with command-line RNA-seq data analysis. Topics include experimental design, cost estimation, data generation, and analysis of RNA-Seq data generated on the Illumina sequencing platform, as well as post differential expression analyses, such as gene set enrichment analysis, Gene Ontology/Pathway analysis, and generation of relevant figures and tables.
@@ -52,19 +48,11 @@ Participants will explore software and protocols, create and modify workflows, a
 
 For more information and to register, go to https://registration.genomecenter.ucdavis.edu/.
 
-
-**June 24-27: Single-Cell RNA-Seq Workshop @ UC Davis**  
-**July 1-3: Single-Cell RNA-Seq Workshop @ UCSF**
-
-This workshop will cover experimental design, data generation, and analysis of single-cell RNA sequencing data (primarily generated using the 10x platform) on the command line and within the R statistical programming language. Participants will explore software and protocols, create and modify workflows, and diagnose/treat problematic data utilizing high performance computing services. The primary packages used for analysis will be 10x software (for sequence reads to counts) and the R packages (e.g, Seurat) for downstream analysis.
-
-For more information and to register, go to https://registration.genomecenter.ucdavis.edu/.
-
 **September 3-6: Microbial Community Analysis @ UC Davis**
 
 This workshop covers amplicon-based microbial analysis and methodology using high throughput sequencing technologies.  Topics will include:
 
-* Differences between communty analysis with amplicons versus shotgun metagenomics and metatranscriptomics
+* Differences between community analysis with amplicons versus shotgun metagenomics and metatranscriptomics
 * Experimental design
 * Sequence data quality assurance and expectations
 * Processing of amplicon reads (using the python application dbcAmplicons)
