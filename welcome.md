@@ -2,11 +2,11 @@
 
 __The mission of the Bioinformatics Core facility is to facilitate outstanding omics-scale research through these activities:__
 
- <img src="base_figures/welcome_figure1.png" alt="welcome_figure1" width="600px"/>
+ <img src="base_figures/welcome_figure1.png" alt="welcome_figure1" width="6800px"/>
 
 ## Staff
 
- <img src="base_figures/welcome_figure2.png" alt="welcome_figure2" width="600px"/>
+ <img src="base_figures/welcome_figure2.png" alt="welcome_figure2" width="800px"/>
 
 ## Contacts
 

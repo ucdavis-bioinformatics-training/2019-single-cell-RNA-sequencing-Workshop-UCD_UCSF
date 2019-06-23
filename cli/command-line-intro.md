@@ -1,5 +1,7 @@
 # Introduction to Command Line Interface
 
+For this workshop (scRNAseq) there isn't a need to go through the whole tutorial, but rather just a select set of topics.
+
 ## What is the command line
 
 * CLI is a tool into which one can type commands to perform tasks.

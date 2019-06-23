@@ -14,16 +14,12 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Running jobs on the Cluster and using modules](cli/cluster.md)
 
 
-[Intro to Sequencing](pdfs/erics_talk.pdf) (talk)  
 [Experimental Design and Cost Estimation](pdfs/ExperimentalDesign.pdf) (talk)
 
 
 ## Data Reduction
-* [Files and Filetypes for RNA-Seq](data_reduction/filetypes.md)
 * [Project Setup](data_reduction/project_setup.md)
 * [Preprocessing Data](data_reduction/preproc_htstream.md)
-* [Aligners](data_reduction/alignment.md)
-* [Generating Summarized Counts](data_reduction/counts.md)
 
 ## Intro to R and Rstudio
 * [Getting Started](intro2R/RStudio.md)
