@@ -34,7 +34,7 @@ __The mission of the Bioinformatics Core facility is to facilitate outstanding o
 ### Eduroam
 Many academic (and some non-academic) institutions are a part of Eduroam. (See "List of Institutions" under "Members" at https://www.eduroam.us/ to find out if your institution is a member.) Please make sure you can log into Eduroam with your device at your home institution, which will make things easier once you come to UCD/UCSF.
 
-If your institution is not a member of Eduroam, you can still access the open wireless through ("UCD Guest")[#ucd-guest-wireless] or ("UCSF guest")[#ucsf-guest-wireless].
+If your institution is not a member of Eduroam, you can still access the open wireless through ["UCD Guest"](#ucd-guest-wireless) or ["UCSF guest"](#ucsf-guest-wireless).
 
 ### UCD Guest Wireless
 
