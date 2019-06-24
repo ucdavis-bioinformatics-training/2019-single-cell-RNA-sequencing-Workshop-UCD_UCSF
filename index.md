@@ -19,7 +19,8 @@ title: June/July 2019 scRNA-Seq Workshop Home
 
 ## Data Reduction
 * [Project Setup](data_reduction/project_setup.md)
-* [Preprocessing Data](data_reduction/preproc_htstream.md)
+* [Preprocessing Data](data_reduction/Expression_Matrix.md)
+
 
 ## Intro to R and Rstudio
 * [Getting Started](intro2R/RStudio.md)
@@ -27,6 +28,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 ### EXTRA
 * [Prepare Data in R](intro2R/data_in_R_prepare.md)
 * [Data in R](intro2R/orig_data_in_R.md)
+
 
 ## scRNAseq Analysis
 * [Prepare scRNAseq Analysis](differential_expression/de_analysis_prepare.md)
