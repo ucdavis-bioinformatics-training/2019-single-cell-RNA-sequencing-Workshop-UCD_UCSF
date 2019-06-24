@@ -6,6 +6,8 @@
 
 3. [samtools](https://github.com/samtools/samtools)
 
-4. [R Project, Berkeley CRAN](https://cran.cnr.berkeley.edu/)
+4. [RseQC](http://rseqc.sourceforge.net/)
 
-5. [RStudio](https://www.rstudio.com/products/rstudio/download/#download)  
+5. [R Project, Berkeley CRAN](https://cran.cnr.berkeley.edu/)
+
+6. [RStudio](https://www.rstudio.com/products/rstudio/download/#download)  

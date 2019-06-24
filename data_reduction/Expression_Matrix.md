@@ -232,18 +232,21 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 
 1. Log into tadpole with the username/password given
 
-2. Link the following folder into your home directory
+2. Load and review cellranger's sub-applications and help docs
 
-	/share/biocore/workshops/2017_2018-single-cell-RNA-sequencing-Workshop-UCD_UCB_UCSF
+3. Review the [cellranger-counts.sh](../scripts/cellranger-counts.sh) script used to map fastq files.
 
-3. Review cellranger's sub-applications and help docs
+4. Copy contents of the script to your scrnaseq_example folder and do a test run. Kill the job after a short time.
 
-5. Review the [2-counts.slurm](2-counts.slurm) script used to map fastq files.
+5. Link completed result folders to your scrnaseq_example folders
 
-	1. In the folder 2017_10X_mouse_comparative, which output folders/files were generated from this script?
+    ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V2 .
+		ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V3 .
+
+	1. In the folder 2017_10X_mouse_comparative_V2, which output folders/files were generated from this script?
 	2. Review the metrics_summary.csv file
 		1. What where the total number of reads in this sample?
-		2. Reads Mapped Confidently to Transcriptome?
+		2. Reads Mapped Confidently to transcriptome?
 		3. Sequencing Saturation?
 		4. Mean Reads per Cell?
 		5. Median UMI Counts per Cell?
@@ -259,17 +262,8 @@ samtools flagstat possorted_genome_bam.bam
 samtools stats possorted_genome_bam.bam
 ```
 
-6. Run a testrun of cellranger in your home directory
-
-```bash
-cellranger testrun
-```
-	* view the output
-
-7. Copy the file and extract. Review [transfer](logging-in.md) if needed.
-
-	/share/biocore/workshops/2017_2018-single-cell-RNA-sequencing-Workshop-UCD_UCB_UCSF/expression_tables.tar.gz
+	6. Now do the same for the V3 folder
 
 ---
 
-[Commands](commands.txt) used in class
+[Commands]() used in class
