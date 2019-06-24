@@ -1,0 +1,123 @@
+---
+title: "Single Cell RNAseq Part 3"
+author: "Bioinformatics Core"
+output:
+    html_document:
+      keep_md: TRUE
+---
+## Load libraries
+```{r, warning=FALSE,error=FALSE,message=FALSE}
+library(Seurat)
+```
+
+## Load the Seurat object
+```{r}
+load(file="pre_sample_corrected.RData")
+experiment.aggregate
+```
+
+## Exploring Batch effects 3 ways, none, Seurat [vars.to.regress] and COMBAT
+
+First lets view the data without any corrections
+
+## PCA in prep for tSNE
+
+ScaleData - Scales and centers genes in the dataset. 
+```{r}
+# ?ScaleData
+
+experiment.aggregate.noc <- ScaleData(object = experiment.aggregate)
+```
+
+Run PCA
+```{r, fig.align="center", fig.caption="Uncorrected PCA plot"}
+experiment.aggregate.noc <- RunPCA(object = experiment.aggregate.noc)
+DimPlot(object = experiment.aggregate.noc, reduction = "pca")
+```
+
+PCA Elbow plot to determine how many principal components to use in downstream analyses.  Components after the "elbow" in the plot generally explain little additional variability in the data.
+
+```{r}
+ElbowPlot(experiment.aggregate.noc)
+```
+
+We use 10 components in downstream analyses. Using more components more closely approximates the full data set but increases run time.
+
+TSNE Plot
+```{r, fig.align="center", fig.caption="Uncorrected TSNE plot"}
+pcs.use <- 10
+experiment.aggregate.noc <- RunTSNE(object = experiment.aggregate.noc, dims = 1:pcs.use)
+DimPlot(object = experiment.aggregate.noc)
+```
+
+## Correct for sample to sample differences (seurat)
+
+Use vars.to.regress to correct for the sample to sample differences and percent mitochondria
+```{r, fig.align="center", fig.caption="Corrected PCA Plot"}
+experiment.aggregate.regress <- ScaleData(object = experiment.aggregate, 
+                                          vars.to.regress = c("orig.ident", "percent.mito"), model.use = "linear")
+
+experiment.aggregate.regress <- RunPCA(object =experiment.aggregate.regress)
+
+DimPlot(object = experiment.aggregate.regress, reduction.use = "pca")
+```
+
+Corrected TSNE Plot
+```{r, fig.align="center", fig.caption="Corrected TSNE Plot"}
+experiment.aggregate.regress <- RunTSNE(object = experiment.aggregate.regress, dims.use = 1:pcs.use)
+DimPlot(object = experiment.aggregate.regress, reduction = "tsne")
+```
+
+## COMBAT corrected, https://academic.oup.com/biostatistics/article-lookup/doi/10.1093/biostatistics/kxj037
+
+## NOT RUN
+```{r eval=FALSE}
+# Install sva package if not installed
+# For R 3.4 and earlier use
+# source("https://bioconductor.org/biocLite.R")
+# biocLite("sva")
+#
+# For R 3.5 and later use
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("sva")
+library(sva)
+?ComBat
+m = as.data.frame(as.matrix(GetAssayData(experiment.aggregate)))
+com = ComBat(dat=m, batch=as.numeric(as.factor(experiment.aggregate$orig.ident)), prior.plots=FALSE, par.prior=TRUE)
+```
+
+
+```{r eval=FALSE}
+experiment.aggregate.combat <- experiment.aggregate
+SetAssayData(experiment.aggregate.combat, new.data = as.matrix(com))
+experiment.aggregate.combat = ScaleData(experiment.aggregate.combat)
+```
+
+Principal components on ComBat adjusted data
+```{r, eval=FALSE, fig.cap = "PCA Plot, Combat adjusted"}
+experiment.aggregate.combat <- RunPCA(object = experiment.aggregate.combat)
+
+DimPlot(object = experiment.aggregate.combat, reduction = "pca")
+```
+
+TSNE plot on ComBat adjusted data
+```{r, eval=FALSE, fig.cap = "TSNE plot, ComBat adjusted "}
+experiment.aggregate.combat <- RunTSNE(object = experiment.aggregate.combat, dims.use = 1:pcs.use)
+DimPlot(object = experiment.aggregate.combat, reduction = "tsne")
+```
+
+#### Question(s)
+
+1. Try a couple of PCA cutoffs (low and high) and compare the TSNE plots from the different methods.  Do they look meaningfully different?
+
+## Get the next Rmd file
+```{r, eval=FALSE}
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART4.Rmd", "scRNA_Workshop-PART4.Rmd")
+```
+
+## Session Information
+```{r}
+sessionInfo()
+```

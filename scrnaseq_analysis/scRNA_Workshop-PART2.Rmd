@@ -1,0 +1,123 @@
+---
+title: "Single Cell RNAseq Part 2"
+author: "Bioinformatics Core"
+output:
+    html_document:
+      keep_md: TRUE
+---
+## Load libraries
+```{r, warning=FALSE,error=FALSE,message=FALSE}
+library(Seurat)
+library(knitr)
+library(kableExtra)
+```
+
+## Load the Seurat object from the previous part
+```{r}
+load(file="original_seurat_object.RData")
+experiment.aggregate
+```
+
+## Some basic QA/QC of the metadata, print tables of the 5% quantiles.
+
+Show 5% quantiles for number of genes per cell per sample
+```{r}
+do.call("cbind", tapply(experiment.aggregate$nFeature_RNA, Idents(experiment.aggregate),quantile,probs=seq(0,1,0.05)))
+```
+
+Show 5% quantiles for number of UMI per cell per sample
+```{r}
+do.call("cbind", tapply(experiment.aggregate$nCount_RNA, Idents(experiment.aggregate),quantile,probs=seq(0,1,0.05)))
+```
+
+Show 5% quantiles for number of mitochondrial percentage per cell per sample
+```{r}
+round(do.call("cbind", tapply(experiment.aggregate$percent.mito, Idents(experiment.aggregate),quantile,probs=seq(0,1,0.05))), digits = 3)
+```
+
+Table of cell cycle
+
+```{r}
+table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of Cells in each Cell Cycle Stage", col.names = c("Stage", "Count"), align = "c") %>% kable_styling()
+```
+
+Plot the number of cells each gene is represented by
+```{r}
+plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 2)) , xlab="gene rank", ylab="number of cells", main="Cells per genes ( >= 2 )")
+```
+
+Violin plot of 1) number of genes, 2) number of UMI and 3) percent mitochondrial genes
+```{r, fig.height=20}
+VlnPlot(
+  experiment.aggregate,
+  features = c("nFeature_RNA", "nCount_RNA","percent.mito"),
+  ncol = 1, pt.size = 0.3)
+```
+
+Gene Plot, scatter plot of gene expression across cells, (colored by sample)
+```{r}
+FeatureScatter(
+  experiment.aggregate, "nCount_RNA", "nFeature_RNA",
+  pt.size = 0.5)
+```
+
+### Cell filtering
+We use the information above to filter out cells. Here we choose those that have percent mitochondrial genes max of 10% and unique UMI counts under 20,000 or greater than 500.
+
+```{r}
+experiment.aggregate <- subset(experiment.aggregate, percent.mito <= 0.1)
+
+experiment.aggregate <- subset(experiment.aggregate, nCount_RNA >= 500 & nCount_RNA <= 20000)
+
+experiment.aggregate
+```
+
+```{r}
+table(experiment.aggregate$orig.ident)
+```
+
+## Next we want to normalize the data
+
+After filtering out cells from the dataset, the next step is to normalize the data. By default, we employ a global-scaling normalization method LogNormalize that normalizes the gene expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and then log-transforms the data.
+
+```{r}
+?NormalizeData
+experiment.aggregate <- NormalizeData(
+  object = experiment.aggregate,
+  normalization.method = "LogNormalize",
+  scale.factor = 10000)
+```
+
+## Identify variable genes
+
+The function FindVariableFeatures identifies the most highly variable genes (default 2000 genes) by fitting a line to the relationship of log(variance) and log(mean) using loess smoothing, uses this information to standardize the data, then calculates the variance of the standardized data.  This helps avoid selecting genes that only appear variable due to their expression level.
+
+```{r}
+?FindVariableFeatures
+experiment.aggregate <- FindVariableFeatures(
+  object = experiment.aggregate,
+  selection.method = "vst")
+
+head(VariableFeatures(experiment.aggregate), 20)
+```
+
+#### Question(s)
+
+1. Play some with the filtering parameters, see how results change?
+2. How do the results change if you use selection.method = "dispersion" or selection.method = "mean.var.plot"
+
+
+## Finally, lets save the filtered and normalized data
+```{r}
+save(experiment.aggregate, file="pre_sample_corrected.RData")
+```
+
+## Get the next Rmd file
+```{r, eval=FALSE}
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART3.Rmd", "scRNA_Workshop-PART3.Rmd")
+```
+
+## Session Information
+```{r}
+sessionInfo()
+```

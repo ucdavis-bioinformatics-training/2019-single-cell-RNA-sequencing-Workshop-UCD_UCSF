@@ -1,0 +1,121 @@
+---
+title: "Single Cell RNAseq Part 4"
+author: "Bioinformatics Core"
+output:
+    html_document:
+      keep_md: TRUE
+---
+
+## Load libraries
+```{r, warning=FALSE,error=FALSE,message=FALSE}
+library(Seurat)
+library(ggplot2)
+```
+
+## Load the Seurat object
+```{r}
+load(file="pre_sample_corrected.RData")
+experiment.aggregate
+```
+
+
+## Now doing so for 'real'
+
+ScaleData - Scales and centers genes in the dataset. If variables are provided in vars.to.regress, they are individually regressed against each gene, and the resulting residuals are then scaled and centered unless otherwise specified. Here we regress out for sample (orig.ident) and percentage mitochondria (percent.mito).
+
+```{r}
+?ScaleData
+experiment.aggregate <- ScaleData(
+  object = experiment.aggregate,
+  vars.to.regress = c("orig.ident", "percent.mito"))
+
+# I THINK THIS WAS THE CODE THAT WAS INTENDED TO FORCE FindAllMarkers TO USE @data INSTEAD OF @scale.data.  (It now uses @data by default)
+# norm.data <- experiment.aggregate@data
+# experiment.aggregate@data <- experiment.aggregate@scale.data
+# experiment.aggregate@data <- norm.data
+# experiment.aggregate <- ScaleData(
+#   object = experiment.aggregate,
+#   genes.use=experiment.aggregate@var.genes)
+```
+
+## Dimensionality reduction with PCA 
+
+Next we perform PCA (principal components analysis) on the scaled data.  
+
+```{r}
+?RunPCA
+experiment.aggregate <- RunPCA(
+  object = experiment.aggregate)
+```
+
+Seurat then provides a number of ways to visualize the PCA results
+
+Visualize PCA loadings
+```{r}
+p <- VizDimLoadings(experiment.aggregate, dims = 1, ncol = 1)
+p + theme_minimal(base_size = 8)
+p <- VizDimLoadings(experiment.aggregate, dims = 2, ncol = 1)
+p + theme_minimal(base_size = 8)
+```
+
+Principal components plot
+```{r}
+DimPlot(
+  object = experiment.aggregate, reduction = "pca")
+```
+
+Draws a heatmap focusing on a principal component. Both cells and genes are sorted by their principal component scores. Allows for nice visualization of sources of heterogeneity in the dataset.
+
+```{r}
+PCHeatmap(
+    object = experiment.aggregate, 
+    dims = 1:6
+)
+PCHeatmap(
+    object = experiment.aggregate, 
+    dims = 7:12
+)
+```
+
+### Selecting which PCs to use
+To overcome the extensive technical noise in any single gene, Seurat clusters cells based on their PCA scores, with each PC essentially representing a metagene that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. 
+
+ElbowPlot plots the standard deviations (or approximate singular values if running PCAFast) of the principle components for easy identification of an elbow in the graph. This elbow often corresponds well with the significant PCs and is much faster to run.  This is the traditional approach to selecting principal components.
+
+```{r}
+ElbowPlot(
+  experiment.aggregate)
+```
+
+The JackStraw function randomly permutes a subset of data, and calculates projected PCA scores for these 'random' genes, then compares the PCA scores for the 'random' genes with the observed PCA scores to determine statistical signifance. End result is a p-value for each gene's association with each principal component. We identify significant PCs as those who have a strong enrichment of low p-value genes.
+
+__WARNING: TAKES A LONG TIME TO RUN__
+```{r}
+experiment.aggregate <- JackStraw(
+    object = experiment.aggregate, dims = 40)
+```
+
+```{r}
+experiment.aggregate <- ScoreJackStraw(experiment.aggregate, dims = 1:40)
+JackStrawPlot(object = experiment.aggregate, dims = 1:40)
+```
+
+Looking at the results of the JackStraw plot, we determine to use the first 35 PCs
+```{r}
+use.pcs = 1:35
+```
+
+## Finally, lets save the filtered and normalized data
+```{r}
+save(experiment.aggregate, file="pca_sample_corrected.RData")
+```
+
+## Get the next Rmd file
+```{r, eval=FALSE}
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART5.Rmd", "scRNA_Workshop-PART5.Rmd")
+```
+
+## Session Information
+```{r}
+sessionInfo()
+```
