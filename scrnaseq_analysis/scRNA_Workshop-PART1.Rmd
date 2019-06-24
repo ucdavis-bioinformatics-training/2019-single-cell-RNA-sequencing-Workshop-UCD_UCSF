@@ -1,3 +1,10 @@
+---
+title: "Single Cell RNAseq Part 1"
+author: "Bioinformatics Core"
+output:
+    html_document:
+      keep_md: TRUE
+---
 [Seurat](http://satijalab.org/seurat/) is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data. Seurat aims to enable users to identify and interpret sources of heterogeneity from single cell transcriptomic measurements, and to integrate diverse types of single cell data. Further, the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), on their website.
 
 Dowload and expand the expression_tables.tar.gz file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000.
@@ -21,7 +28,7 @@ Seurat provides a function `Read10X` to read in 10X data folder. First we read i
 ```{r}
 ## Dataset for analysis
 # dataset_loc <- "expression_tables"
-##### 
+#####
 ### CHANGE THIS FOR ACTUAL DOCUMENTATION
 dataset_loc <- "/share/biocore/workshops/2017_2018-single-cell-RNA-sequencing-Workshop-UCD_UCB_UCSF/expression_tables"
 ###
@@ -37,7 +44,7 @@ experiment.data <- do.call("cbind", d10x.data)
 
 experiment.aggregate <- CreateSeuratObject(
   experiment.data,
-  project = "scRNA workshop", 
+  project = "scRNA workshop",
   min.cells = 10,
   min.features = 200,
   names.field = 2,
