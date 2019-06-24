@@ -19,7 +19,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 
 ## Data Reduction
 * [Project Setup](data_reduction/project_setup.md)
-* [Preprocessing Data](data_reduction/Expression_Matrix.md)
+* [Cell Ranger Counts](data_reduction/Expression_Matrix.md)
 
 
 ## Intro to R and Rstudio
