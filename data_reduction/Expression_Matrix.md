@@ -165,9 +165,9 @@ Below is an example of a challenging cell-calling scenario where 300 high RNA co
 
 With 3 files needed to completely describe each gene x cell matrix
 
-- matrix.mtx
-- genes.tsv
-- barcode.tsv
+- matrix.mtx.gz
+- features.tsv.gz
+- barcode.tsv.gz
 
 ### Bam output
 
@@ -251,10 +251,10 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 
 4. Copy contents of the script to your scrnaseq_example folder and do a test run. Kill the job after a short time.
 
-5. Link completed result folders to your scrnaseq_example folders
+5. Link completed result folders to your scrnaseq_example folders.  
 
-    ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V2 .
-		ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V3 .
+		ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V2 .  
+		ln -s /share/biocore/workshops/2019_scRNAseq/2017_10X_mouse_comparative_V3 .  
 
 	1. In the folder 2017_10X_mouse_comparative_V2, which output folders/files were generated from this script?
 	2. Review the metrics_summary.csv file
