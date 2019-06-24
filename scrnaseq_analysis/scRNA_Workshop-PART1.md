@@ -9,9 +9,9 @@ output:
 
 Dowload and expand the expression_tables.tar.gz file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000.
 
-* UCD_VitE_Def
-* UCD_Supp_VitE
 * UCD_Adj_VitE
+* UCD_Supp_VitE
+* UCD_VitE_Def
 
 We start with loading needed libraries for R, at this time all we need is the package [Seurat](http://satijalab.org/seurat/).
 
@@ -44,6 +44,7 @@ experiment.aggregate <- CreateSeuratObject(
   names.field = 2,
   names.delim = "\\-")
 ```
+
 ### Calc mitocondrial content
 Calculate percent mitochondrial genes per cell. In mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
 
@@ -54,6 +55,31 @@ percent.mito <- Matrix::colSums(GetAssayData(experiment.aggregate, slot = "count
 # Add to @meta.data
 experiment.aggregate$percent.mito <- percent.mito
 ```
+
+
+## Calculate cell cycle, add to meta data
+
+```r
+mm.pairs <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", package="scran"))
+# Convert to matrix for use in cycle
+mat <- as.matrix(GetAssayData(experiment.aggregate))
+
+# Convert rownames to ENSEMBL IDs, Using biomaRt
+#ensembl<- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+#anno_data <- getBM( values=rownames(mat), attributes=c("mgi_symbol","ensembl_gene_id") , filters= "mgi_symbol"  ,mart=ensembl)
+# Downloaded from Biomart
+anno <- read.delim("mart_export_June2019.txt")
+
+ord <- match(rownames(mat), anno$MGI.symbol) # use anno$mgi_symbol if via biomaRt
+rownames(mat) <- anno$Gene.stable.ID[ord] # use anno$ensembl_gene_id if via biomaRt
+drop <- which(is.na(rownames(mat)))
+mat <- mat[-drop,]
+cycles <- scran::cyclone(mat, pairs=mm.pairs)
+tmp <- data.frame(cell.cycle = cycles$phases)
+rownames(tmp) <- colnames(mat)
+experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
+```
+
 ### Lets fix the sample names, reassign names with more meaningful factors
 
 The original samples names (the names above in ids) can be found in the metadata slot, column orig.ident. Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
@@ -111,13 +137,13 @@ head(experiment.aggregate@meta.data)
 ## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE UCD_Adj_VitE       2795         1474
 ## ACATCGGGTCCATGCTC-UCD_Adj_VitE UCD_Adj_VitE       5372         2271
 ## ATACGGTAGTGACCAAG-UCD_Adj_VitE UCD_Adj_VitE        598          367
-##                                percent.mito      batchid
-## ACTCTAATGTGGGTATG-UCD_Adj_VitE   0.01969612 UCD_Adj_VitE
-## AGGCTGGTCAATCACAC-UCD_Adj_VitE   0.06216378 UCD_Adj_VitE
-## ATGACTAGCACATGACT-UCD_Adj_VitE   0.06838768 UCD_Adj_VitE
-## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE   0.04221825 UCD_Adj_VitE
-## ACATCGGGTCCATGCTC-UCD_Adj_VitE   0.07557707 UCD_Adj_VitE
-## ATACGGTAGTGACCAAG-UCD_Adj_VitE   0.11371237 UCD_Adj_VitE
+##                                percent.mito cell.cycle      batchid
+## ACTCTAATGTGGGTATG-UCD_Adj_VitE   0.01969612         G1 UCD_Adj_VitE
+## AGGCTGGTCAATCACAC-UCD_Adj_VitE   0.06216378         G1 UCD_Adj_VitE
+## ATGACTAGCACATGACT-UCD_Adj_VitE   0.06838768         G1 UCD_Adj_VitE
+## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE   0.04221825         G1 UCD_Adj_VitE
+## ACATCGGGTCCATGCTC-UCD_Adj_VitE   0.07557707         G1 UCD_Adj_VitE
+## ATACGGTAGTGACCAAG-UCD_Adj_VitE   0.11371237         G1 UCD_Adj_VitE
 ```
 
 #### Question(s)
@@ -129,7 +155,7 @@ head(experiment.aggregate@meta.data)
 ## Finally, save the original object, write out a tab-delimited table that could be read into excel, and view the object.
 
 ```r
-# write.table(as.matrix(experiment.data),"raw.datatable.txt",sep="\t",col.names=T,row.names=T)
+write.table(as.matrix(experiment.data),"raw.datatable.txt",sep="\t",col.names=T,row.names=T)
 experiment.aggregate
 ```
 
@@ -142,6 +168,12 @@ experiment.aggregate
 ```r
 ## Original dataset in Seurat class, with no filtering
 save(experiment.aggregate,file="original_seurat_object.RData")
+```
+
+## Get the next Rmd file
+
+```r
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART2.Rmd", "scRNA_Workshop-PART2.Rmd")
 ```
 
 ## Session Information
@@ -169,34 +201,65 @@ sessionInfo()
 ## [1] Seurat_3.0.2
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] httr_1.4.0          tidyr_0.8.3         viridisLite_0.3.0  
-##  [4] jsonlite_1.6        splines_3.6.0       lsei_1.2-0         
-##  [7] R.utils_2.9.0       gtools_3.8.1        Rdpack_0.11-0      
-## [10] assertthat_0.2.1    yaml_2.2.0          ggrepel_0.8.1      
-## [13] globals_0.12.4      pillar_1.4.1        lattice_0.20-38    
-## [16] reticulate_1.12     glue_1.3.1          digest_0.6.19      
-## [19] RColorBrewer_1.1-2  SDMTools_1.1-221.1  colorspace_1.4-1   
-## [22] cowplot_0.9.4       htmltools_0.3.6     Matrix_1.2-17      
-## [25] R.oo_1.22.0         plyr_1.8.4          pkgconfig_2.0.2    
-## [28] bibtex_0.4.2        tsne_0.1-3          listenv_0.7.0      
-## [31] purrr_0.3.2         scales_1.0.0        RANN_2.6.1         
-## [34] gdata_2.18.0        Rtsne_0.15          tibble_2.1.3       
-## [37] ggplot2_3.2.0       ROCR_1.0-7          pbapply_1.4-0      
-## [40] lazyeval_0.2.2      survival_2.44-1.1   magrittr_1.5       
-## [43] crayon_1.3.4        evaluate_0.14       R.methodsS3_1.7.1  
-## [46] future_1.13.0       nlme_3.1-140        MASS_7.3-51.4      
-## [49] gplots_3.0.1.1      ica_1.0-2           tools_3.6.0        
-## [52] fitdistrplus_1.0-14 data.table_1.12.2   gbRd_0.4-11        
-## [55] stringr_1.4.0       plotly_4.9.0        munsell_0.5.0      
-## [58] cluster_2.1.0       irlba_2.3.3         compiler_3.6.0     
-## [61] rsvd_1.0.1          caTools_1.17.1.2    rlang_0.3.4        
-## [64] grid_3.6.0          ggridges_0.5.1      htmlwidgets_1.3    
-## [67] igraph_1.2.4.1      bitops_1.0-6        rmarkdown_1.13     
-## [70] npsurv_0.4-0        gtable_0.3.0        codetools_0.2-16   
-## [73] reshape2_1.4.3      R6_2.4.0            gridExtra_2.3      
-## [76] zoo_1.8-6           knitr_1.23          dplyr_0.8.1        
-## [79] future.apply_1.3.0  KernSmooth_2.23-15  metap_1.1          
-## [82] ape_5.3             stringi_1.4.3       parallel_3.6.0     
-## [85] Rcpp_1.0.1          sctransform_0.2.0   png_0.1-7          
-## [88] tidyselect_0.2.5    xfun_0.7            lmtest_0.9-37
+##   [1] ggbeeswarm_0.6.0            Rtsne_0.15                 
+##   [3] colorspace_1.4-1            ggridges_0.5.1             
+##   [5] dynamicTreeCut_1.63-1       XVector_0.24.0             
+##   [7] GenomicRanges_1.36.0        BiocNeighbors_1.2.0        
+##   [9] listenv_0.7.0               npsurv_0.4-0               
+##  [11] ggrepel_0.8.1               codetools_0.2-16           
+##  [13] splines_3.6.0               R.methodsS3_1.7.1          
+##  [15] lsei_1.2-0                  knitr_1.23                 
+##  [17] scater_1.12.2               jsonlite_1.6               
+##  [19] ica_1.0-2                   cluster_2.1.0              
+##  [21] png_0.1-7                   R.oo_1.22.0                
+##  [23] sctransform_0.2.0           compiler_3.6.0             
+##  [25] httr_1.4.0                  dqrng_0.2.1                
+##  [27] assertthat_0.2.1            Matrix_1.2-17              
+##  [29] lazyeval_0.2.2              limma_3.40.2               
+##  [31] BiocSingular_1.0.0          htmltools_0.3.6            
+##  [33] tools_3.6.0                 rsvd_1.0.1                 
+##  [35] igraph_1.2.4.1              gtable_0.3.0               
+##  [37] glue_1.3.1                  GenomeInfoDbData_1.2.1     
+##  [39] RANN_2.6.1                  reshape2_1.4.3             
+##  [41] dplyr_0.8.1                 Rcpp_1.0.1                 
+##  [43] Biobase_2.44.0              gdata_2.18.0               
+##  [45] ape_5.3                     nlme_3.1-140               
+##  [47] DelayedMatrixStats_1.6.0    gbRd_0.4-11                
+##  [49] lmtest_0.9-37               xfun_0.7                   
+##  [51] stringr_1.4.0               globals_0.12.4             
+##  [53] irlba_2.3.3                 gtools_3.8.1               
+##  [55] statmod_1.4.32              future_1.13.0              
+##  [57] edgeR_3.26.5                MASS_7.3-51.4              
+##  [59] zlibbioc_1.30.0             zoo_1.8-6                  
+##  [61] scales_1.0.0                parallel_3.6.0             
+##  [63] SummarizedExperiment_1.14.0 RColorBrewer_1.1-2         
+##  [65] SingleCellExperiment_1.6.0  yaml_2.2.0                 
+##  [67] reticulate_1.12             pbapply_1.4-0              
+##  [69] gridExtra_2.3               ggplot2_3.2.0              
+##  [71] stringi_1.4.3               S4Vectors_0.22.0           
+##  [73] scran_1.12.1                caTools_1.17.1.2           
+##  [75] BiocGenerics_0.30.0         BiocParallel_1.18.0        
+##  [77] bibtex_0.4.2                GenomeInfoDb_1.20.0        
+##  [79] Rdpack_0.11-0               SDMTools_1.1-221.1         
+##  [81] rlang_0.3.4                 pkgconfig_2.0.2            
+##  [83] bitops_1.0-6                matrixStats_0.54.0         
+##  [85] evaluate_0.14               lattice_0.20-38            
+##  [87] ROCR_1.0-7                  purrr_0.3.2                
+##  [89] htmlwidgets_1.3             cowplot_0.9.4              
+##  [91] tidyselect_0.2.5            plyr_1.8.4                 
+##  [93] magrittr_1.5                R6_2.4.0                   
+##  [95] IRanges_2.18.1              gplots_3.0.1.1             
+##  [97] DelayedArray_0.10.0         pillar_1.4.1               
+##  [99] fitdistrplus_1.0-14         survival_2.44-1.1          
+## [101] RCurl_1.95-4.12             tibble_2.1.3               
+## [103] future.apply_1.3.0          tsne_0.1-3                 
+## [105] crayon_1.3.4                KernSmooth_2.23-15         
+## [107] plotly_4.9.0                rmarkdown_1.13             
+## [109] viridis_0.5.1               locfit_1.5-9.1             
+## [111] grid_3.6.0                  data.table_1.12.2          
+## [113] metap_1.1                   digest_0.6.19              
+## [115] tidyr_0.8.3                 R.utils_2.9.0              
+## [117] stats4_3.6.0                munsell_0.5.0              
+## [119] beeswarm_0.2.3              viridisLite_0.3.0          
+## [121] vipor_0.4.5
 ```

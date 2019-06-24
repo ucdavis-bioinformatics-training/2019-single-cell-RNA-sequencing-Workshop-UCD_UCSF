@@ -9,9 +9,9 @@ output:
 
 Dowload and expand the expression_tables.tar.gz file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000.
 
-* UCD_VitE_Def
-* UCD_Supp_VitE
 * UCD_Adj_VitE
+* UCD_Supp_VitE
+* UCD_VitE_Def
 
 We start with loading needed libraries for R, at this time all we need is the package [Seurat](http://satijalab.org/seurat/).
 ```{r, warning=FALSE,error=FALSE,message=FALSE}
@@ -42,6 +42,7 @@ experiment.aggregate <- CreateSeuratObject(
   names.field = 2,
   names.delim = "\\-")
 ```
+
 ### Calc mitocondrial content
 Calculate percent mitochondrial genes per cell. In mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
 ```{r}
@@ -51,6 +52,30 @@ percent.mito <- Matrix::colSums(GetAssayData(experiment.aggregate, slot = "count
 # Add to @meta.data
 experiment.aggregate$percent.mito <- percent.mito
 ```
+
+
+## Calculate cell cycle, add to meta data
+```{r}
+mm.pairs <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", package="scran"))
+# Convert to matrix for use in cycle
+mat <- as.matrix(GetAssayData(experiment.aggregate))
+
+# Convert rownames to ENSEMBL IDs, Using biomaRt
+#ensembl<- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+#anno_data <- getBM( values=rownames(mat), attributes=c("mgi_symbol","ensembl_gene_id") , filters= "mgi_symbol"  ,mart=ensembl)
+# Downloaded from Biomart
+anno <- read.delim("mart_export_June2019.txt")
+
+ord <- match(rownames(mat), anno$MGI.symbol) # use anno$mgi_symbol if via biomaRt
+rownames(mat) <- anno$Gene.stable.ID[ord] # use anno$ensembl_gene_id if via biomaRt
+drop <- which(is.na(rownames(mat)))
+mat <- mat[-drop,]
+cycles <- scran::cyclone(mat, pairs=mm.pairs)
+tmp <- data.frame(cell.cycle = cycles$phases)
+rownames(tmp) <- colnames(mat)
+experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
+```
+
 ### Lets fix the sample names, reassign names with more meaningful factors
 
 The original samples names (the names above in ids) can be found in the metadata slot, column orig.ident. Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
@@ -85,11 +110,16 @@ head(experiment.aggregate@meta.data)
 
 ## Finally, save the original object, write out a tab-delimited table that could be read into excel, and view the object.
 ```{r}
-# write.table(as.matrix(experiment.data),"raw.datatable.txt",sep="\t",col.names=T,row.names=T)
+write.table(as.matrix(experiment.data),"raw.datatable.txt",sep="\t",col.names=T,row.names=T)
 experiment.aggregate
 
 ## Original dataset in Seurat class, with no filtering
 save(experiment.aggregate,file="original_seurat_object.RData")
+```
+
+## Get the next Rmd file
+```{r eval=FALSE}
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART2.Rmd", "scRNA_Workshop-PART2.Rmd")
 ```
 
 ## Session Information

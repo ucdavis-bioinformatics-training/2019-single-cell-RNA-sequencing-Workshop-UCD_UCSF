@@ -25,6 +25,13 @@ if (!any(rownames(installed.packages()) == "sva")){
 }
 library(sva)
 
+if (!any(rownames(installed.packages()) == "scran")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("scran")
+}
+library(scran)
+
 if (!any(rownames(installed.packages()) == "ggplot2")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager")
@@ -39,6 +46,20 @@ if (!any(rownames(installed.packages()) == "dplyr")){
 }
 library(dplyr)
 
+if (!any(rownames(installed.packages()) == "knitr")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("knitr")
+}
+library(knitr)
+
+if (!any(rownames(installed.packages()) == "kableExtra")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("kableExtra")
+}
+library(kableExtra)
+
 if (!any(rownames(installed.packages()) == "limma")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager")
@@ -46,12 +67,26 @@ if (!any(rownames(installed.packages()) == "limma")){
 }
 library(limma)
 
+if (!any(rownames(installed.packages()) == "biomaRt")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("biomaRt")
+}
+library(biomaRt)
+
 if (!any(rownames(installed.packages()) == "topGO")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager")
   BiocManager::install("topGO")
 }
 library(topGO)
+
+if (!any(rownames(installed.packages()) == "org.Mm.eg.db")){
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  BiocManager::install("org.Mm.eg.db")
+}
+library(org.Mm.eg.db)
 
 if (!any(rownames(installed.packages()) == "WGCNA")){
   if (!requireNamespace("BiocManager", quietly = TRUE))
