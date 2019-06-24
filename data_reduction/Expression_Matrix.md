@@ -198,8 +198,11 @@ The following TAG fields are present if a read maps to the genome __and__ overla
 
 #### An example read
 
-J00113:284:HG27NBBXX:8:2202:16741:8594 1040	1	4491502	255	101M	*	0	0	ACTGGACAGTGATTGTGGGGAGCAAGTCCCTCAAGGCATTTAAAACAAAAATCTCGTGTAGCCCCTCAACTGTTCAAGTGGCAGACAAAATAAATTACCAT	-A-AAJJJFAFA-F<<<JFFJFA-AF)JFFAJJFJAFFA7<JFFJA<JJFA<F<JFJJFAJAJFJFFJFJJJJJJJFJJJJJJFJFJFAFJFJJJJF<<<A	NH:i:1	HI:i:1	AS:i:99	nM:i:0	TX:Z:ENSMUST00000027035,+2455,101M;ENSMUST00000195555,+1624,101M;ENSMUST00000192650,+3029,101M	GX:Z:ENSMUSG00000025902	GN:Z:Sox17	RE:A:E	CR:Z:CAAGATCTCGCAAACT	CY:Z:AAFFFJJJJJJJJJJJ	CB:Z:CAAGATCTCGCAAACT-1	UR:Z:GCCGAGACCT	UY:Z:JJJJJJJJJJ	UB:Z:GCCGAGACCT	BC:Z:CAGCATCA	QT:Z:AAFFFFJJ	TR:Z:TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTAAAACTACCAGGAGGTATTTCATAGCGAGAAAACACACGCCC	TQ:Z:JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ-----------7-7<))--------77---))7<AA7A--))))	RG:Z:654:MissingLibrary:1:HG27NBBXX:8
+Cell Ranger Version 2
+		J00113:284:HG27NBBXX:8:2202:16741:8594 1040	1	4491502	255	101M	*	0	0	ACTGGACAGTGATTGTGGGGAGCAAGTCCCTCAAGGCATTTAAAACAAAAATCTCGTGTAGCCCCTCAACTGTTCAAGTGGCAGACAAAATAAATTACCAT	-A-AAJJJFAFA-F<<<JFFJFA-AF)JFFAJJFJAFFA7<JFFJA<JJFA<F<JFJJFAJAJFJFFJFJJJJJJJFJJJJJJFJFJFAFJFJJJJF<<<A	NH:i:1	HI:i:1	AS:i:99	nM:i:0	TX:Z:ENSMUST00000027035,+2455,101M;ENSMUST00000195555,+1624,101M;ENSMUST00000192650,+3029,101M	GX:Z:ENSMUSG00000025902	GN:Z:Sox17	RE:A:E	CR:Z:CAAGATCTCGCAAACT	CY:Z:AAFFFJJJJJJJJJJJ	CB:Z:CAAGATCTCGCAAACT-1	UR:Z:GCCGAGACCT	UY:Z:JJJJJJJJJJ	UB:Z:GCCGAGACCT	BC:Z:CAGCATCA	QT:Z:AAFFFFJJ	TR:Z:TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTAAAACTACCAGGAGGTATTTCATAGCGAGAAAACACACGCCC	TQ:Z:JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ-----------7-7<))--------77---))7<AA7A--))))	RG:Z:654:MissingLibrary:1:HG27NBBXX:8
 
+Cell Ranger Version 3
+		J00113:284:HG27NBBXX:8:2202:16741:8594	1040	1	4491502	255	101M	*	0	0	ACTGGACAGTGATTGTGGGGAGCAAGTCCCTCAAGGCATTTAAAACAAAAATCTCGTGTAGCCCCTCAACTGTTCAAGTGGCAGACAAAATAAATTACCAT	-A-AAJJJFAFA-F<<<JFFJFA-AF)JFFAJJFJAFFA7<JFFJA<JJFA<F<JFJJFAJAJFJFFJFJJJJJJJFJJJJJJFJFJFAFJFJJJJF<<<A	NH:i:1	HI:i:1	AS:i:99	nM:i:0	TX:Z:ENSMUST00000027035,+2455,101M;ENSMUST00000192650,+3029,101M;ENSMUST00000195555,+1624,101M	GX:Z:ENSMUSG00000025902	GN:Z:Sox17	fx:Z:ENSMUSG00000025902	RE:A:E	li:i:0	BC:Z:CAGCATCA	QT:Z:AAFFFFJJ	CR:Z:CAAGATCTCGCAAACT	CY:Z:AAFFFJJJJJJJJJJJ	CB:Z:CAAGATCTCGCAAACT-1	UR:Z:GCCGAGACCT	UY:Z:JJJJJJJJJJ	UB:Z:GCCGAGACCT	xf:i:17RG:Z:654:0:1:HG27NBBXX:8
 
 ### 10X genomics sample report
 
@@ -227,20 +230,13 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 
 ## Exercises
 
-1. Log into ganesh with the username/password given
+1. Log into tadpole with the username/password given
 
 2. Link the following folder into your home directory
 
 	/share/biocore/workshops/2017_2018-single-cell-RNA-sequencing-Workshop-UCD_UCB_UCSF
 
 3. Review cellranger's sub-applications and help docs
-
-4. Review the [1-mkfastq.slurm](1-mkfastq.slurm) script used to generate fastq files from Illumina run output file.
-
-	1. In the folder 2017_10X_mouse_comparative, which output folders/files were generated from this script?
-	2. Copy over the Reports folder and review it
-	3. Using zless review the first set of reads from sample 654
- 	4. If time remain, mock run the script.
 
 5. Review the [2-counts.slurm](2-counts.slurm) script used to map fastq files.
 
@@ -254,7 +250,8 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 	3. head the files under raw_gene_bc_matrices and filtered_gene_bc_matrices
 	4. If time remain, mock run the script.
 	5. Using samtools and rseqc evaluate the mapping file.
-```
+
+```bash
 module load rseqc
 module load samtools
 bam_stat.py -i possorted_genome_bam.bam
@@ -263,7 +260,8 @@ samtools stats possorted_genome_bam.bam
 ```
 
 6. Run a testrun of cellranger in your home directory
-```
+
+```bash
 cellranger testrun
 ```
 	* view the output
