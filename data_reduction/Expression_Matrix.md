@@ -257,9 +257,9 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 ```bash
 module load rseqc
 module load samtools
-bam_stat.py -i possorted_genome_bam.bam
-samtools flagstat possorted_genome_bam.bam
-samtools stats possorted_genome_bam.bam
+bam_stat.py -i possorted_genome_bam.bam > sample_rna_bam.rseqc
+samtools flagstat possorted_genome_bam.bam > sample_bam.flagstat
+samtools stats possorted_genome_bam.bam > sample_bam.stats
 ```
 
 	6. Now do the same for the V3 folder

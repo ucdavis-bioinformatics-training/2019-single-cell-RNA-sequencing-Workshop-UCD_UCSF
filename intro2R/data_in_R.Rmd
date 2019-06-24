@@ -465,7 +465,7 @@ grid.arrange(k, l, nrow = 1)
 The gridExtra package is great for plotting multiple object in one plot.
 
 ```{r grid_image, fig.width=1,fig.height=1}
-include_graphics("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/master/intro2R/Data_in_R_figures/grid_plot.png")
+include_graphics("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/intro2R/Data_in_R_figures/grid_plot.png")
 ```
 
 ```{r cluster}

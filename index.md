@@ -31,9 +31,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 
 
 ## scRNAseq Analysis
-* [Prepare scRNAseq Analysis](differential_expression/de_analysis_prepare.md)
-* [Get Gene Annotation](differential_expression/annotation.md)
-* [Differential Expression Analysis](differential_expression/orig_DE_Analysis.md)
+* [Prepare scRNAseq Analysis](scrnaseq_analysis/scrna_analysis_prepare.md)
 
 
 [Closing thoughts](closing.md)

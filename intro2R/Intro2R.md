@@ -933,7 +933,7 @@ R base function read.table() is a general funciton that can be used to read a fi
 data <- read.table(file="Intro2R_files/raw_counts.txt", sep="\t", header=T, stringsAsFactors=F)
 
 # There is a more convenient way to read files from the internet.
-data <- read.table(file="https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/master/intro2R/Intro2R_files/raw_counts.txt", sep="\t", header=T, stringsAsFactors=F)
+data <- read.table(file="https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/intro2R/Intro2R_files/raw_counts.txt", sep="\t", header=T, stringsAsFactors=F)
 ```
  
 Take a look at the beginning part of the data frame.
@@ -976,7 +976,7 @@ read.delim2(): for reading "tab separated value" files (".txt"). By default, com
 data2 <- read.csv(file="Intro2R_files/raw_counts.csv", stringsAsFactors=F)
 
 # Otherwise, you may read the file by providing the url to the read.csv() function.
-data2 <- read.csv(file="https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/master/intro2R/Intro2R_files/raw_counts.csv", stringsAsFactors=F)
+data2 <- read.csv(file="https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/intro2R/Intro2R_files/raw_counts.csv", stringsAsFactors=F)
 
 # To look at the file:
 head(data2)
@@ -1030,7 +1030,7 @@ getwd()
 ```
 
 ```
-## [1] "/Users/mattsettles/projects/src/github.com-ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/intro2R"
+## [1] "/Users/mattsettles/projects/src/github.com-ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/intro2R"
 ```
 
 ```r

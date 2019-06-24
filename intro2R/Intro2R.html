@@ -750,7 +750,7 @@ length(my_list)</code></pre>
 data &lt;- read.table(file=&quot;Intro2R_files/raw_counts.txt&quot;, sep=&quot;\t&quot;, header=T, stringsAsFactors=F)
 
 # There is a more convenient way to read files from the internet.
-data &lt;- read.table(file=&quot;https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/master/intro2R/Intro2R_files/raw_counts.txt&quot;, sep=&quot;\t&quot;, header=T, stringsAsFactors=F)</code></pre>
+data &lt;- read.table(file=&quot;https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/intro2R/Intro2R_files/raw_counts.txt&quot;, sep=&quot;\t&quot;, header=T, stringsAsFactors=F)</code></pre>
 <p>Take a look at the beginning part of the data frame.</p>
 <pre class="r"><code>head(data)</code></pre>
 <pre><code>##            C61  C62  C63  C64  C91  C92  C93 C94 I561 I562 I563 I564 I591
@@ -776,7 +776,7 @@ data &lt;- read.table(file=&quot;https://raw.githubusercontent.com/ucdavis-bioin
 data2 &lt;- read.csv(file=&quot;Intro2R_files/raw_counts.csv&quot;, stringsAsFactors=F)
 
 # Otherwise, you may read the file by providing the url to the read.csv() function.
-data2 &lt;- read.csv(file=&quot;https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/master/intro2R/Intro2R_files/raw_counts.csv&quot;, stringsAsFactors=F)
+data2 &lt;- read.csv(file=&quot;https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/intro2R/Intro2R_files/raw_counts.csv&quot;, stringsAsFactors=F)
 
 # To look at the file:
 head(data2)</code></pre>
@@ -808,7 +808,7 @@ write.table(data2[1:20,], file=&quot;output.txt&quot;, sep=&quot;\t&quot;, quote
 <h2>Invoking a function by its name, followed by the parenthesis and zero or more arguments.</h2>
 <pre class="r"><code># to find out the current working directory, save it as a variable
 getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/mattsettles/projects/src/github.com-ucdavis-bioinformatics-training/2019_March_UCSF_mRNAseq_Workshop/intro2R&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/mattsettles/projects/src/github.com-ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/intro2R&quot;</code></pre>
 <pre class="r"><code>mycurrentdir &lt;- getwd()
 
 # to set a different working directory, use setwd
