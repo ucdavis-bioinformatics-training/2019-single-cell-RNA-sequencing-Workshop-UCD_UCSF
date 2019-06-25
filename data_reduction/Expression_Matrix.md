@@ -242,6 +242,14 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 | Total Genes Detected	| The number of genes with at least one UMI count in any cell. |
 | Median UMI Counts per Cell	| The median number of total UMI counts across all cell-associated barcodes. |
 
+### 10X genomics html reports
+
+Cell ranger does produce a pretty html report with the same statistics and some "analysis".
+
+[Cell Ranger V2 web summary](wed_summaryV2.html)
+
+[Cell Ranger V3 web summary](wed_summaryV3.html)
+
 ## Exercises
 
 1. Log into tadpole with the username/password given
@@ -276,7 +284,7 @@ samtools flagstat possorted_genome_bam.bam > sample_bam.flagstat
 samtools stats possorted_genome_bam.bam > sample_bam.stats
 ```
 
-	6. Now do the same for the V3 folder  
+  6. Now do the same for the V3 folder
 
 ---
 
