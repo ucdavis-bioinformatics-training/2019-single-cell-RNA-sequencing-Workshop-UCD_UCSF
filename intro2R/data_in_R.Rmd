@@ -22,14 +22,14 @@ This document assumes you have the file 'bwa.samtools.stats' in your current wor
 ```{r check_data}
 getwd()
 dir()
-file.exists("Data_in_R_files/bwa.samtools.stats")
+file.exists("bwa_mem_Stats.log")
 ```
 
 If it returned TRUE, great! If not return to the Prepare data_in_R doc and follow the directions to get the file.
 
 So lets read in the file and view the first few lines and get the length
 ```{r load_data}
-data <- readLines("Data_in_R_files/bwa.samtools.stats")
+data <- readLines("bwa_mem_Stats.log")
 head(data)
 tail(data)
 length(data)
@@ -50,7 +50,7 @@ There are many sections to the samtools stats output, each section begins with a
 * Coverage distribution -> COV
 * Coverage distribution -> GCD
 
-With the exception of Summary Numbers, most sections are tables of data, the file explains the format of the 
+With the exception of Summary Numbers, most sections are tables of data, the file explains the format of the
 data tables, open the log file (in Rstudio is fine) and search for the term 'grep'.
 
 Lets take a quick look at the comments in the file
@@ -209,7 +209,7 @@ GC Coverage data
   * separate by the tab character "\t"
   * and remove the first column '[,-1]', the GCD
 
-### Some Summary stats with 
+### Some Summary stats with
 
 ```{r dplyr_stats}
 summarize(is,low=min(`insert size`), max=max(`insert size`), average=mean(`all pairs`), noutward=sum(outward), ninward=sum(inward))
@@ -265,10 +265,10 @@ A basic ggplot2 plot consists of the following components:
 The basic idea: independently specify plot building blocks and combine them (using '+') to create just about any kind of graphical display you want.
 
 ggplot (data = <DATA> ) +
-  <GEOM_FUNCTION> (mapping = aes( <MAPPINGS> ), stat = <STAT> , position = <POSITION> ) + 
-  <COORDINATE_FUNCTION> + 
-  <FACET_FUNCTION> + 
-  <SCALE_FUNCTION> + 
+  <GEOM_FUNCTION> (mapping = aes( <MAPPINGS> ), stat = <STAT> , position = <POSITION> ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION> +
+  <SCALE_FUNCTION> +
   <THEME_FUNCTION>
 
 ### Our first plot, plotting the insert size of mapped fragments
@@ -284,7 +284,7 @@ g + geom_line( aes(x=get("insert size"), y=get("all pairs")))
 Ok, now lets add some labels to the plot
 
 ```{r plot_is_labels}
-g + geom_line( aes(x=get("insert size"), y=get("all pairs"))) + 
+g + geom_line( aes(x=get("insert size"), y=get("all pairs"))) +
   labs( x = "insert size", y = "all pairs", title ="Mapped insert sizes", subtitle = "All Pairs", caption = "all pairs insert size")
 ```
 
@@ -293,7 +293,7 @@ Ok, what about plotting multiple data objects on the same plot (multiple lines),
 ```{r plot_is_mlines}
 g <- ggplot(data = is, aes(x=get("insert size")))
 g + geom_line(aes(y=get("inward")),color="blue") +  
-    geom_line(aes(y=get("outward")),color="orange") + 
+    geom_line(aes(y=get("outward")),color="orange") +
     labs( x = "insert size", y = "all pairs", title ="Mapped insert sizes", subtitle = "All Pairs", caption = "all pairs insert size")
 ```
 
@@ -301,7 +301,7 @@ lets try adjusting the x/y limits to 0,600 and 0,20000 respectively.
 
 ```{r plot_is_limits}
 g + geom_line(aes(y=get("inward")),color="blue") +
-  geom_line(aes(y=get("outward")),color="orange") + 
+  geom_line(aes(y=get("outward")),color="orange") +
   coord_cartesian(xlim=c(0,500), ylim=c(0,600000))
 ```
 
@@ -317,7 +317,7 @@ g <- g + geom_line(aes(y=get("all pairs")), color="black") +
     geom_line(aes(y=get("inward")),color="blue") +  
     geom_line(aes(y=get("outward")),color="orange") +
     geom_line(aes(y=get("other")), color="green")
-g <- g + 
+g <- g +
     labs( x = "insert size", y = "all pairs", title ="Mapped insert sizes", subtitle = "All Pairs", caption = "all pairs insert size")
 g <- g + coord_cartesian(xlim=c(0,500), ylim=c(0,600000))
 g <- g + theme_light()
@@ -375,7 +375,7 @@ fqm <- melt(fq,id=c("Pair","Cycle"))
 Take a look at the new object
 
 ```{r plot_heatmap}
-j <- ggplot(fqm, aes(Cycle, variable)) 
+j <- ggplot(fqm, aes(Cycle, variable))
 j + geom_tile(aes(fill = as.numeric(value)))
 ```
 
@@ -386,7 +386,7 @@ Now lets try changing the gradient colors and modify the legend, add labels. The
 ```
 
 ```{r heatmap}
-j = j + geom_tile(aes(fill = as.numeric(value))) + 
+j = j + geom_tile(aes(fill = as.numeric(value))) +
   scale_fill_gradient(low = "red", high = "green") +
   ylab("Cycle") +
   xlab("Quality") +
@@ -423,7 +423,7 @@ k
 
 Tweek the grid elments using theme
 ```{r grid_tweek}
-k <- k + theme(panel.grid.minor = element_blank(), 
+k <- k + theme(panel.grid.minor = element_blank(),
   panel.grid.major = element_line(color = "gray50", size = 0.5),
   panel.grid.major.x = element_blank())
 k
@@ -445,7 +445,7 @@ l
 ```
 Tweek the grid
 ```{r}
-l <- l + theme(panel.grid.minor = element_blank(), 
+l <- l + theme(panel.grid.minor = element_blank(),
   panel.grid.major = element_line(color = "gray50", size = 0.5),
   panel.grid.major.x = element_blank())
 l
@@ -470,7 +470,7 @@ include_graphics("https://raw.githubusercontent.com/ucdavis-bioinformatics-train
 
 ```{r cluster}
 full <- grid.arrange(
-  g, h, i, i2, 
+  g, h, i, i2,
   widths = c(2, 1, 1),
   layout_matrix = rbind(c(1, 2, NA),
                         c(3, 3, 4))
@@ -494,7 +494,7 @@ Saving plots to png  ** do on the console **
 ggsave("multi_plot.png",full,device="png",width=6,height=4, units="in", dpi=300)
 ```
 
-View the help documentation for ggsave, what other 
+View the help documentation for ggsave, what other
 
 With any remaining time (or homework), use the ggplot cheat sheet to further expand and modify the plots.
 
