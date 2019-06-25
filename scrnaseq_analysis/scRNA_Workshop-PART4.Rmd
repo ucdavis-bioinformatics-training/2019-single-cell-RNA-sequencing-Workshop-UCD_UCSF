@@ -27,7 +27,7 @@ ScaleData - Scales and centers genes in the dataset. If variables are provided i
 ?ScaleData
 experiment.aggregate <- ScaleData(
   object = experiment.aggregate,
-  vars.to.regress = c("orig.ident", "percent.mito"))
+  vars.to.regress = c("cell.cycle", "percent.mito"))
 ```
 
 ## Dimensionality reduction with PCA 

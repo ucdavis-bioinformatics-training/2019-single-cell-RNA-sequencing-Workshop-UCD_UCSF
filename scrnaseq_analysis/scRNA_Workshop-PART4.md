@@ -36,11 +36,11 @@ ScaleData - Scales and centers genes in the dataset. If variables are provided i
 ?ScaleData
 experiment.aggregate <- ScaleData(
   object = experiment.aggregate,
-  vars.to.regress = c("orig.ident", "percent.mito"))
+  vars.to.regress = c("cell.cycle", "percent.mito"))
 ```
 
 ```
-## Regressing out orig.ident, percent.mito
+## Regressing out cell.cycle, percent.mito
 ```
 
 ```
@@ -60,40 +60,40 @@ experiment.aggregate <- RunPCA(
 
 ```
 ## PC_ 1 
-## Positive:  Txn1, Sncg, Fxyd2, Lxn, Fez1, Rgs10, Synpr, S100a10, Atp6v0b, Ppp1r1a 
-## 	   Dctn3, Ubb, Tmem45b, Rabac1, Sh3bgrl3, Tppp3, Atpif1, Bex2, Cisd1, Atp6v1f 
-## 	   Bex3, Hagh, Tmsb4x, Psmb6, Ndufa11, Pfn1, Aldoa, Ndufs5, Anxa2, Ppia 
-## Negative:  Ptn, S100b, Cbfb, Mt1, Sv2b, Timp3, Nfia, Lynx1, Map2, Ngfr 
-## 	   Adcyap1, Fxyd7, Gap43, Nefh, Thy1, Enah, Syt2, Scg2, Igfbp7, Tmem229b 
-## 	   Faim2, Nptn, Kit, Nfib, Slc17a7, Ryr2, Epb41l3, Cntnap2, Vat1l, Zeb2 
+## Positive:  Txn1, Sncg, Fxyd2, Lxn, Fez1, Rgs10, S100a10, Synpr, Atp6v0b, Ppp1r1a 
+## 	   Dctn3, Ubb, Tmem45b, Rabac1, Sh3bgrl3, Tppp3, Atpif1, Cisd1, Hagh, Bex2 
+## 	   Atp6v1f, Bex3, Tmsb4x, Psmb6, Pfn1, Ndufa11, Aldoa, Anxa2, Ndufs5, Prr13 
+## Negative:  Ptn, S100b, Cbfb, Mt1, Sv2b, Timp3, Ngfr, Nfia, Lynx1, Map2 
+## 	   Adcyap1, Gap43, Fxyd7, Enah, Thy1, Nefh, Scg2, Syt2, Nptn, Tmem229b 
+## 	   Faim2, Igfbp7, Kit, Epb41l3, Zeb2, Nfib, Slc17a7, Ryr2, Ncdn, Cntnap2 
 ## PC_ 2 
-## Positive:  Cntn1, Nefh, Cplx1, Thy1, Slc17a7, S100b, Sv2b, Ntrk3, Atp1b1, Scn1a 
-## 	   Nefm, Vamp1, Lrrn1, Atp2b2, Hopx, Endod1, Tagln3, Scn1b, Snap25, Vsnl1 
-## 	   Nat8l, Nefl, Lynx1, Glrb, Scn4b, Eno2, Fam19a2, Sh3gl2, Scn8a, Spock1 
+## Positive:  Cntn1, Nefh, Cplx1, Thy1, S100b, Slc17a7, Sv2b, Ntrk3, Atp1b1, Scn1a 
+## 	   Vamp1, Nefm, Lrrn1, Atp2b2, Endod1, Hopx, Tagln3, Scn1b, Snap25, Vsnl1 
+## 	   Nat8l, Nefl, Lynx1, Glrb, Scn4b, Fam19a2, Sh3gl2, Eno2, Scn8a, Cpne6 
 ## Negative:  Malat1, Tmem233, Cd9, Cd24a, Prkca, Mal2, Dusp26, Carhsp1, Gna14, Crip2 
-## 	   Gadd45g, Id3, Osmr, Ift122, Tmem158, Cd44, Calca, Camk2a, Hs6st2, Cd82 
-## 	   Emp3, Gm525, Ctxn3, Crip1, Nppb, S100a6, Socs2, Sst, Tac1, Mt1 
+## 	   Osmr, Tmem158, Ift122, Cd44, Gadd45g, Id3, Calca, Camk2a, Cd82, Hs6st2 
+## 	   Ctxn3, Gm525, Emp3, S100a6, Nppb, Tac1, Socs2, Sst, Arpc1b, Crip1 
 ## PC_ 3 
-## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Cdkn1a, Tox3, Gfra2 
-## 	   D130079A08Rik, Rgs5, Cd81, Kcnd3, Pou4f2, Cd34, Iqsec2, Sorbs2, Slc17a8, Rasgrp1 
-## 	   Casz1, Id4, Dpp10, Piezo2, Igfbp7, Gm11549, Zfhx3, Spink2, Ifitm3, Gabra1 
-## Negative:  Calca, Ppp3ca, Basp1, Map1b, Gap43, Cystm1, Tubb3, Scg2, Calm1, Ncdn 
-## 	   Map7d2, Epb41l3, Ift122, 6330403K07Rik, Skp1a, Tmem233, Nmb, Dusp26, Tmem255a, Crip2 
-## 	   Resp18, Ntrk1, Ywhag, Prkca, Tnfrsf21, Camk2a, Fxyd7, Deptor, Mt3, Gna14 
+## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Tox3, Gfra2, Cdkn1a 
+## 	   D130079A08Rik, Rgs5, Kcnd3, Iqsec2, Pou4f2, Cd34, Cd81, Slc17a8, Rasgrp1, Casz1 
+## 	   Sorbs2, Id4, Dpp10, Piezo2, Zfhx3, Gm11549, Spink2, Gabra1, Igfbp7, Synpr 
+## Negative:  Calca, Basp1, Map1b, Ppp3ca, Gap43, Cystm1, Scg2, Tubb3, Calm1, Map7d2 
+## 	   Ncdn, Ift122, 6330403K07Rik, Epb41l3, Skp1a, Tmem233, Nmb, Dusp26, Tmem255a, Resp18 
+## 	   Crip2, Ntrk1, Prkca, Tnfrsf21, Fxyd7, Ywhag, Deptor, Camk2a, Mt3, Camk2g 
 ## PC_ 4 
-## Positive:  Adk, Pvalb, Etv1, Nsg1, Jak1, Tmem233, Tspan8, Nppb, Slc17a7, Shox2 
-## 	   Sst, Gm525, Htr1f, Spp1, Slit2, Cbln2, Nts, Stxbp6, Aldoc, Osmr 
-## 	   Cmtm8, Runx3, Fam19a2, Cysltr2, Hapln4, Rasgrp2, Aprt, Carhsp1, Nxph1, Atp1a3 
-## Negative:  Gap43, Calca, Arhgdig, Stmn1, Alcam, Tac1, Ngfr, 6330403K07Rik, Ppp3ca, Kit 
-## 	   Fxyd6, Adcyap1, Smpd3, Atp1a1, Ntrk1, Gm7271, Tagln3, Gal, Tmem100, Prune2 
-## 	   Chl1, Atp2b4, Tppp3, Dclk1, Cnih2, Mgll, S100a11, Scn7a, Mt3, Bcl11b 
+## Positive:  Adk, Etv1, Pvalb, Nsg1, Jak1, Tmem233, Tspan8, Nppb, Sst, Gm525 
+## 	   Htr1f, Slc17a7, Shox2, Spp1, Slit2, Nts, Cbln2, Osmr, Stxbp6, Cmtm8 
+## 	   Aldoc, Cysltr2, Runx3, Klf5, Fam19a2, Ptprk, Hapln4, Rasgrp2, Carhsp1, Atp1a3 
+## Negative:  Gap43, Calca, Arhgdig, Stmn1, Tac1, 6330403K07Rik, Ngfr, Alcam, Kit, Ppp3ca 
+## 	   Smpd3, Adcyap1, Fxyd6, Ntrk1, Atp1a1, Tagln3, Gal, Tmem100, Gm7271, Chl1 
+## 	   Atp2b4, Mt3, Dclk1, S100a11, Fxyd7, Tppp3, Prune2, Cnih2, Fbxo2, Gng8 
 ## PC_ 5 
-## Positive:  Fxyd2, Rgs4, Cpne3, Acpp, Klf5, Zfhx3, Nbl1, Prune2, Cd24a, Phf24 
-## 	   Gnb1, Osmr, Jak1, Dgkz, Prkca, Parm1, Tmem233, Tspan8, Nppb, Etv1 
-## 	   Kif5b, Socs2, Synpr, Dpp10, Plxnc1, Ywhag, Htr1f, Gm525, Adk, Cysltr2 
-## Negative:  Prdx1, Mt1, Dbi, Ptn, B2m, Mt3, Ubb, Id3, Sparc, Mt2 
-## 	   Ifitm3, Fxyd7, Selenop, Rgcc, Tecr, Cryab, Apoe, Dad1, Uqcrb, Hspa1a 
-## 	   Phlda1, Spcs1, Fxyd1, Selenom, Psmb2, Timp3, S100a16, Qk, Mgst3, Gpm6b
+## Positive:  Fxyd2, Rgs4, Acpp, Cpne3, Zfhx3, Prune2, Klf5, Nbl1, Cd24a, Gnb1 
+## 	   Phf24, Dgkz, Prkca, Parm1, Ywhag, Synpr, Tmem233, Kif5b, Osmr, Plxnc1 
+## 	   Jak1, Dpp10, Ano3, Casz1, Tspan8, Rasgrp1, Arpc1b, P2ry1, Socs2, AC160336.1 
+## Negative:  Mt1, Prdx1, Ptn, Dbi, B2m, Id3, Sparc, Mt2, Ifitm3, Ubb 
+## 	   Selenop, Rgcc, Mt3, Timp3, Cryab, Apoe, Uqcrb, Hspa1a, Tecr, Phlda1 
+## 	   Dad1, Fxyd7, Qk, Ier2, Ifitm2, Fxyd1, Spcs1, Selenom, Psmb2, Ndufa12
 ```
 
 Seurat then provides a number of ways to visualize the PCA results
@@ -166,7 +166,7 @@ JackStrawPlot(object = experiment.aggregate, dims = 1:40)
 ```
 
 ```
-## Warning: Removed 62952 rows containing missing values (geom_point).
+## Warning: Removed 62967 rows containing missing values (geom_point).
 ```
 
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
