@@ -129,7 +129,7 @@ cellranger further aligns exonic reads to annotated transcripts, looking for com
 ### UMI Counting
 
 * Using only the confidently mapped reads with valid barcodes and UMIs,
-	*Correct the UMIs
+	* Correct the UMIs
 		UMIs are corrected to more abundant UMIs that are one mismatch away in sequence (hamming distance = 1).
 	* Record which reads are duplicates of the same RNA molecule (PCR duplicates)
 	* Count only the unique UMIs as unique RNA molecules
