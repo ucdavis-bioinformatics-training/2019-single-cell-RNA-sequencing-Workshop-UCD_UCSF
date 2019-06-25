@@ -118,15 +118,34 @@ Plot TSNE coloring by the slot 'ident' (default).
 DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![plot of chunk unnamed-chunk-36](figure/unnamed-chunk-36-1.png)
+
 
 Plot TSNE coloring by the slot 'orig.ident' (sample names).
 
 ```r
-DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne")
+DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![plot of chunk unnamed-chunk-37](figure/unnamed-chunk-37-1.png)
+
+```r
+## Pretty tsne using alpha
+p <- TSNEPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, do.return = T)
+```
+
+```
+## Error in `[[.Seurat`(object, reduction): Cannot find 'knitr::knit' in this Seurat object
+```
+
+```r
+alpha.use <- 2/5
+p$layers[[1]]$mapping$alpha <- alpha.use
+p + scale_alpha_continuous(range = alpha.use, guide = F)
+```
+
+![plot of chunk unnamed-chunk-37](figure/unnamed-chunk-37-2.png)
+
 
 Plot TSNE coloring by the clustering resolution 4
 
@@ -134,7 +153,7 @@ Plot TSNE coloring by the clustering resolution 4
 DimPlot(object = experiment.aggregate, group.by="RNA_snn_res.4", pt.size=0.5, do.label = TRUE, reduction = "tsne", label = T)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![plot of chunk unnamed-chunk-38](figure/unnamed-chunk-38-1.png)
 
 FeaturePlot can be used to color cells with a 'feature', non categorical data, like number of UMIs
 
@@ -142,14 +161,14 @@ FeaturePlot can be used to color cells with a 'feature', non categorical data, l
 FeaturePlot(experiment.aggregate, features = c('nCount_RNA'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![plot of chunk unnamed-chunk-39](figure/unnamed-chunk-39-1.png)
 and number of genes present
 
 ```r
 FeaturePlot(experiment.aggregate, features = c('nFeature_RNA'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![plot of chunk unnamed-chunk-40](figure/unnamed-chunk-40-1.png)
 
 percent mitochondrial 
 
@@ -157,7 +176,7 @@ percent mitochondrial
 FeaturePlot(experiment.aggregate, features = c('percent.mito'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![plot of chunk unnamed-chunk-41](figure/unnamed-chunk-41-1.png)
 
 TSNE plot by cell cycle
 
@@ -165,10 +184,7 @@ TSNE plot by cell cycle
 DimPlot(object = experiment.aggregate, pt.size=0.5, group.by = "cell.cycle", reduction = "tsne" )
 ```
 
-<div class="figure" style="text-align: center">
-<img src="scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-13-1.png" alt="TSNE Plot by Cell Cycle, No Adjustment"  />
-<p class="caption">TSNE Plot by Cell Cycle, No Adjustment</p>
-</div>
+<img src="figure/unnamed-chunk-42-1.png" title="TSNE Plot by Cell Cycle, No Adjustment" alt="TSNE Plot by Cell Cycle, No Adjustment" style="display: block; margin: auto;" />
 
 
 ## Building  a  tree relating the 'average' cell from each cluster. Tree is estimated based on a distance matrix constructed in either gene expression space or PCA space.
@@ -181,14 +197,14 @@ experiment.aggregate <- BuildClusterTree(
 PlotClusterTree(experiment.aggregate)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![plot of chunk unnamed-chunk-43](figure/unnamed-chunk-43-1.png)
 
 
 ```r
 DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![plot of chunk unnamed-chunk-44](figure/unnamed-chunk-44-1.png)
 
 
 ```r
@@ -203,7 +219,7 @@ experiment.merged <- RenameIdents(
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![plot of chunk unnamed-chunk-45](figure/unnamed-chunk-45-1.png)
 
 ## Identifying Marker Genes
 
@@ -263,7 +279,7 @@ Can use a violin plot to visualize the expression pattern of some markers
 VlnPlot(object = experiment.merged, features = rownames(markers)[1:2], pt.size = 0.05)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![plot of chunk unnamed-chunk-47](figure/unnamed-chunk-47-1.png)
 
 Or a feature plot
 
@@ -276,7 +292,7 @@ FeaturePlot(
 )
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![plot of chunk unnamed-chunk-48](figure/unnamed-chunk-48-1.png)
 
 ```r
 FeaturePlot(    
@@ -286,7 +302,7 @@ FeaturePlot(
 )
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-2.png)<!-- -->
+![plot of chunk unnamed-chunk-48](figure/unnamed-chunk-48-2.png)
 
 FindAllMarkers can be used to automate the process across all genes.
 __WARNING: TAKES A LONG TIME TO RUN__
@@ -437,6 +453,42 @@ library(dplyr)
 ```
 
 ```
+## The following object is masked from 'package:AnnotationDbi':
+## 
+##     select
+```
+
+```
+## The following objects are masked from 'package:IRanges':
+## 
+##     collapse, desc, intersect, setdiff, slice, union
+```
+
+```
+## The following objects are masked from 'package:S4Vectors':
+## 
+##     first, intersect, rename, setdiff, setequal, union
+```
+
+```
+## The following object is masked from 'package:Biobase':
+## 
+##     combine
+```
+
+```
+## The following object is masked from 'package:graph':
+## 
+##     union
+```
+
+```
+## The following objects are masked from 'package:BiocGenerics':
+## 
+##     combine, intersect, setdiff, union
+```
+
+```
 ## The following objects are masked from 'package:stats':
 ## 
 ##     filter, lag
@@ -466,11 +518,11 @@ DoHeatmap(
 
 ```
 ## Warning in DoHeatmap(object = experiment.merged, features = top5$gene): The
-## following features were omitted as they were not found in the scale.data
-## slot for the RNA assay: mt-Nd5, Nwd2, Ctnnd2, Nrip1, Samsn1, Gm13889, Nrsn1
+## following features were omitted as they were not found in the scale.data slot for
+## the RNA assay: mt-Nd5, Nwd2, Ctnnd2, Nrip1, Samsn1, Gm13889, Nrsn1
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![plot of chunk unnamed-chunk-50](figure/unnamed-chunk-50-1.png)
 
 
 ```r
@@ -524,7 +576,7 @@ experiment.clusters <- RenameIdents(
 DimPlot(object = experiment.clusters, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![plot of chunk unnamed-chunk-52](figure/unnamed-chunk-52-1.png)
 
 ```r
 experiment.merged$finalcluster <- Idents(experiment.merged)
@@ -538,19 +590,19 @@ experiment.sample2 <- subset(experiment.merged, orig.ident == "UCD_Supp_VitE")
 DimPlot(object = experiment.sample2, group.by = "RNA_snn_res.0.5", pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-1.png)
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Calca'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-2.png)<!-- -->
+![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-2.png)
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Adcyap1'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-3.png)<!-- -->
+![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-3.png)
 
 ### Adding in a new metadata column representing samples within clusters
 
@@ -649,17 +701,16 @@ DoHeatmap(experiment.merged,
 ```
 
 ```
-## Warning in DoHeatmap(experiment.merged,
-## cells = rownames(experiment.merged@meta.data)
-## [experiment.merged@meta.data$samplecluster %in% : The following features
-## were omitted as they were not found in the scale.data slot for the RNA
-## assay: Ddhd1, Ncam1, Setd3, Anp32e, Wtap, Ythdf2, Clasp2, Arf3, Tle4,
-## Nsg2, Necab1, Icmt, Asap1, Phf20, Hdlbp, Hdgf, Usp22, Fam168b, Vdac1, Eif5,
-## Birc6, mt-Nd4l, BC005624, Erp29, Snrpg, Arhgap15, Zfp467, Rhob, Pdap1,
-## Ap2a1, Rpl17, Ndufa3, Atp5e, Rpl23a, Rpl21, Tmsb10
+## Warning in DoHeatmap(experiment.merged, cells =
+## rownames(experiment.merged@meta.data)[experiment.merged@meta.data$samplecluster
+## %in% : The following features were omitted as they were not found in the scale.data
+## slot for the RNA assay: Ddhd1, Ncam1, Setd3, Anp32e, Wtap, Ythdf2, Clasp2, Arf3,
+## Tle4, Nsg2, Necab1, Icmt, Asap1, Phf20, Hdlbp, Hdgf, Usp22, Fam168b, Vdac1, Eif5,
+## Birc6, mt-Nd4l, BC005624, Erp29, Snrpg, Arhgap15, Zfp467, Rhob, Pdap1, Ap2a1, Rpl17,
+## Ndufa3, Atp5e, Rpl23a, Rpl21, Tmsb10
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![plot of chunk unnamed-chunk-54](figure/unnamed-chunk-54-1.png)
 
 ```r
 Idents(experiment.merged) <- "finalcluster"
@@ -689,48 +740,47 @@ sessionInfo()
 ## Running under: macOS Mojave 10.14.5
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets  methods  
+## [9] base     
 ## 
 ## other attached packages:
-## [1] dplyr_0.8.1   ggplot2_3.2.0 Seurat_3.0.2 
+##  [1] dplyr_0.8.1          ggplot2_3.2.0        Seurat_3.0.2        
+##  [4] topGO_2.36.0         SparseM_1.77         GO.db_3.8.2         
+##  [7] AnnotationDbi_1.46.0 IRanges_2.18.1       S4Vectors_0.22.0    
+## [10] Biobase_2.44.0       graph_1.62.0         BiocGenerics_0.30.0 
+## [13] limma_3.40.2        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-140        tsne_0.1-3          bitops_1.0-6       
-##  [4] RColorBrewer_1.1-2  httr_1.4.0          sctransform_0.2.0  
-##  [7] tools_3.6.0         R6_2.4.0            irlba_2.3.3        
-## [10] KernSmooth_2.23-15  lazyeval_0.2.2      colorspace_1.4-1   
-## [13] npsurv_0.4-0        withr_2.1.2         tidyselect_0.2.5   
-## [16] gridExtra_2.3       compiler_3.6.0      plotly_4.9.0       
-## [19] labeling_0.3        caTools_1.17.1.2    scales_1.0.0       
-## [22] lmtest_0.9-37       ggridges_0.5.1      pbapply_1.4-0      
-## [25] stringr_1.4.0       digest_0.6.19       rmarkdown_1.13     
-## [28] R.utils_2.9.0       pkgconfig_2.0.2     htmltools_0.3.6    
-## [31] bibtex_0.4.2        highr_0.8           htmlwidgets_1.3    
-## [34] rlang_0.3.4         zoo_1.8-6           jsonlite_1.6       
-## [37] ica_1.0-2           gtools_3.8.1        R.oo_1.22.0        
-## [40] magrittr_1.5        Matrix_1.2-17       Rcpp_1.0.1         
-## [43] munsell_0.5.0       ape_5.3             reticulate_1.12    
-## [46] R.methodsS3_1.7.1   stringi_1.4.3       yaml_2.2.0         
-## [49] gbRd_0.4-11         MASS_7.3-51.4       gplots_3.0.1.1     
-## [52] Rtsne_0.15          plyr_1.8.4          grid_3.6.0         
-## [55] parallel_3.6.0      gdata_2.18.0        listenv_0.7.0      
-## [58] ggrepel_0.8.1       crayon_1.3.4        lattice_0.20-38    
-## [61] cowplot_0.9.4       splines_3.6.0       SDMTools_1.1-221.1 
-## [64] knitr_1.23          pillar_1.4.1        igraph_1.2.4.1     
-## [67] future.apply_1.3.0  reshape2_1.4.3      codetools_0.2-16   
-## [70] glue_1.3.1          evaluate_0.14       lsei_1.2-0         
-## [73] metap_1.1           data.table_1.12.2   png_0.1-7          
-## [76] Rdpack_0.11-0       gtable_0.3.0        RANN_2.6.1         
-## [79] purrr_0.3.2         tidyr_0.8.3         future_1.13.0      
-## [82] assertthat_0.2.1    xfun_0.7            rsvd_1.0.1         
-## [85] survival_2.44-1.1   viridisLite_0.3.0   tibble_2.1.3       
-## [88] cluster_2.1.0       globals_0.12.4      fitdistrplus_1.0-14
-## [91] ROCR_1.0-7
+##  [1] Rtsne_0.15          colorspace_1.4-1    ggridges_0.5.1      rstudioapi_0.10    
+##  [5] listenv_0.7.0       npsurv_0.4-0        ggrepel_0.8.1       bit64_0.9-7        
+##  [9] codetools_0.2-16    splines_3.6.0       R.methodsS3_1.7.1   lsei_1.2-0         
+## [13] knitr_1.23          jsonlite_1.6        packrat_0.5.0       ica_1.0-2          
+## [17] cluster_2.1.0       png_0.1-7           R.oo_1.22.0         sctransform_0.2.0  
+## [21] compiler_3.6.0      httr_1.4.0          assertthat_0.2.1    Matrix_1.2-17      
+## [25] lazyeval_0.2.2      htmltools_0.3.6     tools_3.6.0         rsvd_1.0.1         
+## [29] igraph_1.2.4.1      gtable_0.3.0        glue_1.3.1          RANN_2.6.1         
+## [33] reshape2_1.4.3      Rcpp_1.0.1          gdata_2.18.0        ape_5.3            
+## [37] nlme_3.1-140        gbRd_0.4-11         lmtest_0.9-37       xfun_0.7           
+## [41] stringr_1.4.0       globals_0.12.4      irlba_2.3.3         gtools_3.8.1       
+## [45] future_1.13.0       MASS_7.3-51.4       zoo_1.8-6           scales_1.0.0       
+## [49] RColorBrewer_1.1-2  yaml_2.2.0          memoise_1.1.0       reticulate_1.12    
+## [53] pbapply_1.4-0       gridExtra_2.3       stringi_1.4.3       RSQLite_2.1.1      
+## [57] highr_0.8           caTools_1.17.1.2    bibtex_0.4.2        Rdpack_0.11-0      
+## [61] SDMTools_1.1-221.1  rlang_0.3.4         pkgconfig_2.0.2     bitops_1.0-6       
+## [65] matrixStats_0.54.0  evaluate_0.14       lattice_0.20-38     ROCR_1.0-7         
+## [69] purrr_0.3.2         htmlwidgets_1.3     labeling_0.3        cowplot_0.9.4      
+## [73] bit_1.1-14          tidyselect_0.2.5    plyr_1.8.4          magrittr_1.5       
+## [77] R6_2.4.0            gplots_3.0.1.1      DBI_1.0.0           pillar_1.4.1       
+## [81] withr_2.1.2         fitdistrplus_1.0-14 survival_2.44-1.1   tibble_2.1.3       
+## [85] future.apply_1.3.0  tsne_0.1-3          crayon_1.3.4        KernSmooth_2.23-15 
+## [89] plotly_4.9.0        rmarkdown_1.13      grid_3.6.0          data.table_1.12.2  
+## [93] blob_1.1.1          metap_1.1           digest_0.6.19       tidyr_0.8.3        
+## [97] R.utils_2.9.0       munsell_0.5.0       viridisLite_0.3.0
 ```

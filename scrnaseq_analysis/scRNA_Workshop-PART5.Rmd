@@ -66,10 +66,18 @@ Plot TSNE coloring by the slot 'ident' (default).
 DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
 ```
 
+
 Plot TSNE coloring by the slot 'orig.ident' (sample names).
 ```{r}
-DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne")
+DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
+
+## Pretty tsne using alpha
+p <- TSNEPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, do.return = T)
+alpha.use <- 2/5
+p$layers[[1]]$mapping$alpha <- alpha.use
+p + scale_alpha_continuous(range = alpha.use, guide = F)
 ```
+
 
 Plot TSNE coloring by the clustering resolution 4
 ```{r}
