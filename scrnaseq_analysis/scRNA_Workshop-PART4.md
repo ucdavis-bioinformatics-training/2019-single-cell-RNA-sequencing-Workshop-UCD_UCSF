@@ -47,16 +47,6 @@ experiment.aggregate <- ScaleData(
 ## Centering and scaling data matrix
 ```
 
-```r
-# I THINK THIS WAS THE CODE THAT WAS INTENDED TO FORCE FindAllMarkers TO USE @data INSTEAD OF @scale.data.  (It now uses @data by default)
-# norm.data <- experiment.aggregate@data
-# experiment.aggregate@data <- experiment.aggregate@scale.data
-# experiment.aggregate@data <- norm.data
-# experiment.aggregate <- ScaleData(
-#   object = experiment.aggregate,
-#   genes.use=experiment.aggregate@var.genes)
-```
-
 ## Dimensionality reduction with PCA 
 
 Next we perform PCA (principal components analysis) on the scaled data.  
@@ -137,19 +127,13 @@ Draws a heatmap focusing on a principal component. Both cells and genes are sort
 
 
 ```r
-PCHeatmap(
-    object = experiment.aggregate, 
-    dims = 1:6
-)
+DimHeatmap(object = experiment.aggregate, dims = 1:6, cells = 500, balanced = TRUE)
 ```
 
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
-PCHeatmap(
-    object = experiment.aggregate, 
-    dims = 7:12
-)
+DimHeatmap(object = experiment.aggregate, dims = 7:12, cells = 500, balanced = TRUE)
 ```
 
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
@@ -161,8 +145,7 @@ ElbowPlot plots the standard deviations (or approximate singular values if runni
 
 
 ```r
-ElbowPlot(
-  experiment.aggregate)
+ElbowPlot(experiment.aggregate)
 ```
 
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
@@ -191,7 +174,7 @@ JackStrawPlot(object = experiment.aggregate, dims = 1:40)
 Looking at the results of the JackStraw plot, we determine to use the first 35 PCs
 
 ```r
-use.pcs = 1:35
+use.pcs = 1:29
 ```
 
 ## Finally, lets save the filtered and normalized data

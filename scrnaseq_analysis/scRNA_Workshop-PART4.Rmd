@@ -28,14 +28,6 @@ ScaleData - Scales and centers genes in the dataset. If variables are provided i
 experiment.aggregate <- ScaleData(
   object = experiment.aggregate,
   vars.to.regress = c("orig.ident", "percent.mito"))
-
-# I THINK THIS WAS THE CODE THAT WAS INTENDED TO FORCE FindAllMarkers TO USE @data INSTEAD OF @scale.data.  (It now uses @data by default)
-# norm.data <- experiment.aggregate@data
-# experiment.aggregate@data <- experiment.aggregate@scale.data
-# experiment.aggregate@data <- norm.data
-# experiment.aggregate <- ScaleData(
-#   object = experiment.aggregate,
-#   genes.use=experiment.aggregate@var.genes)
 ```
 
 ## Dimensionality reduction with PCA 
@@ -67,14 +59,9 @@ DimPlot(
 Draws a heatmap focusing on a principal component. Both cells and genes are sorted by their principal component scores. Allows for nice visualization of sources of heterogeneity in the dataset.
 
 ```{r}
-PCHeatmap(
-    object = experiment.aggregate, 
-    dims = 1:6
-)
-PCHeatmap(
-    object = experiment.aggregate, 
-    dims = 7:12
-)
+DimHeatmap(object = experiment.aggregate, dims = 1:6, cells = 500, balanced = TRUE)
+
+DimHeatmap(object = experiment.aggregate, dims = 7:12, cells = 500, balanced = TRUE)
 ```
 
 ### Selecting which PCs to use
@@ -83,8 +70,7 @@ To overcome the extensive technical noise in any single gene, Seurat clusters ce
 ElbowPlot plots the standard deviations (or approximate singular values if running PCAFast) of the principle components for easy identification of an elbow in the graph. This elbow often corresponds well with the significant PCs and is much faster to run.  This is the traditional approach to selecting principal components.
 
 ```{r}
-ElbowPlot(
-  experiment.aggregate)
+ElbowPlot(experiment.aggregate)
 ```
 
 The JackStraw function randomly permutes a subset of data, and calculates projected PCA scores for these 'random' genes, then compares the PCA scores for the 'random' genes with the observed PCA scores to determine statistical signifance. End result is a p-value for each gene's association with each principal component. We identify significant PCs as those who have a strong enrichment of low p-value genes.
@@ -95,14 +81,14 @@ experiment.aggregate <- JackStraw(
     object = experiment.aggregate, dims = 40)
 ```
 
-```{r}
+```{r fig.width=10, fig.height=10}
 experiment.aggregate <- ScoreJackStraw(experiment.aggregate, dims = 1:40)
 JackStrawPlot(object = experiment.aggregate, dims = 1:40)
 ```
 
 Looking at the results of the JackStraw plot, we determine to use the first 35 PCs
 ```{r}
-use.pcs = 1:35
+use.pcs = 1:29
 ```
 
 ## Finally, lets save the filtered and normalized data
