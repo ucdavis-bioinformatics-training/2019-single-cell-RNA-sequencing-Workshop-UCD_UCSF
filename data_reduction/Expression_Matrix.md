@@ -246,9 +246,9 @@ Summary of the alignment and assignment of reads to cells and genes are present 
 
 Cell ranger does produce a pretty html report with the same statistics and some "analysis".
 
-[Cell Ranger V2 web summary](wed_summaryV2.html)
+[Cell Ranger V2 web summary](web_summaryV2.html)
 
-[Cell Ranger V3 web summary](wed_summaryV3.html)
+[Cell Ranger V3 web summary](web_summaryV3.html)
 
 ## Exercises
 
@@ -276,13 +276,13 @@ Cell ranger does produce a pretty html report with the same statistics and some 
 	4. If time remain, mock run the script.
 	5. Using samtools and rseqc evaluate the mapping file.
 
-```bash
-module load rseqc
-module load samtools
-bam_stat.py -i possorted_genome_bam.bam > sample_rna_bam.rseqc
-samtools flagstat possorted_genome_bam.bam > sample_bam.flagstat
-samtools stats possorted_genome_bam.bam > sample_bam.stats
-```
+    ```bash
+    module load rseqc
+    module load samtools
+    bam_stat.py -i possorted_genome_bam.bam > sample_rna_bam.rseqc
+    samtools flagstat possorted_genome_bam.bam > sample_bam.flagstat
+    samtools stats possorted_genome_bam.bam > sample_bam.stats
+    ```
 
   6. Now do the same for the V3 folder
 
