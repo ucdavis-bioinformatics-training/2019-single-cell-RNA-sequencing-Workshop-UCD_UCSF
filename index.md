@@ -14,9 +14,6 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Running jobs on the Cluster and using modules](cli/cluster.md)
 
 
-[Experimental Design and Cost Estimation](pdfs/ExperimentalDesign.pdf) (talk)
-
-
 ## Data Reduction
 * [Project Setup](data_reduction/project_setup.md)
 * [Cell Ranger Counts](data_reduction/Expression_Matrix.md)
@@ -29,6 +26,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Prepare Data in R](intro2R/data_in_R_prepare.md)
 * [Data in R](intro2R/orig_data_in_R.md)
 
+[Experimental Design and Cost Estimation](pdfs/singlecellRNAseq-expDesign.pdf) (talk)
 
 ## scRNAseq Analysis
 * [Prepare scRNAseq Analysis](scrnaseq_analysis/scrna_analysis_prepare.md)
