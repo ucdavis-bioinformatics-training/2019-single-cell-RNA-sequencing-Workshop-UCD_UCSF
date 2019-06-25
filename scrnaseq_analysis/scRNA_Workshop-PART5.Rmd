@@ -60,22 +60,20 @@ experiment.aggregate <- RunTSNE(
   do.fast = TRUE)
 ```
 
-
-Plot TSNE coloring by the slot 'ident' (default).
-```{r}
-DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
-```
-
-
 Plot TSNE coloring by the slot 'orig.ident' (sample names).
 ```{r}
 DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
 
 ## Pretty tsne using alpha
-p <- TSNEPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, do.return = T)
+p <- DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne", do.return = T)
 alpha.use <- 2/5
 p$layers[[1]]$mapping$alpha <- alpha.use
 p + scale_alpha_continuous(range = alpha.use, guide = F)
+```
+
+Plot TSNE coloring by the slot 'ident' (default).
+```{r}
+DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
 ```
 
 
@@ -120,11 +118,7 @@ DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "t
 ```{r}
 experiment.merged <- RenameIdents(
   object = experiment.aggregate,
-  '8' = '0'
-)
-experiment.merged <- RenameIdents(
-  object = experiment.merged,
-  '6' = '0'
+  '1' = '0'
 )
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
 ```

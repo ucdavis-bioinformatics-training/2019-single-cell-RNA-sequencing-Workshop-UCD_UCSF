@@ -111,6 +111,23 @@ experiment.aggregate <- RunTSNE(
   do.fast = TRUE)
 ```
 
+Plot TSNE coloring by the slot 'orig.ident' (sample names).
+
+```r
+DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+```r
+## Pretty tsne using alpha
+p <- DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne", do.return = T)
+alpha.use <- 2/5
+p$layers[[1]]$mapping$alpha <- alpha.use
+p + scale_alpha_continuous(range = alpha.use, guide = F)
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
 
 Plot TSNE coloring by the slot 'ident' (default).
 
@@ -118,33 +135,7 @@ Plot TSNE coloring by the slot 'ident' (default).
 DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
 ```
 
-![plot of chunk unnamed-chunk-36](figure/unnamed-chunk-36-1.png)
-
-
-Plot TSNE coloring by the slot 'orig.ident' (sample names).
-
-```r
-DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
-```
-
-![plot of chunk unnamed-chunk-37](figure/unnamed-chunk-37-1.png)
-
-```r
-## Pretty tsne using alpha
-p <- TSNEPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, do.return = T)
-```
-
-```
-## Error in `[[.Seurat`(object, reduction): Cannot find 'knitr::knit' in this Seurat object
-```
-
-```r
-alpha.use <- 2/5
-p$layers[[1]]$mapping$alpha <- alpha.use
-p + scale_alpha_continuous(range = alpha.use, guide = F)
-```
-
-![plot of chunk unnamed-chunk-37](figure/unnamed-chunk-37-2.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 
 Plot TSNE coloring by the clustering resolution 4
@@ -153,7 +144,7 @@ Plot TSNE coloring by the clustering resolution 4
 DimPlot(object = experiment.aggregate, group.by="RNA_snn_res.4", pt.size=0.5, do.label = TRUE, reduction = "tsne", label = T)
 ```
 
-![plot of chunk unnamed-chunk-38](figure/unnamed-chunk-38-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 FeaturePlot can be used to color cells with a 'feature', non categorical data, like number of UMIs
 
@@ -161,14 +152,14 @@ FeaturePlot can be used to color cells with a 'feature', non categorical data, l
 FeaturePlot(experiment.aggregate, features = c('nCount_RNA'), pt.size=0.5)
 ```
 
-![plot of chunk unnamed-chunk-39](figure/unnamed-chunk-39-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 and number of genes present
 
 ```r
 FeaturePlot(experiment.aggregate, features = c('nFeature_RNA'), pt.size=0.5)
 ```
 
-![plot of chunk unnamed-chunk-40](figure/unnamed-chunk-40-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 percent mitochondrial 
 
@@ -176,7 +167,7 @@ percent mitochondrial
 FeaturePlot(experiment.aggregate, features = c('percent.mito'), pt.size=0.5)
 ```
 
-![plot of chunk unnamed-chunk-41](figure/unnamed-chunk-41-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 TSNE plot by cell cycle
 
@@ -184,7 +175,10 @@ TSNE plot by cell cycle
 DimPlot(object = experiment.aggregate, pt.size=0.5, group.by = "cell.cycle", reduction = "tsne" )
 ```
 
-<img src="figure/unnamed-chunk-42-1.png" title="TSNE Plot by Cell Cycle, No Adjustment" alt="TSNE Plot by Cell Cycle, No Adjustment" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+<img src="scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-13-1.png" alt="TSNE Plot by Cell Cycle, No Adjustment"  />
+<p class="caption">TSNE Plot by Cell Cycle, No Adjustment</p>
+</div>
 
 
 ## Building  a  tree relating the 'average' cell from each cluster. Tree is estimated based on a distance matrix constructed in either gene expression space or PCA space.
@@ -197,29 +191,25 @@ experiment.aggregate <- BuildClusterTree(
 PlotClusterTree(experiment.aggregate)
 ```
 
-![plot of chunk unnamed-chunk-43](figure/unnamed-chunk-43-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 
 ```r
 DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
-![plot of chunk unnamed-chunk-44](figure/unnamed-chunk-44-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 
 ```r
 experiment.merged <- RenameIdents(
   object = experiment.aggregate,
-  '8' = '0'
-)
-experiment.merged <- RenameIdents(
-  object = experiment.merged,
-  '6' = '0'
+  '1' = '0'
 )
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
-![plot of chunk unnamed-chunk-45](figure/unnamed-chunk-45-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 ## Identifying Marker Genes
 
@@ -279,7 +269,7 @@ Can use a violin plot to visualize the expression pattern of some markers
 VlnPlot(object = experiment.merged, features = rownames(markers)[1:2], pt.size = 0.05)
 ```
 
-![plot of chunk unnamed-chunk-47](figure/unnamed-chunk-47-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 Or a feature plot
 
@@ -292,7 +282,7 @@ FeaturePlot(
 )
 ```
 
-![plot of chunk unnamed-chunk-48](figure/unnamed-chunk-48-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
 ```r
 FeaturePlot(    
@@ -302,7 +292,7 @@ FeaturePlot(
 )
 ```
 
-![plot of chunk unnamed-chunk-48](figure/unnamed-chunk-48-2.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-2.png)<!-- -->
 
 FindAllMarkers can be used to automate the process across all genes.
 __WARNING: TAKES A LONG TIME TO RUN__
@@ -322,10 +312,6 @@ markers_all <- FindAllMarkers(
 ```
 
 ```
-## Calculating cluster 1
-```
-
-```
 ## Calculating cluster 2
 ```
 
@@ -342,7 +328,15 @@ markers_all <- FindAllMarkers(
 ```
 
 ```
+## Calculating cluster 6
+```
+
+```
 ## Calculating cluster 7
+```
+
+```
+## Calculating cluster 8
 ```
 
 ```
@@ -370,7 +364,7 @@ dim(markers_all)
 ```
 
 ```
-## [1] 4950    7
+## [1] 5943    7
 ```
 
 ```r
@@ -378,13 +372,13 @@ head(markers_all)
 ```
 
 ```
-##               p_val avg_logFC pct.1 pct.2    p_val_adj cluster   gene
-## Nrsn1  6.564989e-95 1.0238837 0.794 0.458 8.410407e-91       0  Nrsn1
-## Tac1   2.875256e-69 0.7105631 0.770 0.450 3.683490e-65       0   Tac1
-## Stmn1  2.081935e-67 0.6332682 0.868 0.779 2.667167e-63       0  Stmn1
-## Marcks 3.076577e-64 0.8034419 0.696 0.397 3.941402e-60       0 Marcks
-## Gal    1.020738e-53 0.9448504 0.338 0.099 1.307668e-49       0    Gal
-## Calca  2.300792e-53 0.6625024 0.737 0.468 2.947545e-49       0  Calca
+##                 p_val avg_logFC pct.1 pct.2     p_val_adj cluster    gene
+## Tac1    1.311938e-250 1.8659209 0.878 0.386 1.680723e-246       0    Tac1
+## Adcyap1 1.251056e-240 1.7624344 0.650 0.070 1.602727e-236       0 Adcyap1
+## Celf4   1.757660e-233 1.5823726 0.871 0.377 2.251738e-229       0   Celf4
+## Calca   1.840752e-225 1.3764535 0.929 0.366 2.358187e-221       0   Calca
+## Gal     1.649118e-193 1.7748844 0.479 0.023 2.112685e-189       0     Gal
+## Fgf13   6.012794e-192 0.9301681 0.968 0.837 7.702991e-188       0   Fgf13
 ```
 
 ```r
@@ -393,8 +387,8 @@ table(table(markers_all$gene))
 
 ```
 ## 
-##    1    2    3    4    5 
-## 1613  889  390   91    5
+##    1    2    3    4    5    6    7 
+## 1598  916  521  165   47    8    1
 ```
 
 ```r
@@ -404,7 +398,7 @@ dim(markers_all_single)
 ```
 
 ```
-## [1] 1613    7
+## [1] 1598    7
 ```
 
 ```r
@@ -414,7 +408,7 @@ table(table(markers_all_single$gene))
 ```
 ## 
 ##    1 
-## 1613
+## 1598
 ```
 
 ```r
@@ -423,8 +417,8 @@ table(markers_all_single$cluster)
 
 ```
 ## 
-##   0   1   2   3   4   5   7   9  10  11  12  13 
-##  14  86 239 128 145 111 401  65 184  16 136  88
+##   0   2   3   4   5   6   7   8   9  10  11  12  13 
+##  87 104  80 128 115 246 394  45  61 154  13  88  83
 ```
 
 ```r
@@ -432,13 +426,13 @@ head(markers_all_single)
 ```
 
 ```
-##                 p_val avg_logFC pct.1 pct.2    p_val_adj cluster     gene
-## Nrsn1    6.564989e-95 1.0238837 0.794 0.458 8.410407e-91       0    Nrsn1
-## Gm13889  1.355705e-47 0.7209084 0.682 0.484 1.736793e-43       0  Gm13889
-## Samsn1   2.815335e-26 0.6310452 0.265 0.114 3.606725e-22       0   Samsn1
-## Map1lc3a 1.192513e-21 0.2577715 0.914 0.865 1.527729e-17       0 Map1lc3a
-## Nrip1    2.100364e-15 0.6367865 0.316 0.207 2.690776e-11       0    Nrip1
-## H2afy    1.675521e-10 0.4126248 0.466 0.384 2.146510e-06       0    H2afy
+##                 p_val avg_logFC pct.1 pct.2     p_val_adj cluster    gene
+## Adcyap1 1.251056e-240  1.762434 0.650 0.070 1.602727e-236       0 Adcyap1
+## Celf4   1.757660e-233  1.582373 0.871 0.377 2.251738e-229       0   Celf4
+## Gal     1.649118e-193  1.774884 0.479 0.023 2.112685e-189       0     Gal
+## Syt4    1.626846e-191  1.199886 0.939 0.773 2.084152e-187       0    Syt4
+## Gpx3    4.876839e-150  1.431709 0.476 0.064 6.247718e-146       0    Gpx3
+## Nrsn1   3.786220e-127  1.188237 0.780 0.451 4.850526e-123       0   Nrsn1
 ```
 
 Plot a heatmap of genes by cluster for the top 5 marker genes per cluster
@@ -450,42 +444,6 @@ library(dplyr)
 ```
 ## 
 ## Attaching package: 'dplyr'
-```
-
-```
-## The following object is masked from 'package:AnnotationDbi':
-## 
-##     select
-```
-
-```
-## The following objects are masked from 'package:IRanges':
-## 
-##     collapse, desc, intersect, setdiff, slice, union
-```
-
-```
-## The following objects are masked from 'package:S4Vectors':
-## 
-##     first, intersect, rename, setdiff, setequal, union
-```
-
-```
-## The following object is masked from 'package:Biobase':
-## 
-##     combine
-```
-
-```
-## The following object is masked from 'package:graph':
-## 
-##     union
-```
-
-```
-## The following objects are masked from 'package:BiocGenerics':
-## 
-##     combine, intersect, setdiff, union
 ```
 
 ```
@@ -506,7 +464,7 @@ dim(top5)
 ```
 
 ```
-## [1] 60  7
+## [1] 65  7
 ```
 
 ```r
@@ -518,11 +476,11 @@ DoHeatmap(
 
 ```
 ## Warning in DoHeatmap(object = experiment.merged, features = top5$gene): The
-## following features were omitted as they were not found in the scale.data slot for
-## the RNA assay: mt-Nd5, Nwd2, Ctnnd2, Nrip1, Samsn1, Gm13889, Nrsn1
+## following features were omitted as they were not found in the scale.data
+## slot for the RNA assay: Tusc2, mt-Nd5, Dusp15, Brap, Chd5, Syt4, Celf4
 ```
 
-![plot of chunk unnamed-chunk-50](figure/unnamed-chunk-50-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 
 ```r
@@ -546,20 +504,20 @@ head(markers_all2)
 ```
 
 ```
-##               p_val avg_logFC pct.1 pct.2    p_val_adj cluster   gene
-## Nrsn1  6.564989e-95 1.0238837 0.794 0.458 8.410407e-91       0  Nrsn1
-## Tac1   2.875256e-69 0.7105631 0.770 0.450 3.683490e-65       0   Tac1
-## Stmn1  2.081935e-67 0.6332682 0.868 0.779 2.667167e-63       0  Stmn1
-## Marcks 3.076577e-64 0.8034419 0.696 0.397 3.941402e-60       0 Marcks
-## Gal    1.020738e-53 0.9448504 0.338 0.099 1.307668e-49       0    Gal
-## Calca  2.300792e-53 0.6625024 0.737 0.468 2.947545e-49       0  Calca
-##        mean.in.cluster mean.out.of.cluster
-## Nrsn1        1.9321788           0.8726252
-## Tac1         2.0982494           1.0435836
-## Stmn1        2.5283721           1.8028816
-## Marcks       1.5974963           0.7586272
-## Gal          0.7977859           0.2052266
-## Calca        2.4531006           1.3263797
+##                 p_val avg_logFC pct.1 pct.2     p_val_adj cluster    gene
+## Tac1    1.311938e-250 1.8659209 0.878 0.386 1.680723e-246       0    Tac1
+## Adcyap1 1.251056e-240 1.7624344 0.650 0.070 1.602727e-236       0 Adcyap1
+## Celf4   1.757660e-233 1.5823726 0.871 0.377 2.251738e-229       0   Celf4
+## Calca   1.840752e-225 1.3764535 0.929 0.366 2.358187e-221       0   Calca
+## Gal     1.649118e-193 1.7748844 0.479 0.023 2.112685e-189       0     Gal
+## Fgf13   6.012794e-192 0.9301681 0.968 0.837 7.702991e-188       0   Fgf13
+##         mean.in.cluster mean.out.of.cluster
+## Tac1           2.729993          0.70246251
+## Adcyap1        1.478343          0.10962330
+## Celf4          2.352024          0.62001897
+## Calca          3.199827          0.92791771
+## Gal            1.109180          0.03420652
+## Fgf13          3.366151          2.15037813
 ```
 
 ## Finishing up clusters.
@@ -576,7 +534,7 @@ experiment.clusters <- RenameIdents(
 DimPlot(object = experiment.clusters, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
-![plot of chunk unnamed-chunk-52](figure/unnamed-chunk-52-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 ```r
 experiment.merged$finalcluster <- Idents(experiment.merged)
@@ -590,19 +548,19 @@ experiment.sample2 <- subset(experiment.merged, orig.ident == "UCD_Supp_VitE")
 DimPlot(object = experiment.sample2, group.by = "RNA_snn_res.0.5", pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
-![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Calca'), pt.size=0.5)
 ```
 
-![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-2.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-2.png)<!-- -->
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Adcyap1'), pt.size=0.5)
 ```
 
-![plot of chunk unnamed-chunk-53](figure/unnamed-chunk-53-3.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-3.png)<!-- -->
 
 ### Adding in a new metadata column representing samples within clusters
 
@@ -619,78 +577,67 @@ markers.comp
 ```
 
 ```
-##                 p_val  avg_logFC pct.1 pct.2    p_val_adj
-## Tmsb10   7.684690e-10  0.2638015 0.988 0.942 9.844857e-06
-## Actb     1.321392e-09 -0.5577055 0.996 0.978 1.692836e-05
-## Pcp4     8.193620e-09  0.4984027 0.667 0.455 1.049685e-04
-## Rpl21    3.063727e-08  0.3658117 0.904 0.755 3.924940e-04
-## Rpl23a   4.355414e-07  0.2641398 0.929 0.802 5.579721e-03
-## Car8     9.396879e-07  0.2692177 0.129 0.036 1.203834e-02
-## Atp5e    1.192436e-06  0.3220314 0.738 0.580 1.527630e-02
-## Ndufa3   1.950435e-06  0.2673952 0.617 0.429 2.498703e-02
-## Rpl17    5.814455e-06  0.2504313 0.900 0.749 7.448898e-02
-## Ap2a1    1.115988e-05  0.2523758 0.254 0.127 1.429693e-01
-## Pdap1    1.703453e-05  0.2862285 0.442 0.275 2.182293e-01
-## Fxyd7    4.341387e-05  0.3332908 0.458 0.311 5.561751e-01
-## Gpx3     4.996700e-05  0.3328014 0.396 0.244 6.401273e-01
-## Rhob     7.881333e-05  0.2814958 0.346 0.205 1.000000e+00
-## Zfp467   9.421480e-05  0.2834557 0.104 0.035 1.000000e+00
-## Mt3      1.395953e-04  0.2602589 0.883 0.749 1.000000e+00
-## Dbpht2   1.950345e-04  0.3190892 0.283 0.164 1.000000e+00
-## Arhgap15 2.011914e-04  0.3278610 0.188 0.093 1.000000e+00
-## Snrpg    2.279383e-04  0.2552111 0.229 0.125 1.000000e+00
-## S100a11  4.735212e-04  0.2534807 0.333 0.216 1.000000e+00
-## Cd82     1.042477e-03 -0.2966794 0.050 0.125 1.000000e+00
-## Erp29    1.091727e-03  0.2758046 0.392 0.276 1.000000e+00
-## Gnb1     1.161127e-03 -0.3288667 0.858 0.836 1.000000e+00
-## Cbx3     1.520229e-03 -0.4329738 0.321 0.407 1.000000e+00
-## BC005624 1.971834e-03  0.2670509 0.267 0.175 1.000000e+00
-## mt-Nd4l  2.080357e-03  0.2543612 0.242 0.151 1.000000e+00
-## Etv1     2.402617e-03 -0.4891759 0.100 0.180 1.000000e+00
-## Cartpt   2.699350e-03  0.3357466 0.196 0.113 1.000000e+00
-## Tmem255a 3.556728e-03  0.2540950 0.412 0.305 1.000000e+00
-## Mt2      7.173504e-03  0.3353622 0.167 0.098 1.000000e+00
-## Birc6    7.707557e-03 -0.3134252 0.133 0.209 1.000000e+00
-## Eif5     1.060473e-02 -0.2940629 0.496 0.524 1.000000e+00
-## Vdac1    1.336564e-02 -0.2961506 0.488 0.522 1.000000e+00
-## Selenop  1.793136e-02 -0.2508145 0.050 0.102 1.000000e+00
-## Fam168b  2.078477e-02 -0.2741915 0.112 0.171 1.000000e+00
-## Plp1     2.615853e-02 -0.3137040 0.112 0.173 1.000000e+00
-## Usp22    3.119112e-02 -0.2925040 0.238 0.298 1.000000e+00
-## Aplp2    4.412238e-02 -0.3018389 0.621 0.605 1.000000e+00
-## Hdgf     4.610414e-02 -0.2786777 0.308 0.362 1.000000e+00
-## Crip1    4.709299e-02 -0.2725004 0.150 0.209 1.000000e+00
-## Agap3    4.904363e-02 -0.2512416 0.125 0.176 1.000000e+00
-## Hdlbp    5.304203e-02 -0.3205958 0.096 0.140 1.000000e+00
-## Phf20    6.476087e-02 -0.2529297 0.146 0.193 1.000000e+00
-## Asap1    6.681940e-02 -0.2550599 0.292 0.342 1.000000e+00
-## Icmt     6.908485e-02 -0.2824116 0.088 0.127 1.000000e+00
-## Necab1   7.668664e-02 -0.3181252 0.146 0.191 1.000000e+00
-## Acpp     8.401520e-02 -0.2923132 0.300 0.331 1.000000e+00
-## Kcnmb1   1.178421e-01 -0.3334086 0.125 0.160 1.000000e+00
-## Nsg2     1.238513e-01 -0.2984264 0.262 0.289 1.000000e+00
-## Tle4     1.309881e-01 -0.3080768 0.162 0.191 1.000000e+00
-## Mrgpra3  1.318399e-01 -0.3149779 0.092 0.125 1.000000e+00
-## Snx7     1.402121e-01 -0.2953552 0.283 0.313 1.000000e+00
-## Eno2     1.410445e-01 -0.2647290 0.338 0.360 1.000000e+00
-## Abhd2    1.534475e-01 -0.4438863 0.362 0.384 1.000000e+00
-## Arf3     1.538958e-01 -0.2711061 0.512 0.505 1.000000e+00
-## Mt1      1.725636e-01  0.3288452 0.433 0.378 1.000000e+00
-## Clasp2   1.825634e-01 -0.2683631 0.196 0.229 1.000000e+00
-## Gpsm3    2.157754e-01 -0.2512666 0.100 0.125 1.000000e+00
-## Spry2    2.555499e-01 -0.3280678 0.183 0.205 1.000000e+00
-## Ythdf2   2.624758e-01 -0.2975725 0.317 0.320 1.000000e+00
-## Bhlhe41  2.718756e-01 -0.2696067 0.379 0.398 1.000000e+00
-## Wtap     3.036890e-01 -0.3226680 0.333 0.349 1.000000e+00
-## Plxnc1   3.174977e-01 -0.2691579 0.146 0.167 1.000000e+00
-## Anp32e   3.453084e-01 -0.2654800 0.183 0.202 1.000000e+00
-## Prkca    3.497289e-01 -0.2507596 0.129 0.147 1.000000e+00
-## Parp1    4.132646e-01 -0.2515310 0.121 0.136 1.000000e+00
-## Setd3    4.297774e-01 -0.2532472 0.246 0.256 1.000000e+00
-## Ncam1    4.312967e-01 -0.2596636 0.412 0.398 1.000000e+00
-## Pam      4.529740e-01 -0.3829036 0.521 0.505 1.000000e+00
-## Ddhd1    5.796372e-01 -0.2632687 0.138 0.144 1.000000e+00
-## AI593442 7.259410e-01 -0.2665855 0.200 0.198 1.000000e+00
+##                      p_val  avg_logFC pct.1 pct.2    p_val_adj
+## Car8          1.282944e-14  0.3948833 0.162 0.021 1.643579e-10
+## Tmsb10        2.666894e-14  0.2972597 0.978 0.916 3.416558e-10
+## Rpl21         1.720593e-10  0.3510050 0.917 0.740 2.204251e-06
+## Rpl23a        1.890311e-10  0.2982967 0.928 0.755 2.421678e-06
+## Rpl39         3.718969e-10  0.2725293 0.950 0.807 4.764371e-06
+## Atp5e         6.685866e-09  0.3537328 0.669 0.455 8.565263e-05
+## Pcp4          1.707987e-07  0.4676306 0.601 0.430 2.188102e-03
+## S100a10       3.704062e-07  0.2710255 0.709 0.491 4.745274e-03
+## Mt3           8.283434e-07  0.2548873 0.899 0.755 1.061191e-02
+## Rps26         1.101874e-06  0.2724771 0.831 0.647 1.411611e-02
+## Ndufa3        1.224526e-06  0.2614552 0.507 0.315 1.568740e-02
+## Wdr89         1.670879e-06  0.2535288 0.237 0.108 2.140563e-02
+## Ndufv3        2.278942e-06  0.2697308 0.727 0.538 2.919552e-02
+## Fxyd7         2.298629e-06  0.3032798 0.558 0.375 2.944774e-02
+## 1810058I24Rik 3.399248e-06  0.2683244 0.514 0.330 4.354777e-02
+## Actb          4.385435e-06 -0.3941914 0.989 0.973 5.618181e-02
+## Acbd5         1.443570e-05  0.2577780 0.385 0.241 1.849358e-01
+## S100a11       2.250754e-05  0.2939947 0.475 0.317 2.883441e-01
+## Wdfy1         5.303404e-04 -0.3353172 0.072 0.154 1.000000e+00
+## Polr2f        5.974018e-04  0.2880090 0.234 0.142 1.000000e+00
+## Gpx3          6.732207e-04  0.2550064 0.568 0.432 1.000000e+00
+## Necab1        9.190603e-04 -0.4100914 0.194 0.284 1.000000e+00
+## Kansl1        9.867037e-04  0.2540027 0.165 0.089 1.000000e+00
+## Chchd10       3.767015e-03  0.2608603 0.165 0.098 1.000000e+00
+## Arf3          8.963832e-03 -0.3305082 0.543 0.550 1.000000e+00
+## Ptgir         2.258065e-02 -0.2640219 0.072 0.120 1.000000e+00
+## Etv5          3.236398e-02 -0.3235883 0.169 0.221 1.000000e+00
+## Rnf146        3.432618e-02 -0.2738134 0.079 0.125 1.000000e+00
+## Tspan3        3.442117e-02 -0.2514633 0.194 0.252 1.000000e+00
+## Vdac1         5.205770e-02 -0.3015605 0.414 0.425 1.000000e+00
+## Aplp2         6.445553e-02 -0.2930104 0.604 0.563 1.000000e+00
+## Cbx3          6.446826e-02 -0.2608676 0.342 0.375 1.000000e+00
+## Ist1          7.226933e-02 -0.2584460 0.094 0.134 1.000000e+00
+## Cct7          9.422990e-02 -0.2540971 0.155 0.193 1.000000e+00
+## Vim           1.048422e-01 -0.2904123 0.151 0.188 1.000000e+00
+## Dync1li1      1.203296e-01 -0.2806179 0.212 0.240 1.000000e+00
+## Usp22         1.223358e-01 -0.2744823 0.288 0.310 1.000000e+00
+## Rapgef4       1.274086e-01 -0.2784728 0.165 0.199 1.000000e+00
+## Nacc2         1.372435e-01 -0.2898637 0.349 0.354 1.000000e+00
+## Amer2         1.403407e-01 -0.2631879 0.158 0.188 1.000000e+00
+## Eno2          1.607022e-01 -0.2703198 0.302 0.325 1.000000e+00
+## Fgfr1         1.609611e-01 -0.2652481 0.119 0.147 1.000000e+00
+## Gng5          1.774391e-01 -0.2668165 0.173 0.202 1.000000e+00
+## Gpsm3         1.783213e-01 -0.2518827 0.119 0.146 1.000000e+00
+## Lix1          1.882788e-01 -0.2648763 0.076 0.101 1.000000e+00
+## Bhlhe41       1.954978e-01 -0.2779008 0.410 0.420 1.000000e+00
+## Hdlbp         2.170926e-01 -0.2748920 0.097 0.120 1.000000e+00
+## Lpar1         2.516716e-01 -0.2568538 0.086 0.108 1.000000e+00
+## Alkbh5        2.675575e-01 -0.2910363 0.183 0.205 1.000000e+00
+## Clasp2        2.691110e-01 -0.2654779 0.187 0.205 1.000000e+00
+## Sult4a1       3.099188e-01 -0.2654949 0.529 0.486 1.000000e+00
+## Nrn1          3.321550e-01 -0.2590242 0.406 0.392 1.000000e+00
+## Tspan2        4.152282e-01 -0.2532937 0.183 0.192 1.000000e+00
+## Setd3         5.103898e-01 -0.2745663 0.241 0.238 1.000000e+00
+## Abhd2         5.205543e-01 -0.3486121 0.410 0.390 1.000000e+00
+## Serinc5       5.837046e-01 -0.2509162 0.252 0.248 1.000000e+00
+## Spry2         7.123013e-01 -0.2944266 0.191 0.190 1.000000e+00
+## Pam           7.167790e-01 -0.5311357 0.576 0.519 1.000000e+00
+## Nuak1         8.371852e-01 -0.2790992 0.173 0.166 1.000000e+00
+## Rgs4          8.882279e-01 -0.2650778 0.457 0.423 1.000000e+00
 ```
 
 ```r
@@ -701,16 +648,17 @@ DoHeatmap(experiment.merged,
 ```
 
 ```
-## Warning in DoHeatmap(experiment.merged, cells =
-## rownames(experiment.merged@meta.data)[experiment.merged@meta.data$samplecluster
-## %in% : The following features were omitted as they were not found in the scale.data
-## slot for the RNA assay: Ddhd1, Ncam1, Setd3, Anp32e, Wtap, Ythdf2, Clasp2, Arf3,
-## Tle4, Nsg2, Necab1, Icmt, Asap1, Phf20, Hdlbp, Hdgf, Usp22, Fam168b, Vdac1, Eif5,
-## Birc6, mt-Nd4l, BC005624, Erp29, Snrpg, Arhgap15, Zfp467, Rhob, Pdap1, Ap2a1, Rpl17,
-## Ndufa3, Atp5e, Rpl23a, Rpl21, Tmsb10
+## Warning in DoHeatmap(experiment.merged,
+## cells = rownames(experiment.merged@meta.data)
+## [experiment.merged@meta.data$samplecluster %in% : The following features
+## were omitted as they were not found in the scale.data slot for the RNA
+## assay: Nuak1, Serinc5, Setd3, Tspan2, Sult4a1, Clasp2, Hdlbp, Gng5, Amer2,
+## Usp22, Dync1li1, Vim, Cct7, Ist1, Vdac1, Tspan3, Rnf146, Arf3, Kansl1,
+## Necab1, Polr2f, Wdfy1, Acbd5, 1810058I24Rik, Wdr89, Ndufa3, Rps26, Atp5e,
+## Rpl39, Rpl23a, Rpl21, Tmsb10
 ```
 
-![plot of chunk unnamed-chunk-54](figure/unnamed-chunk-54-1.png)
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 ```r
 Idents(experiment.merged) <- "finalcluster"
@@ -740,47 +688,48 @@ sessionInfo()
 ## Running under: macOS Mojave 10.14.5
 ## 
 ## Matrix products: default
-## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
 ## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats4    parallel  stats     graphics  grDevices utils     datasets  methods  
-## [9] base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] dplyr_0.8.1          ggplot2_3.2.0        Seurat_3.0.2        
-##  [4] topGO_2.36.0         SparseM_1.77         GO.db_3.8.2         
-##  [7] AnnotationDbi_1.46.0 IRanges_2.18.1       S4Vectors_0.22.0    
-## [10] Biobase_2.44.0       graph_1.62.0         BiocGenerics_0.30.0 
-## [13] limma_3.40.2        
+## [1] dplyr_0.8.1   ggplot2_3.2.0 Seurat_3.0.2 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rtsne_0.15          colorspace_1.4-1    ggridges_0.5.1      rstudioapi_0.10    
-##  [5] listenv_0.7.0       npsurv_0.4-0        ggrepel_0.8.1       bit64_0.9-7        
-##  [9] codetools_0.2-16    splines_3.6.0       R.methodsS3_1.7.1   lsei_1.2-0         
-## [13] knitr_1.23          jsonlite_1.6        packrat_0.5.0       ica_1.0-2          
-## [17] cluster_2.1.0       png_0.1-7           R.oo_1.22.0         sctransform_0.2.0  
-## [21] compiler_3.6.0      httr_1.4.0          assertthat_0.2.1    Matrix_1.2-17      
-## [25] lazyeval_0.2.2      htmltools_0.3.6     tools_3.6.0         rsvd_1.0.1         
-## [29] igraph_1.2.4.1      gtable_0.3.0        glue_1.3.1          RANN_2.6.1         
-## [33] reshape2_1.4.3      Rcpp_1.0.1          gdata_2.18.0        ape_5.3            
-## [37] nlme_3.1-140        gbRd_0.4-11         lmtest_0.9-37       xfun_0.7           
-## [41] stringr_1.4.0       globals_0.12.4      irlba_2.3.3         gtools_3.8.1       
-## [45] future_1.13.0       MASS_7.3-51.4       zoo_1.8-6           scales_1.0.0       
-## [49] RColorBrewer_1.1-2  yaml_2.2.0          memoise_1.1.0       reticulate_1.12    
-## [53] pbapply_1.4-0       gridExtra_2.3       stringi_1.4.3       RSQLite_2.1.1      
-## [57] highr_0.8           caTools_1.17.1.2    bibtex_0.4.2        Rdpack_0.11-0      
-## [61] SDMTools_1.1-221.1  rlang_0.3.4         pkgconfig_2.0.2     bitops_1.0-6       
-## [65] matrixStats_0.54.0  evaluate_0.14       lattice_0.20-38     ROCR_1.0-7         
-## [69] purrr_0.3.2         htmlwidgets_1.3     labeling_0.3        cowplot_0.9.4      
-## [73] bit_1.1-14          tidyselect_0.2.5    plyr_1.8.4          magrittr_1.5       
-## [77] R6_2.4.0            gplots_3.0.1.1      DBI_1.0.0           pillar_1.4.1       
-## [81] withr_2.1.2         fitdistrplus_1.0-14 survival_2.44-1.1   tibble_2.1.3       
-## [85] future.apply_1.3.0  tsne_0.1-3          crayon_1.3.4        KernSmooth_2.23-15 
-## [89] plotly_4.9.0        rmarkdown_1.13      grid_3.6.0          data.table_1.12.2  
-## [93] blob_1.1.1          metap_1.1           digest_0.6.19       tidyr_0.8.3        
-## [97] R.utils_2.9.0       munsell_0.5.0       viridisLite_0.3.0
+##  [1] nlme_3.1-140        tsne_0.1-3          bitops_1.0-6       
+##  [4] RColorBrewer_1.1-2  httr_1.4.0          sctransform_0.2.0  
+##  [7] tools_3.6.0         R6_2.4.0            irlba_2.3.3        
+## [10] KernSmooth_2.23-15  lazyeval_0.2.2      colorspace_1.4-1   
+## [13] npsurv_0.4-0        withr_2.1.2         tidyselect_0.2.5   
+## [16] gridExtra_2.3       compiler_3.6.0      plotly_4.9.0       
+## [19] labeling_0.3        caTools_1.17.1.2    scales_1.0.0       
+## [22] lmtest_0.9-37       ggridges_0.5.1      pbapply_1.4-0      
+## [25] stringr_1.4.0       digest_0.6.19       rmarkdown_1.13     
+## [28] R.utils_2.9.0       pkgconfig_2.0.2     htmltools_0.3.6    
+## [31] bibtex_0.4.2        highr_0.8           htmlwidgets_1.3    
+## [34] rlang_0.3.4         zoo_1.8-6           jsonlite_1.6       
+## [37] ica_1.0-2           gtools_3.8.1        R.oo_1.22.0        
+## [40] magrittr_1.5        Matrix_1.2-17       Rcpp_1.0.1         
+## [43] munsell_0.5.0       ape_5.3             reticulate_1.12    
+## [46] R.methodsS3_1.7.1   stringi_1.4.3       yaml_2.2.0         
+## [49] gbRd_0.4-11         MASS_7.3-51.4       gplots_3.0.1.1     
+## [52] Rtsne_0.15          plyr_1.8.4          grid_3.6.0         
+## [55] parallel_3.6.0      gdata_2.18.0        listenv_0.7.0      
+## [58] ggrepel_0.8.1       crayon_1.3.4        lattice_0.20-38    
+## [61] cowplot_0.9.4       splines_3.6.0       SDMTools_1.1-221.1 
+## [64] knitr_1.23          pillar_1.4.1        igraph_1.2.4.1     
+## [67] future.apply_1.3.0  reshape2_1.4.3      codetools_0.2-16   
+## [70] glue_1.3.1          evaluate_0.14       lsei_1.2-0         
+## [73] metap_1.1           data.table_1.12.2   png_0.1-7          
+## [76] Rdpack_0.11-0       gtable_0.3.0        RANN_2.6.1         
+## [79] purrr_0.3.2         tidyr_0.8.3         future_1.13.0      
+## [82] assertthat_0.2.1    xfun_0.7            rsvd_1.0.1         
+## [85] survival_2.44-1.1   viridisLite_0.3.0   tibble_2.1.3       
+## [88] cluster_2.1.0       globals_0.12.4      fitdistrplus_1.0-14
+## [91] ROCR_1.0-7
 ```
