@@ -5,13 +5,19 @@ output:
     html_document:
       keep_md: TRUE
 ---
+
+# Single Cell Analysis with Seurat and some custom code!
+
 [Seurat](http://satijalab.org/seurat/) is a popular R package that is designed for QC, analysis, and exploration of single cell RNA-seq data. Seurat aims to enable users to identify and interpret sources of heterogeneity from single cell transcriptomic measurements, and to integrate diverse types of single cell data. Further, the authors provide several [tutorials](http://satijalab.org/seurat/get_started.html), on their website.
 
-Dowload and expand the expression_tables.tar.gz file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000.
+Download and expand the expression_tables_cellrangerV3.zip file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform (3' expression V2) for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000 lane. The Experiment contains 3 samples, each merged from 2 original samples and then randomly subsamples to 1000 cells each.
 
-* UCD_Adj_VitE
-* UCD_Supp_VitE
-* UCD_VitE_Def
+The three samples are, Dorsal root ganglion neurons :
+At weaning, Ttpa+/+ mice were fed a normal diet (35 mg of dl-α-tocopheryl acetate/kg, vitE+) while and Ttpa-/- mice were fed either an α-TOH-deficient diet (<10 mg of dl-α-tocopheryl acetate/kg, vitE-), or α-TOH-supplemented diet (600 mg of dl-α-tocopheryl acetate/kg, vitE+++) diet. 
+
+* UCD_Adj_VitE - normal + Vitamin E
+* UCD_Supp_VitE - Vitamin E supplimented by diet.
+* UCD_VitE_Def - Vitamin E deficient animals
 
 We start with loading needed libraries for R, at this time all we need is the package [Seurat](http://satijalab.org/seurat/).
 
@@ -22,7 +28,8 @@ library(Seurat)
 ## Load the Cell Ranger Matrix Data and create the base Seurat object.
 Cell Ranger provides a function `cellranger aggr` that will combine multiple samples into a single matrix file. However, when processing data in R and Seurat this is unnecessary and we can aggregate them in R.
 
-Seurat provides a function `Read10X` to read in 10X data folder. First we read in data from each individual sample folder. First, we initialize the Seurat object (`CreateSeuratObject`) with the raw (non-normalized data). Keep all genes expressed in >= 10 cells. Keep all cells with at least 200 detected genes. Also extracting sample names, calculating and adding in the metadata mitochondrial percentage of each cell. Adding in the metadata batchid. Finally, saving the raw Seurat object.
+Seurat provides a function `Read10X` to read in 10X data folder. First we read in data from each individual sample folder. First, we initialize the Seurat object (`CreateSeuratObject`) with the raw (non-normalized data). Keep all genes expressed in >= 10 cells. Keep all cells with at least 200 detected genes. Also extracting sample names, calculating and adding in the metadata mitochondrial percentage of each cell. Adding in the metadata batchid and cell cycle. Finally, saving the raw Seurat object.
+
 
 ```r
 dataset_loc <- "./expression_tables_cellrangerV3"
@@ -58,6 +65,7 @@ experiment.aggregate$percent.mito <- percent.mito
 
 
 ## Calculate cell cycle, add to meta data
+Using the package scran, get the mouse cell cycle markers and a mapping of m
 
 ```r
 mm.pairs <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", package="scran"))
@@ -68,6 +76,7 @@ mat <- as.matrix(GetAssayData(experiment.aggregate))
 #ensembl<- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
 #anno_data <- getBM( values=rownames(mat), attributes=c("mgi_symbol","ensembl_gene_id") , filters= "mgi_symbol"  ,mart=ensembl)
 # Downloaded from Biomart
+#download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/mart_export_June2019.txt", "mart_export_June2019.txt"
 anno <- read.delim("mart_export_June2019.txt")
 
 ord <- match(rownames(mat), anno$MGI.symbol) # use anno$mgi_symbol if via biomaRt
