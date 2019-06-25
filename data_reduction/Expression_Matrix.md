@@ -110,10 +110,11 @@ cellranger  version 3 has many sub-applications
 	* May be 1 mismatch away from the list if the mismatch occurs at a low- quality position (the barcode is then corrected).
 
 * UMIs (Unique Molecular Index)
-	*  Must not be a homopolymer, e.g. AAAAAAAAAA
-	*  Must not contain N
-	*  Must not contain bases with base quality < 10
-	*  UMIs that are 1 mismatch away from a higher-count UMI are corrected to that UMI if they share a cell barcode and gene.
+	* Must not be a homopolymer, e.g. AAAAAAAAAA
+	* Must not contain N
+	* Must not contain bases with base quality < 10
+	*	UMIs that are 1 mismatch away from a higher-count UMI are corrected to that UMI if they share a cell barcode and gene.
+
 
 ### Alignment
 
@@ -275,7 +276,7 @@ samtools flagstat possorted_genome_bam.bam > sample_bam.flagstat
 samtools stats possorted_genome_bam.bam > sample_bam.stats
 ```
 
-	6. Now do the same for the V3 folder
+	6. Now do the same for the V3 folder  
 
 ---
 
