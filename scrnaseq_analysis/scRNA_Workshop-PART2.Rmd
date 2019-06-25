@@ -12,7 +12,7 @@ library(knitr)
 library(kableExtra)
 ```
 
-## Load the Seurat object from the previous part
+## Load the Seurat object from part 1
 ```{r}
 load(file="original_seurat_object.RData")
 experiment.aggregate
@@ -71,6 +71,29 @@ experiment.aggregate <- subset(experiment.aggregate, nCount_RNA >= 500 & nCount_
 
 experiment.aggregate
 ```
+### You may also want to filter out additional genes.
+  
+When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells. 
+
+```{r}
+FilterGenes <- 
+ function (object, min.value=1, min.cells = 0, genes = NULL) {
+   genes.use <- rownames(object)
+   if (!is.null(genes)) {
+     genes.use <- intersect(genes.use, genes)
+     object@data <- GetAssayData(object)[genes.use, ]
+   } else if (min.cells > 0) {
+     num.cells <- Matrix::rowSums(GetAssayData(object) > min.value)
+     genes.use <- names(num.cells[which(num.cells >= min.cells)])
+     object = object[genes.use, ] 
+   }
+  object <- LogSeuratCommand(object = object)
+  return(object)
+}
+
+experiment.aggregate.genes <- FilterGenes(object = experiment.aggregate, min.value = 1, min.cells = 400)
+experiment.aggregate.genes
+```
 
 ```{r}
 table(experiment.aggregate$orig.ident)
@@ -98,6 +121,7 @@ experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
 
+length(VariableFeatures(experiment.aggregate))
 head(VariableFeatures(experiment.aggregate), 20)
 ```
 

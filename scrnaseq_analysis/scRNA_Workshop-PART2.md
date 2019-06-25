@@ -13,7 +13,7 @@ library(knitr)
 library(kableExtra)
 ```
 
-## Load the Seurat object from the previous part
+## Load the Seurat object from part 1
 
 ```r
 load(file="original_seurat_object.RData")
@@ -139,7 +139,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 <tbody>
   <tr>
    <td style="text-align:center;"> G1 </td>
-   <td style="text-align:center;"> 2765 </td>
+   <td style="text-align:center;"> 2767 </td>
   </tr>
   <tr>
    <td style="text-align:center;"> G2M </td>
@@ -147,7 +147,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
   </tr>
   <tr>
    <td style="text-align:center;"> S </td>
-   <td style="text-align:center;"> 34 </td>
+   <td style="text-align:center;"> 32 </td>
   </tr>
 </tbody>
 </table>
@@ -198,6 +198,36 @@ experiment.aggregate
 ## 12811 features across 2681 samples within 1 assay 
 ## Active assay: RNA (12811 features)
 ```
+### You may also want to filter out additional genes.
+  
+When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells. 
+
+
+```r
+FilterGenes <- 
+ function (object, min.value=1, min.cells = 0, genes = NULL) {
+   genes.use <- rownames(object)
+   if (!is.null(genes)) {
+     genes.use <- intersect(genes.use, genes)
+     object@data <- GetAssayData(object)[genes.use, ]
+   } else if (min.cells > 0) {
+     num.cells <- Matrix::rowSums(GetAssayData(object) > min.value)
+     genes.use <- names(num.cells[which(num.cells >= min.cells)])
+     object = object[genes.use, ] 
+   }
+  object <- LogSeuratCommand(object = object)
+  return(object)
+}
+
+experiment.aggregate.genes <- FilterGenes(object = experiment.aggregate, min.value = 1, min.cells = 400)
+experiment.aggregate.genes
+```
+
+```
+## An object of class Seurat 
+## 1117 features across 2681 samples within 1 assay 
+## Active assay: RNA (1117 features)
+```
 
 
 ```r
@@ -234,6 +264,14 @@ experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
 
+length(VariableFeatures(experiment.aggregate))
+```
+
+```
+## [1] 2000
+```
+
+```r
 head(VariableFeatures(experiment.aggregate), 20)
 ```
 

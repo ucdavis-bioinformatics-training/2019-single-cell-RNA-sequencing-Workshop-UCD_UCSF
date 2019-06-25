@@ -24,12 +24,11 @@ First lets view the data without any corrections
 
 ScaleData - Scales and centers genes in the dataset. 
 ```{r}
-# ?ScaleData
-
+?ScaleData
 experiment.aggregate.noc <- ScaleData(object = experiment.aggregate)
 ```
 
-Run PCA
+### Run PCA
 ```{r, fig.align="center", fig.caption="Uncorrected PCA plot"}
 experiment.aggregate.noc <- RunPCA(object = experiment.aggregate.noc)
 DimPlot(object = experiment.aggregate.noc, reduction = "pca")
@@ -43,7 +42,7 @@ ElbowPlot(experiment.aggregate.noc)
 
 We use 10 components in downstream analyses. Using more components more closely approximates the full data set but increases run time.
 
-TSNE Plot
+### TSNE Plot
 ```{r, fig.align="center", fig.caption="Uncorrected TSNE plot"}
 pcs.use <- 10
 experiment.aggregate.noc <- RunTSNE(object = experiment.aggregate.noc, dims = 1:pcs.use)
@@ -55,14 +54,14 @@ DimPlot(object = experiment.aggregate.noc)
 Use vars.to.regress to correct for the sample to sample differences and percent mitochondria
 ```{r, fig.align="center", fig.caption="Corrected PCA Plot"}
 experiment.aggregate.regress <- ScaleData(object = experiment.aggregate, 
-                                          vars.to.regress = c("orig.ident", "percent.mito"), model.use = "linear")
+                    vars.to.regress = c("cell.cycle", "percent.mito"), model.use = "linear")
 
 experiment.aggregate.regress <- RunPCA(object =experiment.aggregate.regress)
 
 DimPlot(object = experiment.aggregate.regress, reduction.use = "pca")
 ```
 
-Corrected TSNE Plot
+### Corrected TSNE Plot
 ```{r, fig.align="center", fig.caption="Corrected TSNE Plot"}
 experiment.aggregate.regress <- RunTSNE(object = experiment.aggregate.regress, dims.use = 1:pcs.use)
 DimPlot(object = experiment.aggregate.regress, reduction = "tsne")
@@ -70,40 +69,29 @@ DimPlot(object = experiment.aggregate.regress, reduction = "tsne")
 
 ## COMBAT corrected, https://academic.oup.com/biostatistics/article-lookup/doi/10.1093/biostatistics/kxj037
 
-## NOT RUN
-```{r eval=FALSE}
-# Install sva package if not installed
-# For R 3.4 and earlier use
-# source("https://bioconductor.org/biocLite.R")
-# biocLite("sva")
-#
-# For R 3.5 and later use
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-#     install.packages("BiocManager")
-# 
-# BiocManager::install("sva")
+```{r}
 library(sva)
 ?ComBat
-m = as.data.frame(as.matrix(GetAssayData(experiment.aggregate)))
+m = as.matrix(GetAssayData(experiment.aggregate))
 com = ComBat(dat=m, batch=as.numeric(as.factor(experiment.aggregate$orig.ident)), prior.plots=FALSE, par.prior=TRUE)
 ```
 
 
-```{r eval=FALSE}
+```{r}
 experiment.aggregate.combat <- experiment.aggregate
 SetAssayData(experiment.aggregate.combat, new.data = as.matrix(com))
 experiment.aggregate.combat = ScaleData(experiment.aggregate.combat)
 ```
 
-Principal components on ComBat adjusted data
-```{r, eval=FALSE, fig.cap = "PCA Plot, Combat adjusted"}
+### Principal components on ComBat adjusted data
+```{r, fig.cap = "PCA Plot, Combat adjusted"}
 experiment.aggregate.combat <- RunPCA(object = experiment.aggregate.combat)
 
 DimPlot(object = experiment.aggregate.combat, reduction = "pca")
 ```
 
 TSNE plot on ComBat adjusted data
-```{r, eval=FALSE, fig.cap = "TSNE plot, ComBat adjusted "}
+```{r, fig.cap = "TSNE plot, ComBat adjusted "}
 experiment.aggregate.combat <- RunTSNE(object = experiment.aggregate.combat, dims.use = 1:pcs.use)
 DimPlot(object = experiment.aggregate.combat, reduction = "tsne")
 ```

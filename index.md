@@ -33,6 +33,11 @@ title: June/July 2019 scRNA-Seq Workshop Home
 ## scRNAseq Analysis
 * [Prepare scRNAseq Analysis](scrnaseq_analysis/scrna_analysis_prepare.md)
 * [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART1.md)
+* [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART2.md)
+* [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART3.md)
+* [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART4.md)
+* [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART5.md)
+* [scRNAseq Analysis - PART1](scrnaseq_analysis/scRNA_Workshop-PART6.md)
 
 
 [Closing thoughts](closing.md)
