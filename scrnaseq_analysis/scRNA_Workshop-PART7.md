@@ -42,7 +42,7 @@ library(cowplot)
 ```
 
 ```r
-#download.file('https://ucdavis.box.com/shared/static/zgxdsp3nwhzixpkeitftkgzq3phlsear.rdata','scRNA.workshop.alignment.airway.rdata')
+download.file('https://ucdavis.box.com/shared/static/zgxdsp3nwhzixpkeitftkgzq3phlsear.rdata','scRNA.workshop.alignment.airway.rdata', mode='wb')
 load('scRNA.workshop.alignment.airway.rdata')
 
 #for now, make the name of the cells just the name of the dataset, so we can easily visualize batch or condition effect
@@ -283,7 +283,7 @@ How do you know when alignment makes sense?
 Try aligning single cells across the human and mouse cortex:
 
 ```r
-#download.file('https://ucdavis.box.com/shared/static/zxouwrqb7pm9t64gqyuqdrl637749a7y.rdata','allen.expr.rdata')
+#download.file('https://ucdavis.box.com/shared/static/zxouwrqb7pm9t64gqyuqdrl637749a7y.rdata','allen.expr.rdata', mode='wb')
 #load('allen.expr.rdata')
 #Tip: Look at e.g. seuratObjs[[1]]@meta.data. Columns "cluster_type_label" and "cluster_subtype_label" will be useful for visualization.
 ```
