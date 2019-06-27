@@ -30,7 +30,7 @@
 
 My recommendation is to follow all of the instructions again, from the beginning on your own and send emails to
 
-bioinformatics.training@ucdavis.edu
+training.bioinformatics@ucdavis.edu
 
 And we will be responsive to answering questions
 
