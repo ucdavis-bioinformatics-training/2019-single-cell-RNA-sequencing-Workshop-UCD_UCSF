@@ -44,7 +44,7 @@ expr <- as.matrix(GetAssayData(cluster0))
 bad <- which(rowSums(expr) == 0)
 expr <- expr[-bad,]
 
-mm <- model.matrix(~0 + orig.ident, data = cluster0@meta.data) 
+mm <- model.matrix(~0 + orig.ident, data = cluster0@meta.data)
 fit <- lmFit(expr, mm)  
 head(coef(fit)) # means in each sample for each gene
 contr <- makeContrasts(orig.identUCD_Supp_VitE - orig.identUCD_Adj_VitE, levels = colnames(coef(fit)))
@@ -97,7 +97,7 @@ WARNING: TAKES A LONG TIME TO RUN
 ```{r, warning = F}
 library(WGCNA)
 options(stringsAsFactors = F)
-datExpr <- t(as.matrix(GetAssayData(experiment.merged)))[,VariableFeatures(experiment.merged)]  # only use variable genes in analysis 
+datExpr <- t(as.matrix(GetAssayData(experiment.merged)))[,VariableFeatures(experiment.merged)]  # only use variable genes in analysis
 
 net <- blockwiseModules(datExpr, power = 10,
   corType = "bicor", # use robust correlation
@@ -140,10 +140,13 @@ axis(1, at = 1:19, labels = 0:18, cex.axis = 0.8)
 matpoints(plotdat, col = modules, pch = 21)
 ```
 
+
+## Get the next Rmd file
+```{r, eval=FALSE}
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
+```
+
 ## Session Information
 ```{r}
 sessionInfo()
 ```
-
-
-
