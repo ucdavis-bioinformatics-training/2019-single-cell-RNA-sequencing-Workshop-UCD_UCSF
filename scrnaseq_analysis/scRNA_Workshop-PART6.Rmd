@@ -142,7 +142,7 @@ matpoints(plotdat, col = modules, pch = 21)
 
 
 ## Get the next Rmd file
-```{r, eval=FALSE}
+```
 download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
 ```
 
