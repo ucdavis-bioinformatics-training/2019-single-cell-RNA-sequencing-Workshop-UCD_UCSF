@@ -57,7 +57,7 @@ experiment.aggregate <- CreateSeuratObject(
 * We use the set of all genes, in mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
 
 ```{r}
-pbmc$percent.mito <- PercentageFeatureSet(pbmc, pattern = "^mt-")
+experiment.aggregate$percent.mito <- PercentageFeatureSet(experiment.aggregate, pattern = "^mt-")
 ```
 
 
