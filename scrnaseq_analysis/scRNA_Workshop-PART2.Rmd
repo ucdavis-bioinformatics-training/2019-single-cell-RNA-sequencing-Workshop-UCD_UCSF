@@ -56,6 +56,7 @@ VlnPlot(
 
 Gene Plot, scatter plot of gene expression across cells, (colored by sample)
 ```{r}
+FeatureScatter(experiment.aggregate, feature1 = "nCount_RNA", feature2 = "percent.mito")
 FeatureScatter(
   experiment.aggregate, "nCount_RNA", "nFeature_RNA",
   pt.size = 0.5)
@@ -72,11 +73,11 @@ experiment.aggregate <- subset(experiment.aggregate, nCount_RNA >= 500 & nCount_
 experiment.aggregate
 ```
 ### You may also want to filter out additional genes.
-  
-When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells. 
+
+When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells.
 
 ```{r}
-FilterGenes <- 
+FilterGenes <-
  function (object, min.value=1, min.cells = 0, genes = NULL) {
    genes.use <- rownames(object)
    if (!is.null(genes)) {
@@ -85,7 +86,7 @@ FilterGenes <-
    } else if (min.cells > 0) {
      num.cells <- Matrix::rowSums(GetAssayData(object) > min.value)
      genes.use <- names(num.cells[which(num.cells >= min.cells)])
-     object = object[genes.use, ] 
+     object = object[genes.use, ]
    }
   object <- LogSeuratCommand(object = object)
   return(object)
@@ -117,15 +118,21 @@ The function FindVariableFeatures identifies the most highly variable genes (def
 
 ```{r}
 ?FindVariableFeatures
+
 experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
 
-
-VariableFeaturePlot(experiment.aggregate)
-
 length(VariableFeatures(experiment.aggregate))
-head(VariableFeatures(experiment.aggregate), 20)
+
+top10 <- head(VariableFeatures(experiment.aggregate), 10)
+
+top10
+
+vfp1 <- VariableFeaturePlot(experiment.aggregate)
+vfp1 <- LabelPoints(plot = vfp1, points = top10, repel = TRUE)
+
+vfp1
 ```
 
 #### Question(s)

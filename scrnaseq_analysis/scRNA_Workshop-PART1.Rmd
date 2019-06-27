@@ -13,7 +13,7 @@ output:
 Download and expand the expression_tables_cellrangerV3.zip file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform (3' expression V2) for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000 lane. The Experiment contains 3 samples, each merged from 2 original samples and then randomly subsamples to 1000 cells each.
 
 The three samples are, Dorsal root ganglion neurons :
-At weaning, Ttpa+/+ mice were fed a normal diet (35 mg of dl-α-tocopheryl acetate/kg, vitE+) while and Ttpa-/- mice were fed either an α-TOH-deficient diet (<10 mg of dl-α-tocopheryl acetate/kg, vitE-), or α-TOH-supplemented diet (600 mg of dl-α-tocopheryl acetate/kg, vitE+++) diet. 
+At weaning, Ttpa+/+ mice were fed a normal diet (35 mg of dl-α-tocopheryl acetate/kg, vitE+) while and Ttpa-/- mice were fed either an α-TOH-deficient diet (<10 mg of dl-α-tocopheryl acetate/kg, vitE-), or α-TOH-supplemented diet (600 mg of dl-α-tocopheryl acetate/kg, vitE+++) diet.
 
 * UCD_Adj_VitE - normal + Vitamin E
 * UCD_Supp_VitE - Vitamin E supplimented by diet.
@@ -50,14 +50,14 @@ experiment.aggregate <- CreateSeuratObject(
   names.delim = "\\-")
 ```
 
-### Calc mitocondrial content
-Calculate percent mitochondrial genes per cell. In mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
-```{r}
-mito.genes <- grep("^mt-", rownames(experiment.aggregate), value = T)
-percent.mito <- Matrix::colSums(GetAssayData(experiment.aggregate, slot = "counts")[mito.genes, ]) / Matrix::colSums(GetAssayData(experiment.aggregate, slot = "counts"))
+### The percentage of reads that map to the mitochondrial genome
 
-# Add to @meta.data
-experiment.aggregate$percent.mito <- percent.mito
+* Low-quality / dying cells often exhibit extensive mitochondrial contamination.
+* We calculate mitochondrial QC metrics with the PercentageFeatureSet function, which calculates the percentage of counts originating from a set of features.
+* We use the set of all genes, in mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
+
+```{r}
+pbmc$percent.mito <- PercentageFeatureSet(pbmc, pattern = "^mt-")
 ```
 
 
@@ -85,22 +85,9 @@ rownames(tmp) <- colnames(mat)
 experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
 ```
 
-### Lets fix the sample names, reassign names with more meaningful factors
-
-The original samples names (the names above in ids) can be found in the metadata slot, column orig.ident. Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
-```{r}
-samplename = experiment.aggregate$orig.ident
-table(samplename)
-
-batchid = experiment.aggregate$orig.ident
-names(batchid) = rownames(experiment.aggregate@meta.data)
-
-experiment.aggregate$batchid <- batchid
-table(experiment.aggregate$batchid)
-```
 ### Lets spend a little time getting to know the Seurat object.
 
-The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyes, etc. The R function slotNames can be used to view the slot names within an object.
+The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyses, etc. The R function slotNames can be used to view the slot names within an object.
 
 ```{r}
 slotNames(experiment.aggregate)

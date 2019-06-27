@@ -30,14 +30,13 @@ experiment.aggregate <- ScaleData(
   vars.to.regress = c("cell.cycle", "percent.mito"))
 ```
 
-## Dimensionality reduction with PCA 
+## Dimensionality reduction with PCA
 
 Next we perform PCA (principal components analysis) on the scaled data.  
 
 ```{r}
 ?RunPCA
-experiment.aggregate <- RunPCA(
-  object = experiment.aggregate)
+experiment.aggregate <- RunPCA(object = experiment.aggregate, features = VariableFeatures(object = experiment.aggregate))
 ```
 
 Seurat then provides a number of ways to visualize the PCA results
@@ -65,7 +64,7 @@ DimHeatmap(object = experiment.aggregate, dims = 7:12, cells = 500, balanced = T
 ```
 
 ### Selecting which PCs to use
-To overcome the extensive technical noise in any single gene, Seurat clusters cells based on their PCA scores, with each PC essentially representing a metagene that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. 
+To overcome the extensive technical noise in any single gene, Seurat clusters cells based on their PCA scores, with each PC essentially representing a metagene that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step.
 
 ElbowPlot plots the standard deviations (or approximate singular values if running PCAFast) of the principle components for easy identification of an elbow in the graph. This elbow often corresponds well with the significant PCs and is much faster to run.  This is the traditional approach to selecting principal components.
 

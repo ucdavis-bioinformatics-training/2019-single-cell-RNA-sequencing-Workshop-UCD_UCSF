@@ -27,6 +27,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Data in R](intro2R/orig_data_in_R.md)
 
 [Cell Preparation, Dr. Diana Burkhart-Waco](pdfs/10X_Cell_Preparation_Talk.pdf) (talk)  
+
 [Experimental Design and Cost Estimation](pdfs/singlecellRNAseq-expDesign.pdf) (talk)
 
 ## scRNAseq Analysis
