@@ -80,7 +80,7 @@ experiment.aggregate <- JackStraw(
     object = experiment.aggregate, dims = 40)
 ```
 
-```{r fig.width=10, fig.height=10}
+```{r fig.width=10, fig.height=10, warning=FALSE}
 experiment.aggregate <- ScoreJackStraw(experiment.aggregate, dims = 1:40)
 JackStrawPlot(object = experiment.aggregate, dims = 1:40)
 ```

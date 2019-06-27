@@ -27,11 +27,13 @@ The FindClusters function implements the procedure, and contains a resolution pa
 ```{r}
 use.pcs = 1:29 
 
-experiment.aggregate <- FindNeighbors(experiment.aggregate, dims = use.pcs)
+?FindNeighbors
+experiment.aggregate <- FindNeighbors(experiment.aggregate, reduction="pca", dims = use.pcs)
 
+?FindCluster
 experiment.aggregate <- FindClusters(
     object = experiment.aggregate, 
-    resolution = seq(0.5,4,0.5), 
+    resolution = seq(0.25,4,0.25), 
     verbose = FALSE
 )
 ```
@@ -60,17 +62,6 @@ experiment.aggregate <- RunTSNE(
   do.fast = TRUE)
 ```
 
-Plot TSNE coloring by the slot 'orig.ident' (sample names).
-```{r}
-DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
-
-## Pretty tsne using alpha
-p <- DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne", do.return = T)
-alpha.use <- 2/5
-p$layers[[1]]$mapping$alpha <- alpha.use
-p + scale_alpha_continuous(range = alpha.use, guide = F)
-```
-
 Plot TSNE coloring by the slot 'ident' (default).
 ```{r}
 DimPlot(object = experiment.aggregate, pt.size=0.5, reduction = "tsne", label = T)
@@ -97,7 +88,7 @@ FeaturePlot(experiment.aggregate, features = c('percent.mito'), pt.size=0.5)
 ```
 
 TSNE plot by cell cycle
-```{r, fig.cap ="TSNE Plot by Cell Cycle, No Adjustment", fig.align = "center"}
+```{r}
 DimPlot(object = experiment.aggregate, pt.size=0.5, group.by = "cell.cycle", reduction = "tsne" )
 ```
 
@@ -118,9 +109,20 @@ DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "t
 ```{r}
 experiment.merged <- RenameIdents(
   object = experiment.aggregate,
-  '1' = '0'
+  '2' = '0'
 )
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
+```
+
+Plot TSNE coloring by the slot 'orig.ident' (sample names) with alpha colors turned on.
+```{r}
+DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne" )
+
+## Pretty tsne using alpha
+p <- DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, reduction = "tsne", do.return = T)
+alpha.use <- 2/5
+p$layers[[1]]$mapping$alpha <- alpha.use
+p + scale_alpha_continuous(range = alpha.use, guide = F)
 ```
 
 ## Identifying Marker Genes

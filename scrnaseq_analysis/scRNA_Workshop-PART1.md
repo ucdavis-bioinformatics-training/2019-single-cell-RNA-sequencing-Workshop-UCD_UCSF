@@ -13,7 +13,7 @@ output:
 Download and expand the expression_tables_cellrangerV3.zip file to extract the single cell matrix files for the three samples. These are isolated mouse cells ran on the 10X genomics platform (3' expression V2) for single cell RNA sequencing, sequenced with UC Davis on 1 HiSeq 4000 lane. The Experiment contains 3 samples, each merged from 2 original samples and then randomly subsamples to 1000 cells each.
 
 The three samples are, Dorsal root ganglion neurons :
-At weaning, Ttpa+/+ mice were fed a normal diet (35 mg of dl-α-tocopheryl acetate/kg, vitE+) while and Ttpa-/- mice were fed either an α-TOH-deficient diet (<10 mg of dl-α-tocopheryl acetate/kg, vitE-), or α-TOH-supplemented diet (600 mg of dl-α-tocopheryl acetate/kg, vitE+++) diet. 
+At weaning, Ttpa+/+ mice were fed a normal diet (35 mg of dl-α-tocopheryl acetate/kg, vitE+) while and Ttpa-/- mice were fed either an α-TOH-deficient diet (<10 mg of dl-α-tocopheryl acetate/kg, vitE-), or α-TOH-supplemented diet (600 mg of dl-α-tocopheryl acetate/kg, vitE+++) diet.
 
 * UCD_Adj_VitE - normal + Vitamin E
 * UCD_Supp_VitE - Vitamin E supplimented by diet.
@@ -52,15 +52,15 @@ experiment.aggregate <- CreateSeuratObject(
   names.delim = "\\-")
 ```
 
-### Calc mitocondrial content
-Calculate percent mitochondrial genes per cell. In mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
+### The percentage of reads that map to the mitochondrial genome
+
+* Low-quality / dying cells often exhibit extensive mitochondrial contamination.
+* We calculate mitochondrial QC metrics with the PercentageFeatureSet function, which calculates the percentage of counts originating from a set of features.
+* We use the set of all genes, in mouse these genes can be identified as those that begin with 'mt', in human data they begin with MT.
+
 
 ```r
-mito.genes <- grep("^mt-", rownames(experiment.aggregate), value = T)
-percent.mito <- Matrix::colSums(GetAssayData(experiment.aggregate, slot = "counts")[mito.genes, ]) / Matrix::colSums(GetAssayData(experiment.aggregate, slot = "counts"))
-
-# Add to @meta.data
-experiment.aggregate$percent.mito <- percent.mito
+experiment.aggregate$percent.mito <- PercentageFeatureSet(experiment.aggregate, pattern = "^mt-")
 ```
 
 
@@ -89,37 +89,9 @@ rownames(tmp) <- colnames(mat)
 experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
 ```
 
-### Lets fix the sample names, reassign names with more meaningful factors
-
-The original samples names (the names above in ids) can be found in the metadata slot, column orig.ident. Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
-
-```r
-samplename = experiment.aggregate$orig.ident
-table(samplename)
-```
-
-```
-## samplename
-##  UCD_Adj_VitE UCD_Supp_VitE  UCD_VitE_Def 
-##           904          1000           992
-```
-
-```r
-batchid = experiment.aggregate$orig.ident
-names(batchid) = rownames(experiment.aggregate@meta.data)
-
-experiment.aggregate$batchid <- batchid
-table(experiment.aggregate$batchid)
-```
-
-```
-## 
-##  UCD_Adj_VitE UCD_Supp_VitE  UCD_VitE_Def 
-##           904          1000           992
-```
 ### Lets spend a little time getting to know the Seurat object.
 
-The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyes, etc. The R function slotNames can be used to view the slot names within an object.
+The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyses, etc. The R function slotNames can be used to view the slot names within an object.
 
 
 ```r
@@ -146,13 +118,13 @@ head(experiment.aggregate@meta.data)
 ## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE UCD_Adj_VitE       2795         1474
 ## ACATCGGGTCCATGCTC-UCD_Adj_VitE UCD_Adj_VitE       5372         2271
 ## ATACGGTAGTGACCAAG-UCD_Adj_VitE UCD_Adj_VitE        598          367
-##                                percent.mito cell.cycle      batchid
-## ACTCTAATGTGGGTATG-UCD_Adj_VitE   0.01969612         G1 UCD_Adj_VitE
-## AGGCTGGTCAATCACAC-UCD_Adj_VitE   0.06216378         G1 UCD_Adj_VitE
-## ATGACTAGCACATGACT-UCD_Adj_VitE   0.06838768         G1 UCD_Adj_VitE
-## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE   0.04221825         G1 UCD_Adj_VitE
-## ACATCGGGTCCATGCTC-UCD_Adj_VitE   0.07557707         G1 UCD_Adj_VitE
-## ATACGGTAGTGACCAAG-UCD_Adj_VitE   0.11371237         G1 UCD_Adj_VitE
+##                                percent.mito cell.cycle
+## ACTCTAATGTGGGTATG-UCD_Adj_VitE     1.969612         G1
+## AGGCTGGTCAATCACAC-UCD_Adj_VitE     6.216378         G1
+## ATGACTAGCACATGACT-UCD_Adj_VitE     6.838768         G1
+## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE     4.221825         G1
+## ACATCGGGTCCATGCTC-UCD_Adj_VitE     7.557707         G1
+## ATACGGTAGTGACCAAG-UCD_Adj_VitE    11.371237         G1
 ```
 
 #### Question(s)

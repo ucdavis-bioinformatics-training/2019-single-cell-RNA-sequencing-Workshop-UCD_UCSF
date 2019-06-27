@@ -47,53 +47,52 @@ experiment.aggregate <- ScaleData(
 ## Centering and scaling data matrix
 ```
 
-## Dimensionality reduction with PCA 
+## Dimensionality reduction with PCA
 
 Next we perform PCA (principal components analysis) on the scaled data.  
 
 
 ```r
 ?RunPCA
-experiment.aggregate <- RunPCA(
-  object = experiment.aggregate)
+experiment.aggregate <- RunPCA(object = experiment.aggregate, features = VariableFeatures(object = experiment.aggregate))
 ```
 
 ```
 ## PC_ 1 
 ## Positive:  Txn1, Sncg, Fxyd2, Lxn, Fez1, Rgs10, S100a10, Synpr, Atp6v0b, Ppp1r1a 
-## 	   Dctn3, Ubb, Tmem45b, Rabac1, Sh3bgrl3, Tppp3, Atpif1, Cisd1, Hagh, Bex2 
-## 	   Atp6v1f, Bex3, Tmsb4x, Psmb6, Pfn1, Ndufa11, Aldoa, Anxa2, Ndufs5, Prr13 
-## Negative:  Ptn, S100b, Cbfb, Mt1, Sv2b, Timp3, Ngfr, Nfia, Lynx1, Map2 
+## 	   Dctn3, Ubb, Tmem45b, Sh3bgrl3, Rabac1, Tppp3, Atpif1, Cisd1, Bex2, Hagh 
+## 	   Atp6v1f, Bex3, Tmsb4x, Psmb6, Pfn1, Ndufa11, Aldoa, Anxa2, Ndufs5, Ppia 
+## Negative:  Ptn, S100b, Mt1, Cbfb, Sv2b, Timp3, Nfia, Ngfr, Lynx1, Map2 
 ## 	   Adcyap1, Gap43, Fxyd7, Enah, Thy1, Nefh, Scg2, Syt2, Nptn, Tmem229b 
-## 	   Faim2, Igfbp7, Kit, Epb41l3, Zeb2, Nfib, Slc17a7, Ryr2, Ncdn, Cntnap2 
+## 	   Igfbp7, Faim2, Kit, Nfib, Zeb2, Epb41l3, Ryr2, Slc17a7, Cntnap2, Ncdn 
 ## PC_ 2 
 ## Positive:  Cntn1, Nefh, Cplx1, Thy1, S100b, Slc17a7, Sv2b, Ntrk3, Atp1b1, Scn1a 
 ## 	   Vamp1, Nefm, Lrrn1, Atp2b2, Endod1, Hopx, Tagln3, Scn1b, Snap25, Vsnl1 
 ## 	   Nat8l, Nefl, Lynx1, Glrb, Scn4b, Fam19a2, Sh3gl2, Eno2, Scn8a, Cpne6 
 ## Negative:  Malat1, Tmem233, Cd9, Cd24a, Prkca, Mal2, Dusp26, Carhsp1, Gna14, Crip2 
-## 	   Osmr, Tmem158, Ift122, Cd44, Gadd45g, Id3, Calca, Camk2a, Cd82, Hs6st2 
-## 	   Ctxn3, Gm525, Emp3, S100a6, Nppb, Tac1, Socs2, Sst, Arpc1b, Crip1 
+## 	   Osmr, Tmem158, Cd44, Ift122, Id3, Gadd45g, Camk2a, Calca, Cd82, Hs6st2 
+## 	   Ctxn3, Gm525, Emp3, S100a6, Nppb, Socs2, Sst, Tac1, Arpc1b, Crip1 
 ## PC_ 3 
 ## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Tox3, Gfra2, Cdkn1a 
-## 	   D130079A08Rik, Rgs5, Kcnd3, Iqsec2, Pou4f2, Cd34, Cd81, Slc17a8, Rasgrp1, Casz1 
+## 	   D130079A08Rik, Rgs5, Kcnd3, Iqsec2, Pou4f2, Cd81, Cd34, Slc17a8, Rasgrp1, Casz1 
 ## 	   Sorbs2, Id4, Dpp10, Piezo2, Zfhx3, Gm11549, Spink2, Gabra1, Igfbp7, Synpr 
 ## Negative:  Calca, Basp1, Map1b, Ppp3ca, Gap43, Cystm1, Scg2, Tubb3, Calm1, Map7d2 
 ## 	   Ncdn, Ift122, 6330403K07Rik, Epb41l3, Skp1a, Tmem233, Nmb, Dusp26, Tmem255a, Resp18 
-## 	   Crip2, Ntrk1, Prkca, Tnfrsf21, Fxyd7, Ywhag, Deptor, Camk2a, Mt3, Camk2g 
+## 	   Crip2, Ntrk1, Tnfrsf21, Prkca, Fxyd7, Ywhag, Deptor, Camk2a, Mt3, Etl4 
 ## PC_ 4 
 ## Positive:  Adk, Etv1, Pvalb, Nsg1, Jak1, Tmem233, Tspan8, Nppb, Sst, Gm525 
 ## 	   Htr1f, Slc17a7, Shox2, Spp1, Slit2, Nts, Cbln2, Osmr, Stxbp6, Cmtm8 
-## 	   Aldoc, Cysltr2, Runx3, Klf5, Fam19a2, Ptprk, Hapln4, Rasgrp2, Carhsp1, Atp1a3 
+## 	   Aldoc, Runx3, Cysltr2, Klf5, Fam19a2, Hapln4, Ptprk, Rasgrp2, Carhsp1, Atp1a3 
 ## Negative:  Gap43, Calca, Arhgdig, Stmn1, Tac1, 6330403K07Rik, Ngfr, Alcam, Kit, Ppp3ca 
 ## 	   Smpd3, Adcyap1, Fxyd6, Ntrk1, Atp1a1, Tagln3, Gal, Tmem100, Gm7271, Chl1 
-## 	   Atp2b4, Mt3, Dclk1, S100a11, Fxyd7, Tppp3, Prune2, Cnih2, Fbxo2, Gng8 
+## 	   Atp2b4, Dclk1, Mt3, Prune2, S100a11, Tppp3, Fxyd7, Cnih2, Fbxo2, Mgll 
 ## PC_ 5 
-## Positive:  Fxyd2, Rgs4, Acpp, Cpne3, Zfhx3, Prune2, Klf5, Nbl1, Cd24a, Gnb1 
-## 	   Phf24, Dgkz, Prkca, Parm1, Ywhag, Synpr, Tmem233, Kif5b, Osmr, Plxnc1 
-## 	   Jak1, Dpp10, Ano3, Casz1, Tspan8, Rasgrp1, Arpc1b, P2ry1, Socs2, AC160336.1 
+## Positive:  Fxyd2, Rgs4, Acpp, Cpne3, Klf5, Zfhx3, Prune2, Nbl1, Cd24a, Gnb1 
+## 	   Phf24, Dgkz, Prkca, Parm1, Osmr, Ywhag, Tmem233, Jak1, Synpr, Kif5b 
+## 	   Tspan8, Plxnc1, Dpp10, Casz1, Ano3, P2ry1, Rasgrp1, Nppb, Socs2, Arpc1b 
 ## Negative:  Mt1, Prdx1, Ptn, Dbi, B2m, Id3, Sparc, Mt2, Ifitm3, Ubb 
-## 	   Selenop, Rgcc, Mt3, Timp3, Cryab, Apoe, Uqcrb, Hspa1a, Tecr, Phlda1 
-## 	   Dad1, Fxyd7, Qk, Ier2, Ifitm2, Fxyd1, Spcs1, Selenom, Psmb2, Ndufa12
+## 	   Selenop, Mt3, Rgcc, Timp3, Apoe, Cryab, Phlda1, Uqcrb, Hspa1a, Tecr 
+## 	   Fxyd7, Dad1, Ier2, Qk, Ifitm2, Fxyd1, Selenom, Spcs1, Psmb2, Cebpd
 ```
 
 Seurat then provides a number of ways to visualize the PCA results
@@ -139,7 +138,7 @@ DimHeatmap(object = experiment.aggregate, dims = 7:12, cells = 500, balanced = T
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
 
 ### Selecting which PCs to use
-To overcome the extensive technical noise in any single gene, Seurat clusters cells based on their PCA scores, with each PC essentially representing a metagene that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step. 
+To overcome the extensive technical noise in any single gene, Seurat clusters cells based on their PCA scores, with each PC essentially representing a metagene that combines information across a correlated gene set. Determining how many PCs to include downstream is therefore an important step.
 
 ElbowPlot plots the standard deviations (or approximate singular values if running PCAFast) of the principle components for easy identification of an elbow in the graph. This elbow often corresponds well with the significant PCs and is much faster to run.  This is the traditional approach to selecting principal components.
 
@@ -163,10 +162,6 @@ experiment.aggregate <- JackStraw(
 ```r
 experiment.aggregate <- ScoreJackStraw(experiment.aggregate, dims = 1:40)
 JackStrawPlot(object = experiment.aggregate, dims = 1:40)
-```
-
-```
-## Warning: Removed 62967 rows containing missing values (geom_point).
 ```
 
 ![](scRNA_Workshop-PART4_files/figure-html/unnamed-chunk-10-1.png)<!-- -->

@@ -98,27 +98,27 @@ round(do.call("cbind", tapply(experiment.aggregate$percent.mito, Idents(experime
 
 ```
 ##      UCD_Adj_VitE UCD_Supp_VitE UCD_VitE_Def
-## 0%          0.000         0.000        0.000
-## 5%          0.014         0.007        0.007
-## 10%         0.021         0.010        0.011
-## 15%         0.025         0.014        0.015
-## 20%         0.028         0.017        0.018
-## 25%         0.032         0.020        0.021
-## 30%         0.035         0.022        0.024
-## 35%         0.038         0.026        0.027
-## 40%         0.042         0.029        0.030
-## 45%         0.045         0.032        0.034
-## 50%         0.049         0.034        0.037
-## 55%         0.053         0.038        0.041
-## 60%         0.057         0.042        0.045
-## 65%         0.060         0.047        0.049
-## 70%         0.065         0.050        0.053
-## 75%         0.070         0.055        0.058
-## 80%         0.076         0.060        0.065
-## 85%         0.084         0.066        0.072
-## 90%         0.100         0.075        0.081
-## 95%         0.276         0.101        0.109
-## 100%        0.593         0.518        0.644
+## 0%          0.031         0.000        0.000
+## 5%          1.354         0.653        0.652
+## 10%         2.059         0.991        1.105
+## 15%         2.461         1.409        1.536
+## 20%         2.842         1.693        1.794
+## 25%         3.179         1.972        2.121
+## 30%         3.548         2.215        2.411
+## 35%         3.844         2.598        2.718
+## 40%         4.233         2.904        3.023
+## 45%         4.526         3.152        3.399
+## 50%         4.908         3.429        3.749
+## 55%         5.346         3.825        4.111
+## 60%         5.666         4.209        4.482
+## 65%         6.023         4.662        4.856
+## 70%         6.482         5.018        5.297
+## 75%         6.996         5.483        5.834
+## 80%         7.586         5.980        6.497
+## 85%         8.356         6.626        7.157
+## 90%        10.026         7.529        8.059
+## 95%        27.560        10.056       10.858
+## 100%       59.279        51.836       64.441
 ```
 
 Table of cell cycle
@@ -139,7 +139,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 <tbody>
   <tr>
    <td style="text-align:center;"> G1 </td>
-   <td style="text-align:center;"> 2767 </td>
+   <td style="text-align:center;"> 2764 </td>
   </tr>
   <tr>
    <td style="text-align:center;"> G2M </td>
@@ -147,7 +147,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
   </tr>
   <tr>
    <td style="text-align:center;"> S </td>
-   <td style="text-align:center;"> 32 </td>
+   <td style="text-align:center;"> 35 </td>
   </tr>
 </tbody>
 </table>
@@ -155,7 +155,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 Plot the number of cells each gene is represented by
 
 ```r
-plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 2)) , xlab="gene rank", ylab="number of cells", main="Cells per genes ( >= 2 )")
+plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 3)) , xlab="gene rank", ylab="number of cells", main="Cells per genes (reads/gene >= 3 )")
 ```
 
 ![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
@@ -174,19 +174,25 @@ VlnPlot(
 Gene Plot, scatter plot of gene expression across cells, (colored by sample)
 
 ```r
+FeatureScatter(experiment.aggregate, feature1 = "nCount_RNA", feature2 = "percent.mito")
+```
+
+![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+```r
 FeatureScatter(
   experiment.aggregate, "nCount_RNA", "nFeature_RNA",
   pt.size = 0.5)
 ```
 
-![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-9-2.png)<!-- -->
 
 ### Cell filtering
 We use the information above to filter out cells. Here we choose those that have percent mitochondrial genes max of 10% and unique UMI counts under 20,000 or greater than 500.
 
 
 ```r
-experiment.aggregate <- subset(experiment.aggregate, percent.mito <= 0.1)
+experiment.aggregate <- subset(experiment.aggregate, percent.mito <= 10)
 
 experiment.aggregate <- subset(experiment.aggregate, nCount_RNA >= 500 & nCount_RNA <= 20000)
 
@@ -199,12 +205,12 @@ experiment.aggregate
 ## Active assay: RNA (12811 features)
 ```
 ### You may also want to filter out additional genes.
-  
-When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells. 
+
+When creating the base Seurat object we did filter out some genes, recall _Keep all genes expressed in >= 10 cells_. After filtering cells and you may want to be more aggressive with the gene filter. Seurat doesn't supply such a function (that I can find), so below is a function that can do so, it filters genes requiring a min.value (log-normalized) in at least min.cells, here expression of 1 in at least 400 cells.
 
 
 ```r
-FilterGenes <- 
+FilterGenes <-
  function (object, min.value=1, min.cells = 0, genes = NULL) {
    genes.use <- rownames(object)
    if (!is.null(genes)) {
@@ -213,7 +219,7 @@ FilterGenes <-
    } else if (min.cells > 0) {
      num.cells <- Matrix::rowSums(GetAssayData(object) > min.value)
      genes.use <- names(num.cells[which(num.cells >= min.cells)])
-     object = object[genes.use, ] 
+     object = object[genes.use, ]
    }
   object <- LogSeuratCommand(object = object)
   return(object)
@@ -260,17 +266,11 @@ The function FindVariableFeatures identifies the most highly variable genes (def
 
 ```r
 ?FindVariableFeatures
+
 experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
 
-
-VariableFeaturePlot(experiment.aggregate)
-```
-
-![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
-
-```r
 length(VariableFeatures(experiment.aggregate))
 ```
 
@@ -279,15 +279,23 @@ length(VariableFeatures(experiment.aggregate))
 ```
 
 ```r
-head(VariableFeatures(experiment.aggregate), 20)
+top10 <- head(VariableFeatures(experiment.aggregate), 10)
+
+top10
 ```
 
 ```
 ##  [1] "Pvalb"    "Fxyd7"    "S100a16"  "Apoe"     "Crip1"    "Ly86"    
-##  [7] "Ifi27l2a" "Sst"      "Pcp4"     "Hbb-bs"   "Cadps2"   "Mrgpra3" 
-## [13] "Spp1"     "Calca"    "Gng8"     "Ntrk2"    "S100b"    "Nts"     
-## [19] "Nefh"     "Ntrk3"
+##  [7] "Ifi27l2a" "Sst"      "Pcp4"     "Hbb-bs"
 ```
+
+```r
+vfp1 <- VariableFeaturePlot(experiment.aggregate)
+vfp1 <- LabelPoints(plot = vfp1, points = top10, repel = TRUE)
+vfp1
+```
+
+![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 #### Question(s)
 

@@ -43,11 +43,11 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 
 Plot the number of cells each gene is represented by
 ```{r}
-plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 2)) , xlab="gene rank", ylab="number of cells", main="Cells per genes ( >= 2 )")
+plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 3)) , xlab="gene rank", ylab="number of cells", main="Cells per genes (reads/gene >= 3 )")
 ```
 
 Violin plot of 1) number of genes, 2) number of UMI and 3) percent mitochondrial genes
-```{r, fig.height=10}
+```{r, fig.height=6}
 VlnPlot(
   experiment.aggregate,
   features = c("nFeature_RNA", "nCount_RNA","percent.mito"),
@@ -66,7 +66,7 @@ FeatureScatter(
 We use the information above to filter out cells. Here we choose those that have percent mitochondrial genes max of 10% and unique UMI counts under 20,000 or greater than 500.
 
 ```{r}
-experiment.aggregate <- subset(experiment.aggregate, percent.mito <= 0.1)
+experiment.aggregate <- subset(experiment.aggregate, percent.mito <= 10)
 
 experiment.aggregate <- subset(experiment.aggregate, nCount_RNA >= 500 & nCount_RNA <= 20000)
 
@@ -116,7 +116,7 @@ experiment.aggregate <- NormalizeData(
 
 The function FindVariableFeatures identifies the most highly variable genes (default 2000 genes) by fitting a line to the relationship of log(variance) and log(mean) using loess smoothing, uses this information to standardize the data, then calculates the variance of the standardized data.  This helps avoid selecting genes that only appear variable due to their expression level.
 
-```{r}
+```{r message=FALSE}
 ?FindVariableFeatures
 
 experiment.aggregate <- FindVariableFeatures(
@@ -131,7 +131,6 @@ top10
 
 vfp1 <- VariableFeaturePlot(experiment.aggregate)
 vfp1 <- LabelPoints(plot = vfp1, points = top10, repel = TRUE)
-
 vfp1
 ```
 
