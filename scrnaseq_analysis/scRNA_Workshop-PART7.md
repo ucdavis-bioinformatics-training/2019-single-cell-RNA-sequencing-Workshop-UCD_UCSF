@@ -151,7 +151,7 @@ Now we will visualize the data without alignment.
 ## This warning is displayed once per session.
 ```
 
-![](scRNA.workshop.alignment_files/figure-html/data_visualization_without_alignment-1.png)<!-- -->
+![](scRNA_Workshop-PART7_files/figure-html/data_visualization_without_alignment-1.png)<!-- -->
 
 ```r
         gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
@@ -159,7 +159,7 @@ Now we will visualize the data without alignment.
                 repel = TRUE) + NoLegend()
 ```
 
-![](scRNA.workshop.alignment_files/figure-html/data_visualization_without_alignment-2.png)<!-- -->
+![](scRNA_Workshop-PART7_files/figure-html/data_visualization_without_alignment-2.png)<!-- -->
 
 ```r
   rm(gse.combined)
@@ -259,14 +259,14 @@ Now visualize after alignment.
                 repel = TRUE) + NoLegend()
 ```
 
-![](scRNA.workshop.alignment_files/figure-html/seuratAlignment-1.png)<!-- -->
+![](scRNA_Workshop-PART7_files/figure-html/seuratAlignment-1.png)<!-- -->
 
 ```r
   DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
                 repel = TRUE) + NoLegend()
 ```
 
-![](scRNA.workshop.alignment_files/figure-html/seuratAlignment-2.png)<!-- -->
+![](scRNA_Workshop-PART7_files/figure-html/seuratAlignment-2.png)<!-- -->
 
 ## Group assignment 1
 
