@@ -26,6 +26,7 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Prepare Data in R](intro2R/data_in_R_prepare.md)
 * [Data in R](intro2R/orig_data_in_R.md)
 
+[Cell Preparation, Dr. Diana Burkhart-Waco](pdfs/10X_Cell_Preparation_Talk.pdf) (talk)
 [Experimental Design and Cost Estimation](pdfs/singlecellRNAseq-expDesign.pdf) (talk)
 
 ## scRNAseq Analysis
@@ -37,7 +38,6 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [scRNAseq Analysis - PART5](scrnaseq_analysis/scRNA_Workshop-PART5.md)
 * [scRNAseq Analysis - PART6](scrnaseq_analysis/scRNA_Workshop-PART6.md)
 
-## Get the next Rmd file
 ```
 download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
 ```

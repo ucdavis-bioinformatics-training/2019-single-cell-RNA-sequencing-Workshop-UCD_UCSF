@@ -14,6 +14,12 @@ library(Seurat)
 ```{r}
 load(file="pre_sample_corrected.RData")
 experiment.aggregate
+experiment.test <- experiment.aggregate
+set.seed(12345)
+rand.genes <- sample(1:nrow(experiment.test), 500,replace = F,)
+mat <- as.matrix(GetAssayData(experiment.test, slot="data"))
+mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] <- mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] + 0.5
+experiment.test = SetAssayData(experiment.test, slot="data", new.data= mat )
 ```
 
 ## Exploring Batch effects 3 ways, none, Seurat [vars.to.regress] and COMBAT
@@ -25,19 +31,20 @@ First lets view the data without any corrections
 ScaleData - Scales and centers genes in the dataset. 
 ```{r}
 ?ScaleData
-experiment.aggregate.noc <- ScaleData(object = experiment.aggregate)
+experiment.test.noc <- ScaleData(object = experiment.test)
 ```
 
 ### Run PCA
 ```{r, fig.align="center", fig.caption="Uncorrected PCA plot"}
-experiment.aggregate.noc <- RunPCA(object = experiment.aggregate.noc)
-DimPlot(object = experiment.aggregate.noc, reduction = "pca")
+experiment.test.noc <- RunPCA(object = experiment.test.noc)
+DimPlot(object = experiment.test.noc, reduction = "pca")
+DimPlot(object = experiment.test.noc, dims = c(2,3), reduction = "pca")
 ```
 
 PCA Elbow plot to determine how many principal components to use in downstream analyses.  Components after the "elbow" in the plot generally explain little additional variability in the data.
 
 ```{r}
-ElbowPlot(experiment.aggregate.noc)
+ElbowPlot(experiment.test.noc)
 ```
 
 We use 10 components in downstream analyses. Using more components more closely approximates the full data set but increases run time.
@@ -45,26 +52,26 @@ We use 10 components in downstream analyses. Using more components more closely 
 ### TSNE Plot
 ```{r, fig.align="center", fig.caption="Uncorrected TSNE plot"}
 pcs.use <- 10
-experiment.aggregate.noc <- RunTSNE(object = experiment.aggregate.noc, dims = 1:pcs.use)
-DimPlot(object = experiment.aggregate.noc)
+experiment.test.noc <- RunTSNE(object = experiment.test.noc, dims = 1:pcs.use)
+DimPlot(object = experiment.test.noc)
 ```
 
 ## Correct for sample to sample differences (seurat)
 
 Use vars.to.regress to correct for the sample to sample differences and percent mitochondria
 ```{r, fig.align="center", fig.caption="Corrected PCA Plot"}
-experiment.aggregate.regress <- ScaleData(object = experiment.aggregate, 
-                    vars.to.regress = c("cell.cycle", "percent.mito"), model.use = "linear")
+experiment.test.regress <- ScaleData(object = experiment.test, 
+                    vars.to.regress = c("orig.ident"), model.use = "linear")
 
-experiment.aggregate.regress <- RunPCA(object =experiment.aggregate.regress)
+experiment.test.regress <- RunPCA(object =experiment.test.regress)
 
-DimPlot(object = experiment.aggregate.regress, reduction.use = "pca")
+DimPlot(object = experiment.test.regress, reduction.use = "pca")
 ```
 
 ### Corrected TSNE Plot
 ```{r, fig.align="center", fig.caption="Corrected TSNE Plot"}
-experiment.aggregate.regress <- RunTSNE(object = experiment.aggregate.regress, dims.use = 1:pcs.use)
-DimPlot(object = experiment.aggregate.regress, reduction = "tsne")
+experiment.test.regress <- RunTSNE(object = experiment.test.regress, dims.use = 1:pcs.use)
+DimPlot(object = experiment.test.regress, reduction = "tsne")
 ```
 
 ## COMBAT corrected, https://academic.oup.com/biostatistics/article-lookup/doi/10.1093/biostatistics/kxj037
@@ -72,28 +79,28 @@ DimPlot(object = experiment.aggregate.regress, reduction = "tsne")
 ```{r}
 library(sva)
 ?ComBat
-m = as.matrix(GetAssayData(experiment.aggregate))
-com = ComBat(dat=m, batch=as.numeric(as.factor(experiment.aggregate$orig.ident)), prior.plots=FALSE, par.prior=TRUE)
+m = as.matrix(GetAssayData(experiment.test))
+com = ComBat(dat=m, batch=as.numeric(as.factor(experiment.test$orig.ident)), prior.plots=FALSE, par.prior=TRUE)
 ```
 
 
 ```{r}
-experiment.aggregate.combat <- experiment.aggregate
-SetAssayData(experiment.aggregate.combat, new.data = as.matrix(com))
-experiment.aggregate.combat = ScaleData(experiment.aggregate.combat)
+experiment.test.combat <- experiment.test
+experiment.test.combat <- SetAssayData(experiment.test.combat, new.data = as.matrix(com))
+experiment.test.combat = ScaleData(experiment.test.combat)
 ```
 
 ### Principal components on ComBat adjusted data
 ```{r, fig.cap = "PCA Plot, Combat adjusted"}
-experiment.aggregate.combat <- RunPCA(object = experiment.aggregate.combat)
+experiment.test.combat <- RunPCA(object = experiment.test.combat)
 
-DimPlot(object = experiment.aggregate.combat, reduction = "pca")
+DimPlot(object = experiment.test.combat, reduction = "pca")
 ```
 
 TSNE plot on ComBat adjusted data
 ```{r, fig.cap = "TSNE plot, ComBat adjusted "}
-experiment.aggregate.combat <- RunTSNE(object = experiment.aggregate.combat, dims.use = 1:pcs.use)
-DimPlot(object = experiment.aggregate.combat, reduction = "tsne")
+experiment.test.combat <- RunTSNE(object = experiment.test.combat, dims.use = 1:pcs.use)
+DimPlot(object = experiment.test.combat, reduction = "tsne")
 ```
 
 #### Question(s)

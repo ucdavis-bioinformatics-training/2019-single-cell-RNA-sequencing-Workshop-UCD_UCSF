@@ -47,7 +47,7 @@ plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 2)) , xlab="gene
 ```
 
 Violin plot of 1) number of genes, 2) number of UMI and 3) percent mitochondrial genes
-```{r, fig.height=20}
+```{r, fig.height=10}
 VlnPlot(
   experiment.aggregate,
   features = c("nFeature_RNA", "nCount_RNA","percent.mito"),
@@ -120,6 +120,9 @@ The function FindVariableFeatures identifies the most highly variable genes (def
 experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
+
+
+VariableFeaturePlot(experiment.aggregate)
 
 length(VariableFeatures(experiment.aggregate))
 head(VariableFeatures(experiment.aggregate), 20)

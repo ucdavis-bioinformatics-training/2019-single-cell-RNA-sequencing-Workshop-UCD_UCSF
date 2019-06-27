@@ -264,6 +264,13 @@ experiment.aggregate <- FindVariableFeatures(
   object = experiment.aggregate,
   selection.method = "vst")
 
+
+VariableFeaturePlot(experiment.aggregate)
+```
+
+![](scRNA_Workshop-PART2_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+```r
 length(VariableFeatures(experiment.aggregate))
 ```
 
