@@ -56,35 +56,30 @@ levels(factor(gse102580.data@meta.data$type))
 Now we will visualize the data without alignment.
 
 ```{r data_visualization_without_alignment}
+dat1=gse102580.data;
+dat2=gse103354.data;
+dat1 <- ScaleData(object = dat1)
+dat2 <- ScaleData(object = dat2)
+dat1 <- FindVariableFeatures(object = dat1, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
+dat2 <- FindVariableFeatures(object = dat2, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
 
-  
-  dat1=gse102580.data;
-  dat2=gse103354.data;
-  dat1 <- ScaleData(object = dat1)
-  dat2 <- ScaleData(object = dat2)
-  dat1 <- FindVariableFeatures(object = dat1, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-   dat2 <- FindVariableFeatures(object = dat2, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-  
-  
- gse.combined <- merge(x = dat1, y = dat2, add.cell.ids = c("gse102580", "gse103354"), project = "airwayepithelium")
 
- rm(dat1,dat2)
- 
- gse.combined <- ScaleData(object = gse.combined)
-  gse.combined <- FindVariableFeatures(object = gse.combined, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-  
-    gse.combined <- RunPCA(object = gse.combined, npcs = 30, verbose = FALSE)
+gse.combined <- merge(x = dat1, y = dat2, add.cell.ids = c("gse102580", "gse103354"), project = "airwayepithelium")
 
-      gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
-  DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TRUE, 
-                repel = TRUE) + NoLegend()
+rm(dat1,dat2)
 
-        gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
-  DimPlot(object = gse.combined, reduction = "tsne", group.by = "type", label = TRUE, 
-                repel = TRUE) + NoLegend()
- 
- 
-  rm(gse.combined)
+gse.combined <- ScaleData(object = gse.combined)
+gse.combined <- FindVariableFeatures(object = gse.combined, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
+
+gse.combined <- RunPCA(object = gse.combined, npcs = 30, verbose = FALSE)
+
+gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
+DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TRUE, repel = TRUE) + NoLegend()
+
+gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
+DimPlot(object = gse.combined, reduction = "tsne", group.by = "type", label = TRUE, repel = TRUE) + NoLegend()
+
+rm(gse.combined)
 ```
   
 
@@ -93,28 +88,25 @@ Now visualize after alignment.
 ```{r seuratAlignment}
 
   #find anchors
-  reference.list <- compData.list[c("gse102", "gse103")]
-  compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:30)
-  compData.integrated <- IntegrateData(anchorset = compData.anchors, dims = 1:30)
-  
-  
-  
-  rm(reference.list, compData.anchors)
+reference.list <- compData.list[c("gse102", "gse103")]
+compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:30)
+compData.integrated <- IntegrateData(anchorset = compData.anchors, dims = 1:30)
 
+rm(reference.list, compData.anchors)
 
-  DefaultAssay(object = compData.integrated) <- "integrated"
+DefaultAssay(object = compData.integrated) <- "integrated"
+
+#visualize
   
-  #visualize
-    
-  # Run the standard workflow for visualization and clustering
-  compData.integrated <- ScaleData(object = compData.integrated, verbose = FALSE)
-  compData.integrated <- RunPCA(object = compData.integrated, npcs = 30, verbose = FALSE)
-  compData.integrated <- RunTSNE(object = compData.integrated, reduction = "pca", dims = 1:30)
-  DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", label = TRUE, 
-                repel = TRUE) + NoLegend()
- 
-  DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
-                repel = TRUE) + NoLegend()
+# Run the standard workflow for visualization and clustering
+compData.integrated <- ScaleData(object = compData.integrated, verbose = FALSE)
+compData.integrated <- RunPCA(object = compData.integrated, npcs = 30, verbose = FALSE)
+compData.integrated <- RunTSNE(object = compData.integrated, reduction = "pca", dims = 1:30)
+DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", label = TRUE, 
+              repel = TRUE) + NoLegend()
+
+DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
+              repel = TRUE) + NoLegend()
 
 ```
 
@@ -131,9 +123,15 @@ How do you know when alignment makes sense?
 ## Group assignment 2
 
 Try aligning single cells across the human and mouse cortex:
-```{r}
-#download.file('https://ucdavis.box.com/shared/static/zxouwrqb7pm9t64gqyuqdrl637749a7y.rdata','allen.expr.rdata', mode='wb')
-#load('allen.expr.rdata')
-#Tip: Look at e.g. seuratObjs[[1]]@meta.data. Columns "cluster_type_label" and "cluster_subtype_label" will be useful for visualization.
+```{r eval=FALSE}
+download.file('https://ucdavis.box.com/shared/static/zxouwrqb7pm9t64gqyuqdrl637749a7y.rdata','allen.expr.rdata', mode='wb')
+load('allen.expr.rdata')
 
+#Tip: Look at e.g. seuratObjs[[1]]@meta.data. Columns "cluster_type_label" and "cluster_subtype_label" will be useful for visualization.
+```
+
+
+## Session Information
+```{r}
+sessionInfo()
 ```

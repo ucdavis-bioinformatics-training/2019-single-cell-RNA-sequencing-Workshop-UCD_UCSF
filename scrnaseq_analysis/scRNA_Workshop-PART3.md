@@ -29,7 +29,7 @@ experiment.test <- experiment.aggregate
 set.seed(12345)
 rand.genes <- sample(1:nrow(experiment.test), 500,replace = F,)
 mat <- as.matrix(GetAssayData(experiment.test, slot="data"))
-mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] <- mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] + 0.5
+mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] <- mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] + 0.18
 experiment.test = SetAssayData(experiment.test, slot="data", new.data= mat )
 ```
 
@@ -58,40 +58,40 @@ experiment.test.noc <- RunPCA(object = experiment.test.noc)
 
 ```
 ## PC_ 1 
-## Positive:  Txn1, Sncg, Fez1, Atp6v0b, S100a10, Lxn, Dctn3, Tppp3, Sh3bgrl3, Rabac1 
-## 	   Cisd1, Ppia, Fxyd2, Atp6v1f, Stmn3, Bex2, Atp5g1, Atpif1, Uchl1, Psmb6 
-## 	   Ubb, Ndufa11, Hagh, Anxa2, Gabarapl2, Rgs10, Nme1, Ndufa4, Psmb3, Prdx2 
-## Negative:  Mt1, Malat1, Adcyap1, Ptn, Apoe, Zeb2, Mt2, Timp3, Fabp7, Gal 
-## 	   Gpm6b, Kit, Qk, Atp2b4, Plp1, Ifitm3, 6330403K07Rik, Sparc, Id3, Gap43 
-## 	   Gpx3, Selenop, Zfp36l1, Rgcc, Scg2, Cbfb, Zfp36, Igfbp7, Marcksl1, Phlda1 
+## Positive:  Txn1, Sncg, Fez1, S100a10, Atp6v0b, Lxn, Dctn3, Tppp3, Sh3bgrl3, Rabac1 
+## 	   Cisd1, Ppia, Fxyd2, Atp6v1f, Stmn3, Atp5g1, Ndufa11, Bex2, Atpif1, Uchl1 
+## 	   Psmb6, Ubb, Ndufa4, Hagh, Anxa2, Gabarapl2, Rgs10, Nme1, Psmb3, Prdx2 
+## Negative:  Mt1, Malat1, Adcyap1, Ptn, Apoe, Zeb2, Mt2, Timp3, Fabp7, Gpm6b 
+## 	   Gal, Kit, Qk, Atp2b4, Plp1, Ifitm3, 6330403K07Rik, Sparc, Id3, Gap43 
+## 	   Selenop, Gpx3, Zfp36l1, Rgcc, Scg2, Cbfb, Zfp36, Igfbp7, Marcksl1, Phlda1 
 ## PC_ 2 
-## Positive:  Nefh, Cntn1, Thy1, S100b, Sv2b, Cplx1, Slc17a7, Nefm, Vamp1, Lynx1 
-## 	   Endod1, Atp1b1, Scn1a, Nat8l, Vsnl1, Ntrk3, Sh3gl2, Eno2, Fam19a2, Spock1 
-## 	   Scn1b, Scn8a, Glrb, Syt2, Scn4b, Cpne6, Lrrn1, Atp2b2, Lgi3, Clec2l 
-## Negative:  Malat1, Cd24a, Tmem233, Cd9, Dusp26, Mal2, Tmem158, Carhsp1, Fxyd2, Arpc1b 
-## 	   Ubb, Ctxn3, Prkca, Crip2, Gna14, S100a6, Cd44, Klf5, Tceal9, Hs6st2 
-## 	   Bex3, Cd82, Emp3, Tmem45b, Pfn1, Ift122, Fam89a, Gadd45g, Dynll1, Acpp 
+## Positive:  Nefh, Cntn1, Thy1, S100b, Sv2b, Cplx1, Slc17a7, Vamp1, Nefm, Lynx1 
+## 	   Endod1, Atp1b1, Scn1a, Nat8l, Vsnl1, Ntrk3, Sh3gl2, Fam19a2, Eno2, Scn1b 
+## 	   Spock1, Scn8a, Glrb, Syt2, Scn4b, Lrrn1, Cpne6, Atp2b2, Lgi3, Snap25 
+## Negative:  Malat1, Cd24a, Tmem233, Cd9, Dusp26, Mal2, Tmem158, Carhsp1, Fxyd2, Ctxn3 
+## 	   Prkca, Arpc1b, Ubb, Crip2, Gna14, S100a6, Cd44, Tmem45b, Klf5, Tceal9 
+## 	   Hs6st2, Bex3, Cd82, Emp3, Ift122, Pfn1, Fam89a, Dynll1, Tubb2b, Gadd45g 
 ## PC_ 3 
-## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Tox3, D130079A08Rik, Iqsec2 
-## 	   Gfra2, Pou4f2, Rgs5, Kcnd3, Id4, Slc17a8, Piezo2, Gm11549, Dpp10, Cdkn1a 
-## 	   Casz1, Fxyd6, Spink2, Gabra1, Rgs10, C1ql4, Cd34, Zfhx3, Cckar, Alcam 
-## Negative:  Calca, Basp1, Gap43, Ppp3ca, Map1b, Cystm1, Scg2, Tmem233, Map7d2, Calm1 
-## 	   Ift122, Prkca, Tubb3, Ncdn, Etv1, Resp18, Nmb, Skp1a, Camk2a, Crip2 
-## 	   Tspan8, Gna14, Deptor, Adk, Ntrk1, Epb41l3, Cd9, Jak1, Carhsp1, Tmem255a 
+## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Tox3, Gfra2, D130079A08Rik 
+## 	   Iqsec2, Pou4f2, Rgs5, Kcnd3, Id4, Rasgrp1, Slc17a8, Casz1, Cdkn1a, Piezo2 
+## 	   Dpp10, Gm11549, Fxyd6, Spink2, Rgs10, C1ql4, Zfhx3, Cd34, Gabra1, Cckar 
+## Negative:  Calca, Basp1, Gap43, Ppp3ca, Map1b, Scg2, Cystm1, Tmem233, Map7d2, Calm1 
+## 	   Ift122, Tubb3, Ncdn, Prkca, Resp18, Etv1, Nmb, Skp1a, Crip2, Camk2a 
+## 	   Tspan8, Epb41l3, Ntrk1, Gna14, Deptor, Adk, Jak1, Tmem255a, Etl4, Cd9 
 ## PC_ 4 
-## Positive:  Gm45941, Slc26a2, Sez6l, Gm17197, Tmem238l, Egln3, Ltbp1, Agmo, Gm43409, Cyp26b1 
-## 	   Zfp712, Tnfaip6, Gm45509, Cdh12, Ociad2, Dgkb, Thrsp, Gm29595, Serpinb1a, Bckdhb 
-## 	   Chst2, Ankrd34c, Arpp21, D430036J16Rik, Esam, Pcca, Gm26710, Kcnh2, Pcgf2, Gm26737 
-## Negative:  6330403K07Rik, Gpx3, Snap25, Gap43, Ppp3ca, Epb41l3, Gal, Adcyap1, Dbpht2, Calca 
-## 	   Tac1, Map1b, B630019K06Rik, Cbfb, Pcp4, Arhgdig, Fxyd7, Kit, Atp2b4, Tmem255a 
-## 	   Mt3, Tmem176b, Tmem100, Ndn, Ywhag, Scg2, Cnih2, Ccl2, Bex1, Tnfrsf21 
+## Positive:  Id3, Timp3, Selenop, Pvalb, Ifitm3, Sparc, Igfbp7, Adk, Sgk1, Tm4sf1 
+## 	   Ly6c1, Id1, Etv1, Nsg1, Mt2, Zfp36l1, Slc17a7, Itm2a, Cldn5, Spp1 
+## 	   Ier2, Aldoc, Cxcl12, Shox2, Ptn, Qk, Stxbp6, Sparcl1, Jak1, Slit2 
+## Negative:  Gap43, Calca, Tac1, Stmn1, Ppp3ca, 6330403K07Rik, Arhgdig, Adcyap1, Alcam, Prune2 
+## 	   Kit, Ngfr, Ywhag, Gal, Fxyd6, Atp1a1, Smpd3, Ntrk1, Tmem100, Mt3 
+## 	   Atp2b4, Cd24a, Cnih2, Gpx3, Tppp3, S100a11, Snap25, Scn7a, Cbfb, Cartpt 
 ## PC_ 5 
-## Positive:  Gap43, Calca, Stmn1, Tac1, Ppp3ca, Arhgdig, 6330403K07Rik, Alcam, Prune2, Adcyap1 
-## 	   Ngfr, Kit, Ywhag, Atp1a1, Fxyd6, S100a11, Smpd3, Gal, Ntrk1, Tmem100 
-## 	   Cd24a, Mt3, Atp2b4, Tppp3, Cnih2, Anxa5, Phactr2, Gnb1, Scn7a, Gpx3 
-## Negative:  Id3, Pvalb, Timp3, Selenop, Igfbp7, Ifitm3, Adk, Sparc, Sgk1, Etv1 
-## 	   Ly6c1, Id1, Tm4sf1, Slc17a7, Shox2, Spp1, Aldoc, Ier2, Cldn5, Stxbp6 
-## 	   Zfp36l1, Jak1, Cxcl12, Ptn, Slit2, Cbln2, Sparcl1, Tspan8, Qk, Nppb
+## Positive:  Cpne3, Klf5, Acpp, Fxyd2, Jak1, Nppb, Osmr, Rgs4, Htr1f, Nbl1 
+## 	   Gm525, Etv1, Sst, Zfhx3, Adk, Tspan8, Cysltr2, Parm1, Npy2r, Tmem233 
+## 	   Cd24a, Nts, Prkca, Prune2, Socs2, Il31ra, Dgkz, Gnb1, Phf24, Plxnc1 
+## Negative:  Mt1, Ptn, B2m, Prdx1, Dbi, Mt3, Ifitm3, Fxyd7, Id3, S100a16 
+## 	   Calca, Mt2, Sparc, Pcp4l1, Selenop, Ifitm2, Rgcc, Igfbp7, Abcg2, Selenom 
+## 	   Tm4sf1, S100a13, Timp3, Apoe, Hspb1, Cryab, Ubb, Ly6c1, Phlda1, Gap43
 ```
 
 ```r
@@ -293,7 +293,7 @@ experiment.test.combat <- RunPCA(object = experiment.test.combat)
 ## 	   Bex3, Hs6st2, Cd82, Emp3, Pfn1, Tubb2b, Dynll1, Ift122, Fam89a, Acpp 
 ## PC_ 3 
 ## Positive:  P2ry1, Fam19a4, Gm7271, Rarres1, Th, Zfp521, Wfdc2, Tox3, Gfra2, D130079A08Rik 
-## 	   Iqsec2, Pou4f2, Rgs5, Kcnd3, Rasgrp1, Id4, Slc17a8, Casz1, Cdkn1a, Piezo2 
+## 	   Iqsec2, Pou4f2, Rgs5, Kcnd3, Id4, Rasgrp1, Slc17a8, Casz1, Cdkn1a, Piezo2 
 ## 	   Dpp10, Gm11549, Fxyd6, Rgs10, Zfhx3, Spink2, C1ql4, Gabra1, Cd34, Synpr 
 ## Negative:  Calca, Basp1, Gap43, Ppp3ca, Map1b, Scg2, Cystm1, Tmem233, Map7d2, Ift122 
 ## 	   Calm1, Ncdn, Tubb3, Prkca, Resp18, Etv1, Skp1a, Nmb, Crip2, Camk2a 
@@ -301,17 +301,17 @@ experiment.test.combat <- RunPCA(object = experiment.test.combat)
 ## PC_ 4 
 ## Positive:  Id3, Timp3, Pvalb, Selenop, Sparc, Adk, Ifitm3, Igfbp7, Etv1, Nsg1 
 ## 	   Sgk1, Tm4sf1, Id1, Ly6c1, Mt2, Spp1, Slc17a7, Zfp36l1, Shox2, Ier2 
-## 	   Aldoc, Cldn5, Itm2a, Ptn, Jak1, Qk, Cxcl12, Stxbp6, Tspan8, Slit2 
+## 	   Aldoc, Cldn5, Itm2a, Ptn, Jak1, Cxcl12, Qk, Stxbp6, Tspan8, Slit2 
 ## Negative:  Gap43, Calca, Stmn1, Tac1, Arhgdig, Ppp3ca, 6330403K07Rik, Alcam, Adcyap1, Prune2 
 ## 	   Ngfr, Kit, Ywhag, Atp1a1, Gal, Fxyd6, Smpd3, Ntrk1, Tmem100, Mt3 
 ## 	   Atp2b4, Cd24a, Cnih2, Tppp3, S100a11, Gpx3, Scn7a, Cbfb, Snap25, Gnb1 
 ## PC_ 5 
-## Positive:  Cpne3, Klf5, Acpp, Fxyd2, Jak1, Nppb, Osmr, Nbl1, Gm525, Htr1f 
-## 	   Rgs4, Sst, Etv1, Zfhx3, Cysltr2, Tspan8, Adk, Npy2r, Parm1, Tmem233 
+## Positive:  Cpne3, Klf5, Acpp, Fxyd2, Jak1, Nppb, Osmr, Nbl1, Gm525, Rgs4 
+## 	   Htr1f, Sst, Etv1, Zfhx3, Cysltr2, Tspan8, Adk, Npy2r, Parm1, Tmem233 
 ## 	   Cd24a, Nts, Prkca, Prune2, Socs2, Il31ra, Gnb1, Dgkz, Phf24, Ptafr 
 ## Negative:  Mt1, Ptn, B2m, Dbi, Prdx1, Mt3, Id3, Ifitm3, S100a16, Fxyd7 
 ## 	   Mt2, Calca, Sparc, Selenop, Pcp4l1, Ifitm2, Rgcc, Apoe, Cryab, Igfbp7 
-## 	   Selenom, Ubb, Abcg2, Tm4sf1, Timp3, S100a13, Hspb1, Phlda1, Hspa1a, Dad1
+## 	   Selenom, Ubb, Abcg2, Timp3, Tm4sf1, S100a13, Hspb1, Phlda1, Hspa1a, Dad1
 ```
 
 ```r

@@ -140,6 +140,14 @@ axis(1, at = 1:19, labels = 0:18, cex.axis = 0.8)
 matpoints(plotdat, col = modules, pch = 21)
 ```
 
+Can also plot the module onto the tsne plot
+```{r}
+blue.eigengene <- unlist(net$MEs[paste0("ME", "blue")])
+names(blue.eigengene) <- rownames(datExpr)
+experiment.merged$blue.eigengene <- blue.eigengene
+FeaturePlot(experiment.merged, features = "blue.eigengene", cols = c("grey", "blue"))
+```
+
 
 ## Get the next Rmd file
 ```{r, eval=FALSE}

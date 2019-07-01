@@ -47,7 +47,7 @@ plot(sort(Matrix::rowSums(GetAssayData(experiment.aggregate) >= 3)) , xlab="gene
 ```
 
 Violin plot of 1) number of genes, 2) number of UMI and 3) percent mitochondrial genes
-```{r, fig.height=6}
+```{r, fig.height=8}
 VlnPlot(
   experiment.aggregate,
   features = c("nFeature_RNA", "nCount_RNA","percent.mito"),

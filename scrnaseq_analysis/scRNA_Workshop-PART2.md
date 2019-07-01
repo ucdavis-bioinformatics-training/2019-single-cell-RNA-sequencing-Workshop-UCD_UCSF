@@ -139,15 +139,15 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 <tbody>
   <tr>
    <td style="text-align:center;"> G1 </td>
-   <td style="text-align:center;"> 2764 </td>
+   <td style="text-align:center;"> 2762 </td>
   </tr>
   <tr>
    <td style="text-align:center;"> G2M </td>
-   <td style="text-align:center;"> 97 </td>
+   <td style="text-align:center;"> 98 </td>
   </tr>
   <tr>
    <td style="text-align:center;"> S </td>
-   <td style="text-align:center;"> 35 </td>
+   <td style="text-align:center;"> 36 </td>
   </tr>
 </tbody>
 </table>

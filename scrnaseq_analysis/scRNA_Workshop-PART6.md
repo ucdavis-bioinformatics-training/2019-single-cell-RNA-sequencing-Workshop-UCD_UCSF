@@ -59,12 +59,12 @@ head(coef(fit)) # means in each sample for each gene
 
 ```
 ##        orig.identUCD_Adj_VitE orig.identUCD_Supp_VitE orig.identUCD_VitE_Def
-## Xkr4               0.00000000             0.000000000            0.007299386
-## Sox17              0.00000000             0.009059615            0.000000000
-## Mrpl15             0.09950052             0.047111832            0.090124656
-## Lypla1             0.16825245             0.174572188            0.274566585
-## Tcea1              0.23337111             0.217451945            0.268055981
-## Rgs20              0.05671722             0.098139805            0.075264334
+## Xkr4               0.00000000             0.000000000            0.007382649
+## Sox17              0.00000000             0.009641144            0.000000000
+## Mrpl15             0.10208017             0.050135903            0.100379172
+## Lypla1             0.17261455             0.169445627            0.267464330
+## Tcea1              0.22150229             0.221724283            0.259727729
+## Rgs20              0.05818767             0.104439319            0.076122862
 ```
 
 ```r
@@ -76,26 +76,26 @@ topTable(tmp, sort.by = "P", n = 20) # top 20 DE genes
 
 ```
 ##              logFC   AveExpr         t      P.Value    adj.P.Val         B
-## Rpl21   -0.6940744 2.0960659 -7.491480 1.695939e-13 2.114836e-09 20.010067
-## Rpl23a  -0.5758956 2.1549568 -6.358577 3.308626e-10 2.062928e-06 12.817327
-## Tmsb10  -0.4870359 3.2805433 -6.263147 5.964289e-10 2.479156e-06 12.259827
-## Rpl39   -0.5102379 2.2270006 -6.138103 1.275859e-09 3.977489e-06 11.540934
-## Rpl17   -0.5555388 1.9858858 -5.966323 3.548324e-09 8.849521e-06 10.574973
-## Rpl32   -0.5305218 2.4879312 -5.922604 4.584875e-09 9.528899e-06 10.333143
-## Rps8    -0.5176911 2.4850790 -5.631597 2.420869e-08 4.120323e-05  8.765247
-## S100a10 -0.5327206 1.2593306 -5.615855 2.643351e-08 4.120323e-05  8.682515
-## Rps11   -0.4909334 2.2978636 -5.559438 3.616049e-08 5.004915e-05  8.387774
-## Tmsb4x  -0.3659831 3.3269827 -5.529852 4.257135e-08 5.004915e-05  8.234309
-## Pcp4    -0.6658739 1.3585640 -5.523235 4.414921e-08 5.004915e-05  8.200095
-## Hspa8   -0.5093576 2.1252230 -5.445758 6.741872e-08 7.005928e-05  7.802273
-## Rps24   -0.4879797 1.5510296 -5.303590 1.446206e-07 1.380947e-04  7.085914
-## Rpl23   -0.4631348 2.0116972 -5.290467 1.550382e-07 1.380947e-04  7.020680
-## Sncg    -0.4462357 3.2198350 -5.273893 1.692372e-07 1.406925e-04  6.938511
-## Pfn1    -0.4909951 1.3084847 -5.246140 1.958794e-07 1.526635e-04  6.801457
-## Rpl24   -0.4670874 2.0841996 -5.193872 2.574962e-07 1.888810e-04  6.545176
-## H3f3b   -0.4806824 2.0994168 -5.167956 2.946317e-07 2.041143e-04  6.418997
-## Car8    -0.1846817 0.1153888 -5.139171 3.419529e-07 2.170852e-04  6.279540
-## Fau     -0.3994305 2.7479232 -5.135678 3.481720e-07 2.170852e-04  6.262668
+## Rpl21   -0.6295940 2.1675115 -6.904699 1.002068e-11 1.247575e-07 16.121644
+## Rpl39   -0.5023332 2.2658847 -6.104300 1.585680e-09 9.870858e-06 11.332145
+## Rpl23a  -0.5372573 2.2156351 -6.007236 2.824811e-09 1.172296e-05 10.787656
+## Rpl32   -0.5141010 2.5498295 -5.886385 5.732455e-09 1.784227e-05 10.120883
+## Tmsb4x  -0.3501370 3.3599509 -5.583192 3.202287e-08 7.973695e-05  8.502946
+## Rpl17   -0.5083811 2.0479434 -5.496973 5.147817e-08 1.003387e-04  8.057289
+## S100a10 -0.5279809 1.2947974 -5.458863 6.336631e-08 1.003387e-04  7.862350
+## Tmsb10  -0.4109434 3.3271754 -5.455672 6.447466e-08 1.003387e-04  7.846085
+## Rps11   -0.4656787 2.3489460 -5.374550 9.989407e-08 1.381868e-04  7.435558
+## Rps8    -0.4697608 2.5561078 -5.291931 1.551110e-07 1.931132e-04  7.023336
+## Pcp4    -0.6478194 1.3919370 -5.248194 1.953265e-07 2.210740e-04  6.807524
+## Hspa8   -0.4841140 2.1531037 -5.188601 2.666897e-07 2.766905e-04  6.516167
+## Fau     -0.3794717 2.7995759 -5.069733 4.917454e-07 4.568013e-04  5.944305
+## Rpl24   -0.4485520 2.1356508 -5.048071 5.490179e-07 4.568013e-04  5.841430
+## Rps24   -0.4678599 1.5957525 -5.047589 5.503630e-07 4.568013e-04  5.839145
+## Pfn1    -0.4760304 1.3429171 -5.016960 6.426726e-07 5.000796e-04  5.694403
+## Rpl10   -0.4202890 2.3551818 -5.000454 6.984432e-07 5.115069e-04  5.616744
+## Sncg    -0.4135446 3.2485368 -4.922839 1.029626e-06 6.804763e-04  5.254801
+## Ahsa2   -0.2772534 0.3017702 -4.921115 1.038478e-06 6.804763e-04  5.246822
+## Fxyd7   -0.4819690 1.0056997 -4.864036 1.376701e-06 8.569965e-04  4.984135
 ```
 * logFC: log2 fold change (UCD_Supp_VitE/UCD_Adj_VitE)
 * AveExpr: Average expression, in log2 counts per million, across all cells included in analysis (i.e. those in cluster 0)
@@ -293,7 +293,7 @@ names(geneList) <- all.genes
 ## 
 ## 			 -- Elim Algorithm -- 
 ## 
-## 		 the algorithm is scoring 3146 nontrivial nodes
+## 		 the algorithm is scoring 3209 nontrivial nodes
 ## 		 parameters: 
 ## 			 test statistic: fisher
 ## 			 cutOff: 0.01
@@ -326,72 +326,72 @@ names(geneList) <- all.genes
 
 ```
 ## 
-## 	 Level 14:	34 nodes to be scored	(31 eliminated genes)
+## 	 Level 14:	35 nodes to be scored	(31 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 13:	82 nodes to be scored	(38 eliminated genes)
+## 	 Level 13:	83 nodes to be scored	(38 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 12:	125 nodes to be scored	(438 eliminated genes)
+## 	 Level 12:	127 nodes to be scored	(438 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 11:	201 nodes to be scored	(521 eliminated genes)
+## 	 Level 11:	205 nodes to be scored	(521 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 10:	290 nodes to be scored	(750 eliminated genes)
+## 	 Level 10:	296 nodes to be scored	(750 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 9:	358 nodes to be scored	(999 eliminated genes)
+## 	 Level 9:	365 nodes to be scored	(1173 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 8:	409 nodes to be scored	(1361 eliminated genes)
+## 	 Level 8:	419 nodes to be scored	(1515 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 7:	496 nodes to be scored	(1659 eliminated genes)
+## 	 Level 7:	510 nodes to be scored	(1848 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 6:	482 nodes to be scored	(2334 eliminated genes)
+## 	 Level 6:	493 nodes to be scored	(2308 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 5:	340 nodes to be scored	(2567 eliminated genes)
+## 	 Level 5:	344 nodes to be scored	(2815 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 4:	194 nodes to be scored	(2588 eliminated genes)
+## 	 Level 4:	196 nodes to be scored	(2818 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 3:	88 nodes to be scored	(2658 eliminated genes)
+## 	 Level 3:	89 nodes to be scored	(3074 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 2:	19 nodes to be scored	(3206 eliminated genes)
+## 	 Level 2:	19 nodes to be scored	(3589 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 1:	1 nodes to be scored	(3206 eliminated genes)
+## 	 Level 1:	1 nodes to be scored	(3589 eliminated genes)
 ```
 
 ```r
@@ -400,26 +400,26 @@ names(geneList) <- all.genes
 
 ```
 ##         GO.ID                                                            Term Annotated Significant Expected  Fisher
-## 1  GO:0006412                                                     translation       517          52     6.83 1.0e-22
-## 2  GO:0002181                                         cytoplasmic translation        77          18     1.02 4.7e-18
-## 3  GO:0000028                                ribosomal small subunit assembly        18           7     0.24 1.7e-09
-## 4  GO:0000027                                ribosomal large subunit assembly        29           7     0.38 7.5e-08
-## 5  GO:0097214          positive regulation of lysosomal membrane permeability         2           2     0.03 0.00017
-## 6  GO:0006880                          intracellular sequestering of iron ion         3           2     0.04 0.00052
-## 7  GO:2000582 positive regulation of ATP-dependent microtubule motor activ...         3           2     0.04 0.00052
-## 8  GO:0000462 maturation of SSU-rRNA from tricistronic rRNA transcript (SS...        30           4     0.40 0.00062
-## 9  GO:0007409                                                    axonogenesis       353          15     4.67 0.00065
-## 10 GO:1990090               cellular response to nerve growth factor stimulus        32           4     0.42 0.00079
-## 11 GO:0016198                                   axon choice point recognition         4           2     0.05 0.00102
-## 12 GO:0050848                        regulation of calcium-mediated signaling        60           5     0.79 0.00115
-## 13 GO:0061844 antimicrobial humoral immune response mediated by antimicrob...        17           3     0.22 0.00134
-## 14 GO:0050774                   negative regulation of dendrite morphogenesis        18           3     0.24 0.00160
-## 15 GO:0002227                                innate immune response in mucosa         5           2     0.07 0.00169
-## 16 GO:0071635 negative regulation of transforming growth factor beta produ...         5           2     0.07 0.00169
-## 17 GO:0047497                       mitochondrion transport along microtubule        19           3     0.25 0.00188
-## 18 GO:0048588                                       developmental cell growth       213           9     2.82 0.00207
-## 19 GO:0033138          positive regulation of peptidyl-serine phosphorylation        71           5     0.94 0.00244
-## 20 GO:0002679                  respiratory burst involved in defense response         6           2     0.08 0.00251
+## 1  GO:0006412                                                     translation       517          53     7.10 2.9e-22
+## 2  GO:0002181                                         cytoplasmic translation        77          19     1.06 3.6e-19
+## 3  GO:0000028                                ribosomal small subunit assembly        18           8     0.25 4.1e-11
+## 4  GO:0000027                                ribosomal large subunit assembly        29           7     0.40 9.8e-08
+## 5  GO:1902255 positive regulation of intrinsic apoptotic signaling pathway...         6           3     0.08 4.9e-05
+## 6  GO:0047497                       mitochondrion transport along microtubule        19           4     0.26 0.00011
+## 7  GO:0097214          positive regulation of lysosomal membrane permeability         2           2     0.03 0.00019
+## 8  GO:0006880                          intracellular sequestering of iron ion         3           2     0.04 0.00056
+## 9  GO:2000582 positive regulation of ATP-dependent microtubule motor activ...         3           2     0.04 0.00056
+## 10 GO:0000462 maturation of SSU-rRNA from tricistronic rRNA transcript (SS...        30           4     0.41 0.00071
+## 11 GO:1990090               cellular response to nerve growth factor stimulus        32           4     0.44 0.00091
+## 12 GO:0007409                                                    axonogenesis       353          15     4.85 0.00093
+## 13 GO:0016198                                   axon choice point recognition         4           2     0.05 0.00110
+## 14 GO:0050848                        regulation of calcium-mediated signaling        60           5     0.82 0.00136
+## 15 GO:0061844 antimicrobial humoral immune response mediated by antimicrob...        17           3     0.23 0.00150
+## 16 GO:0050774                   negative regulation of dendrite morphogenesis        18           3     0.25 0.00178
+## 17 GO:0050808                                            synapse organization       371          13     5.09 0.00180
+## 18 GO:0002227                                innate immune response in mucosa         5           2     0.07 0.00182
+## 19 GO:0071635 negative regulation of transforming growth factor beta produ...         5           2     0.07 0.00182
+## 20 GO:0048588                                       developmental cell growth       213           9     2.92 0.00268
 ```
 * Annotated: number of genes (out of all.genes) that are annotated with that GO term
 * Significant: number of genes that are annotated with that GO term and meet our criteria for "expressed"
@@ -572,6 +572,17 @@ matpoints(plotdat, col = modules, pch = 21)
 
 ![](scRNA_Workshop-PART6_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
+Can also plot the module onto the tsne plot
+
+```r
+blue.eigengene <- unlist(net$MEs[paste0("ME", "blue")])
+names(blue.eigengene) <- rownames(datExpr)
+experiment.merged$blue.eigengene <- blue.eigengene
+FeaturePlot(experiment.merged, features = "blue.eigengene", cols = c("grey", "blue"))
+```
+
+![](scRNA_Workshop-PART6_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
 
 ## Get the next Rmd file
 
@@ -604,10 +615,11 @@ sessionInfo()
 ##  [1] WGCNA_1.68            fastcluster_1.1.25    dynamicTreeCut_1.63-1 org.Mm.eg.db_3.8.2    topGO_2.36.0          SparseM_1.77          GO.db_3.8.2           AnnotationDbi_1.46.0  IRanges_2.18.1        S4Vectors_0.22.0      Biobase_2.44.0        graph_1.62.0          BiocGenerics_0.30.0   limma_3.40.2          ggplot2_3.2.0         Seurat_3.0.2         
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] Rtsne_0.15            colorspace_1.4-1      ggridges_0.5.1        htmlTable_1.13.1      base64enc_0.1-3       rstudioapi_0.10       listenv_0.7.0         npsurv_0.4-0          ggrepel_0.8.1         bit64_0.9-7           mvtnorm_1.0-11        codetools_0.2-16      splines_3.6.0         R.methodsS3_1.7.1     doParallel_1.0.14     robustbase_0.93-5     impute_1.58.0         lsei_1.2-0            knitr_1.23            Formula_1.2-3        
-##  [21] jsonlite_1.6          ica_1.0-2             cluster_2.1.0         png_0.1-7             R.oo_1.22.0           sctransform_0.2.0     rrcov_1.4-7           compiler_3.6.0        httr_1.4.0            backports_1.1.4       assertthat_0.2.1      Matrix_1.2-17         lazyeval_0.2.2        acepack_1.4.1         htmltools_0.3.6       tools_3.6.0           rsvd_1.0.1            igraph_1.2.4.1        gtable_0.3.0          glue_1.3.1           
-##  [41] RANN_2.6.1            reshape2_1.4.3        dplyr_0.8.1           Rcpp_1.0.1            preprocessCore_1.46.0 gdata_2.18.0          ape_5.3               nlme_3.1-140          iterators_1.0.10      gbRd_0.4-11           lmtest_0.9-37         xfun_0.7              stringr_1.4.0         globals_0.12.4        irlba_2.3.3           gtools_3.8.1          future_1.13.0         DEoptimR_1.0-8        MASS_7.3-51.4         zoo_1.8-6            
-##  [61] scales_1.0.0          RColorBrewer_1.1-2    yaml_2.2.0            memoise_1.1.0         reticulate_1.12       pbapply_1.4-0         gridExtra_2.3         rpart_4.1-15          latticeExtra_0.6-28   stringi_1.4.3         RSQLite_2.1.1         pcaPP_1.9-73          foreach_1.4.4         checkmate_1.9.3       caTools_1.17.1.2      bibtex_0.4.2          Rdpack_0.11-0         SDMTools_1.1-221.1    rlang_0.3.4           pkgconfig_2.0.2      
-##  [81] bitops_1.0-6          matrixStats_0.54.0    evaluate_0.14         lattice_0.20-38       ROCR_1.0-7            purrr_0.3.2           htmlwidgets_1.3       robust_0.4-18         cowplot_0.9.4         bit_1.1-14            tidyselect_0.2.5      plyr_1.8.4            magrittr_1.5          R6_2.4.0              fit.models_0.5-14     Hmisc_4.2-0           gplots_3.0.1.1        DBI_1.0.0             foreign_0.8-71        pillar_1.4.1         
-## [101] withr_2.1.2           fitdistrplus_1.0-14   nnet_7.3-12           survival_2.44-1.1     tibble_2.1.3          future.apply_1.3.0    tsne_0.1-3            crayon_1.3.4          KernSmooth_2.23-15    plotly_4.9.0          rmarkdown_1.13        grid_3.6.0            data.table_1.12.2     blob_1.1.1            metap_1.1             digest_0.6.19         tidyr_0.8.3           R.utils_2.9.0         munsell_0.5.0         viridisLite_0.3.0
+##   [1] backports_1.1.4       Hmisc_4.2-0           plyr_1.8.4            igraph_1.2.4.1        lazyeval_0.2.2        splines_3.6.0         listenv_0.7.0         robust_0.4-18         digest_0.6.19         foreach_1.4.4         htmltools_0.3.6       gdata_2.18.0          magrittr_1.5          checkmate_1.9.3       memoise_1.1.0         fit.models_0.5-14     cluster_2.1.0         doParallel_1.0.14     ROCR_1.0-7            globals_0.12.4       
+##  [21] matrixStats_0.54.0    R.utils_2.9.0         colorspace_1.4-1      blob_1.1.1            rrcov_1.4-7           ggrepel_0.8.1         xfun_0.7              dplyr_0.8.1           crayon_1.3.4          jsonlite_1.6          impute_1.58.0         survival_2.44-1.1     zoo_1.8-6             iterators_1.0.10      ape_5.3               glue_1.3.1            gtable_0.3.0          future.apply_1.3.0    DEoptimR_1.0-8        scales_1.0.0         
+##  [41] mvtnorm_1.0-11        DBI_1.0.0             bibtex_0.4.2          Rcpp_1.0.1            metap_1.1             viridisLite_0.3.0     htmlTable_1.13.1      reticulate_1.12       foreign_0.8-71        bit_1.1-14            rsvd_1.0.1            SDMTools_1.1-221.1    preprocessCore_1.46.0 Formula_1.2-3         tsne_0.1-3            htmlwidgets_1.3       httr_1.4.0            gplots_3.0.1.1        RColorBrewer_1.1-2    acepack_1.4.1        
+##  [61] ica_1.0-2             pkgconfig_2.0.2       R.methodsS3_1.7.1     nnet_7.3-12           tidyselect_0.2.5      labeling_0.3          rlang_0.3.4           reshape2_1.4.3        munsell_0.5.0         tools_3.6.0           RSQLite_2.1.1         ggridges_0.5.1        evaluate_0.14         stringr_1.4.0         yaml_2.2.0            npsurv_0.4-0          knitr_1.23            bit64_0.9-7           fitdistrplus_1.0-14   robustbase_0.93-5    
+##  [81] caTools_1.17.1.2      purrr_0.3.2           RANN_2.6.1            pbapply_1.4-0         future_1.13.0         nlme_3.1-140          R.oo_1.22.0           compiler_3.6.0        rstudioapi_0.10       plotly_4.9.0          png_0.1-7             lsei_1.2-0            tibble_2.1.3          pcaPP_1.9-73          stringi_1.4.3         lattice_0.20-38       Matrix_1.2-17         pillar_1.4.1          Rdpack_0.11-0         lmtest_0.9-37        
+## [101] data.table_1.12.2     cowplot_0.9.4         bitops_1.0-6          irlba_2.3.3           gbRd_0.4-11           R6_2.4.0              latticeExtra_0.6-28   KernSmooth_2.23-15    gridExtra_2.3         codetools_0.2-16      MASS_7.3-51.4         gtools_3.8.1          assertthat_0.2.1      withr_2.1.2           sctransform_0.2.0     grid_3.6.0            rpart_4.1-15          tidyr_0.8.3           rmarkdown_1.13        Rtsne_0.15           
+## [121] base64enc_0.1-3
 ```
