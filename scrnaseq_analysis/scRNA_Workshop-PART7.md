@@ -14,6 +14,8 @@ In this section, we will learn how to take two separate datasets and "integrate"
 
 Here we will perform alignment as if we do not have any labels (case 3), but we will use the labels after alignment to check its accuracy. The following R markdown illustrates how to do integration with Seurat, and aligns two datasets pretty successfully.
 
+Let's take a quick peek to see what cell types are annotated in each study.
+
 
 ```r
 library(Seurat)
@@ -42,34 +44,11 @@ library(cowplot)
 ```
 
 ```r
-download.file('https://ucdavis.box.com/shared/static/zgxdsp3nwhzixpkeitftkgzq3phlsear.rdata','scRNA.workshop.alignment.airway.rdata', mode='wb')
+# ASSIGNMENT 3 modify here
+
+#download.file('https://ucdavis.box.com/shared/static/0nseizn5no45gbr5tsiks7lqz1ziixx7.rdata','scRNA.workshop.alignment.airway.rdata', mode='wb')
 load('scRNA.workshop.alignment.airway.rdata')
 
-#for now, make the name of the cells just the name of the dataset, so we can easily visualize batch or condition effect
-for (ii in 1:length(seuratObjs)) {
-  Idents(seuratObjs[[ii]])=names(seuratObjs)[ii];
-};
-
-#load data
-gse103354.data <- seuratObjs[['gse103354']];
-gse102580.data <- seuratObjs[['gse102580']];
-rm(seuratObjs);
-
-compData.list <- list("gse103" = gse103354.data, "gse102" = gse102580.data)
-
-  
-#normalize, find HVGs
-for (i in 1:length(x = compData.list)) {
-  compData.list[[i]] <- NormalizeData(object = compData.list[[i]], verbose = FALSE)
-  compData.list[[i]] <- FindVariableFeatures(object = compData.list[[i]], selection.method = "vst", nfeatures = 2000, verbose = FALSE)
-}
-```
-
-
-Let's take a quick peek to see what cell types are annotated in each study.
-
-
-```r
 levels(factor(gse103354.data@meta.data$type))
 ```
 
@@ -97,14 +76,31 @@ levels(factor(gse102580.data@meta.data$type))
 ## [10] "gse102580_Secretory"
 ```
 
+```r
+#rename datasets to make cross-species alignment (below) easier
+dataset1 = gse103354.data;
+dataset2 = gse102580.data;
+dataset1name = 'gse103354';
+dataset2name = 'gse102580';
+projectname = 'airwayepithelia';
+
+#try this later:
+#gse102580.data = removeCellType(gse102580.data, cellTypeToRemove = 'gse102580_Ciliated')
+```
+
 
 Now we will visualize the data without alignment.
 
 
 ```r
-  dat1=gse102580.data;
-  dat2=gse103354.data;
-  dat1 <- ScaleData(object = dat1)
+# speed up alignment by subsetting data to at most 100 cells per type.
+# ASSIGNMENT 1 modify here
+dataset1 <- setMaxNumCellsPerType(dataset1, maxNumCells=100);
+dataset2 <- setMaxNumCellsPerType(dataset2, maxNumCells=100);
+
+gse.combined <- merge(x = dataset1, y = dataset2, add.cell.ids = c(dataset1name, dataset2name), project = projectname)
+
+gse.combined <- ScaleData(object = gse.combined)
 ```
 
 ```
@@ -112,37 +108,12 @@ Now we will visualize the data without alignment.
 ```
 
 ```r
-  dat2 <- ScaleData(object = dat2)
-```
+gse.combined <- FindVariableFeatures(object = gse.combined, selection.method = "vst", nfeatures = 2000, verbose = FALSE)
 
-```
-## Centering and scaling data matrix
-```
+gse.combined <- RunPCA(object = gse.combined, npcs = 30, verbose = FALSE)
 
-```r
-  dat1 <- FindVariableFeatures(object = dat1, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-   dat2 <- FindVariableFeatures(object = dat2, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-  
-  
- gse.combined <- merge(x = dat1, y = dat2, add.cell.ids = c("gse102580", "gse103354"), project = "airwayepithelium")
-
- rm(dat1,dat2)
- 
- gse.combined <- ScaleData(object = gse.combined)
-```
-
-```
-## Centering and scaling data matrix
-```
-
-```r
-  gse.combined <- FindVariableFeatures(object = gse.combined, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.125, x.high.cutoff = 4, y.cutoff = 0.5)
-  
-    gse.combined <- RunPCA(object = gse.combined, npcs = 30, verbose = FALSE)
-
-      gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
-  DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TRUE, 
-                repel = TRUE) + NoLegend()
+gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
+DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TRUE, repel = TRUE) + NoLegend()
 ```
 
 ```
@@ -154,15 +125,14 @@ Now we will visualize the data without alignment.
 ![](scRNA_Workshop-PART7_files/figure-html/data_visualization_without_alignment-1.png)<!-- -->
 
 ```r
-        gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
-  DimPlot(object = gse.combined, reduction = "tsne", group.by = "type", label = TRUE, 
-                repel = TRUE) + NoLegend()
+gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
+DimPlot(object = gse.combined, reduction = "tsne", group.by = "type", label = TRUE, repel = TRUE) + NoLegend()
 ```
 
 ![](scRNA_Workshop-PART7_files/figure-html/data_visualization_without_alignment-2.png)<!-- -->
 
 ```r
-  rm(gse.combined)
+rm(gse.combined)
 ```
   
 
@@ -171,8 +141,11 @@ Now visualize after alignment.
 
 ```r
   #find anchors
-  reference.list <- compData.list[c("gse102", "gse103")]
-  compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:30)
+reference.list <- list(dataset1,dataset2)
+names(reference.list) <- c(dataset1name, dataset2name)
+
+# ASSIGNMENT 2 modify here
+compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:30, k.anchor = 5, k.filter = 200, k.score = 30)
 ```
 
 ```
@@ -204,7 +177,7 @@ Now visualize after alignment.
 ```
 
 ```
-## 	Found 16701 anchors
+## 	Found 1809 anchors
 ```
 
 ```
@@ -212,7 +185,7 @@ Now visualize after alignment.
 ```
 
 ```
-## 	Retained 7652 anchors
+## 	Retained 1484 anchors
 ```
 
 ```
@@ -220,11 +193,11 @@ Now visualize after alignment.
 ```
 
 ```r
-  compData.integrated <- IntegrateData(anchorset = compData.anchors, dims = 1:30)
+compData.integrated <- IntegrateData(anchorset = compData.anchors, dims = 1:30)
 ```
 
 ```
-## Merging dataset 2 into 1
+## Merging dataset 1 into 2
 ```
 
 ```
@@ -244,46 +217,49 @@ Now visualize after alignment.
 ```
 
 ```r
-  rm(reference.list, compData.anchors)
+rm(reference.list, compData.anchors)
 
+DefaultAssay(object = compData.integrated) <- "integrated"
 
-  DefaultAssay(object = compData.integrated) <- "integrated"
+#visualize
   
-  #visualize
-    
-  # Run the standard workflow for visualization and clustering
-  compData.integrated <- ScaleData(object = compData.integrated, verbose = FALSE)
-  compData.integrated <- RunPCA(object = compData.integrated, npcs = 30, verbose = FALSE)
-  compData.integrated <- RunTSNE(object = compData.integrated, reduction = "pca", dims = 1:30)
-  DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", label = TRUE, 
-                repel = TRUE) + NoLegend()
+# Run the standard workflow for visualization and clustering
+compData.integrated <- ScaleData(object = compData.integrated, verbose = FALSE)
+compData.integrated <- RunPCA(object = compData.integrated, npcs = 30, verbose = FALSE)
+compData.integrated <- RunTSNE(object = compData.integrated, reduction = "pca", dims = 1:30)
+DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", label = TRUE, 
+              repel = TRUE) + NoLegend()
 ```
 
 ![](scRNA_Workshop-PART7_files/figure-html/seuratAlignment-1.png)<!-- -->
 
 ```r
-  DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
-                repel = TRUE) + NoLegend()
+DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
+              repel = TRUE) + NoLegend()
 ```
 
 ![](scRNA_Workshop-PART7_files/figure-html/seuratAlignment-2.png)<!-- -->
 
 ## Group assignment 1
 
-Check the help of FindIntegrationAnchors. What happens when you change k.anchor, k.filter and k.score.
-
-## Discussion points
-
-Statistical significance?
-When does alignment make sense?
-How do you know when alignment makes sense?
+Check how well Seurat can align the correct cell types, when the cell types are more evenly distributed (e.g. the Basal cells are not overrepresented in the data). Hint: do a search in this Rmd file for 'ASSIGNMENT 1 modify here', and set maxNumCells=25 or something small.
 
 ## Group assignment 2
 
-Try aligning single cells across the human and mouse cortex:
+Check the help of FindIntegrationAnchors. What happens when you change dims, k.anchor, k.filter and k.score. What about the dims argument of RunTSNE?  Hint: do a search in this Rmd file for 'ASSIGNMENT 2 modify here'.
+
+## Group assignment 3
+
+Try aligning single cells across the human and mouse cortex ( Hint: do a search in this Rmd file for 'ASSIGNMENT 3 modify here'.):
 
 ```r
-#download.file('https://ucdavis.box.com/shared/static/zxouwrqb7pm9t64gqyuqdrl637749a7y.rdata','allen.expr.rdata', mode='wb')
-#load('allen.expr.rdata')
-#Tip: Look at e.g. seuratObjs[[1]]@meta.data. Columns "cluster_type_label" and "cluster_subtype_label" will be useful for visualization.
+#download.file('https://ucdavis.box.com/shared/static/ud4zh4ynpd7avemk3gqfva3nmqurk7ld.rdata','allen.expr.rdata', mode='wb')
+load('allen.expr.rdata')
 ```
+
+## Discussion points
+
+When does alignment work well? (e.g. what were the results of Assignment 1?)
+Statistical significance?
+When does alignment make sense?
+How do you know when alignment makes sense?
