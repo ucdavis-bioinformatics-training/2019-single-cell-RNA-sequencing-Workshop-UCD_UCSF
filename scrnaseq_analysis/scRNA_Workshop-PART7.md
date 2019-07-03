@@ -112,6 +112,7 @@ gse.combined <- FindVariableFeatures(object = gse.combined, selection.method = "
 
 gse.combined <- RunPCA(object = gse.combined, npcs = 30, verbose = FALSE)
 
+#Run TSNE, coloring cells by which dataset they came from
 gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
 DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TRUE, repel = TRUE) + NoLegend()
 ```
@@ -125,6 +126,7 @@ DimPlot(object = gse.combined, reduction = "tsne", group.by = "stim", label = TR
 ![](scRNA_Workshop-PART7_files/figure-html/data_visualization_without_alignment-1.png)<!-- -->
 
 ```r
+#Run TSNE, coloring cells by "cell type"
 gse.combined <- RunTSNE(object = gse.combined, reduction = "pca", dims = 1:20)
 DimPlot(object = gse.combined, reduction = "tsne", group.by = "type", label = TRUE, repel = TRUE) + NoLegend()
 ```
@@ -136,6 +138,10 @@ rm(gse.combined)
 ```
   
 
+[FUTURE] ComBat and Seurat (regress) batch correction results.
+  
+
+
 Now visualize after alignment.
   
 
@@ -145,7 +151,7 @@ reference.list <- list(dataset1,dataset2)
 names(reference.list) <- c(dataset1name, dataset2name)
 
 # ASSIGNMENT 2 modify here
-compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:30, k.anchor = 5, k.filter = 200, k.score = 30)
+compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 1:2, k.anchor = 5, k.filter = 200, k.score = 30)
 ```
 
 ```
@@ -177,7 +183,7 @@ compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 
 ```
 
 ```
-## 	Found 1809 anchors
+## 	Found 2065 anchors
 ```
 
 ```
@@ -185,7 +191,7 @@ compData.anchors <- FindIntegrationAnchors(object.list = reference.list, dims = 
 ```
 
 ```
-## 	Retained 1484 anchors
+## 	Retained 1511 anchors
 ```
 
 ```
@@ -226,6 +232,8 @@ DefaultAssay(object = compData.integrated) <- "integrated"
 # Run the standard workflow for visualization and clustering
 compData.integrated <- ScaleData(object = compData.integrated, verbose = FALSE)
 compData.integrated <- RunPCA(object = compData.integrated, npcs = 30, verbose = FALSE)
+
+#Run TSNE on integrated data, coloring cells by which dataset they came from
 compData.integrated <- RunTSNE(object = compData.integrated, reduction = "pca", dims = 1:30)
 DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", label = TRUE, 
               repel = TRUE) + NoLegend()
@@ -234,6 +242,7 @@ DimPlot(object = compData.integrated, reduction = "tsne", group.by = "stim", lab
 ![](scRNA_Workshop-PART7_files/figure-html/seuratAlignment-1.png)<!-- -->
 
 ```r
+#Run TSNE on integrated data, coloring cells by "cell type"
 DimPlot(object = compData.integrated, reduction = "tsne", group.by = "type", label = TRUE, 
               repel = TRUE) + NoLegend()
 ```
@@ -263,3 +272,10 @@ When does alignment work well? (e.g. what were the results of Assignment 1?)
 Statistical significance?
 When does alignment make sense?
 How do you know when alignment makes sense?
+
+## More reading
+
+For a larger list of alignment methods, as well as an evaluation of them, see our preprint here: https://www.biorxiv.org/content/10.1101/504944v6 . As a side note, some of the benefits of scAlign compared to most other methods include:
+
+* ability to 'project' data from aligned space back to UMI/count space (for post-analysis). 
+* ability to use partial labeling of cells to improve alignment - e.g. suppose only some cells can be labeled using high confidence markers.
