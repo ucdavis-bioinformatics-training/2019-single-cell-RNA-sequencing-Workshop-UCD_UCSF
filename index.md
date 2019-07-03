@@ -19,14 +19,16 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [Cell Ranger Counts](data_reduction/Expression_Matrix.md)
 
 
-## Intro to R and Rstudio
+## Intro to R and RStudio
 * [Getting Started](intro2R/RStudio.md)
 * [Intro to R](intro2R/Intro2R.md)
 ### EXTRA
 * [Prepare Data in R](intro2R/data_in_R_prepare.md)
 * [Data in R](intro2R/orig_data_in_R.md)
 
-[Cell Preparation, Dr. Diana Burkhart-Waco](pdfs/10X_Cell_Preparation_Talk.pdf) (talk)  
+[Cell Preparation, Dr. Diana Burkhart-Waco (UCD)](pdfs/10X_Cell_Preparation_Talk.pdf) (talk)  
+
+[Single Cell Technologies, Dr. Eric Chow (UCSF)](pdfs/2019_UCD_scRNA-seq_tech_talk.pdf) (talk)
 
 [Experimental Design and Cost Estimation](pdfs/singlecellRNAseq-expDesign.pdf) (talk)
 
@@ -41,11 +43,6 @@ title: June/July 2019 scRNA-Seq Workshop Home
 
 #### Part 7 taught by [Dr. Gerald Quon](https://qlab.faculty.ucdavis.edu/)
 * [scRNAseq Analysis - PART7](scrnaseq_analysis/scRNA_Workshop-PART7.md)
-
-
-```
-download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
-```
 
 
 [Closing thoughts](closing.md)
