@@ -76,7 +76,7 @@ mat <- as.matrix(GetAssayData(experiment.aggregate))
 #ensembl<- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
 #anno_data <- getBM( values=rownames(mat), attributes=c("mgi_symbol","ensembl_gene_id") , filters= "mgi_symbol"  ,mart=ensembl)
 # Downloaded from Biomart
-#download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/mart_export_June2019.txt", "mart_export_June2019.txt"
+#download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/mart_export_June2019.txt", "mart_export_June2019.txt")
 anno <- read.delim("mart_export_June2019.txt")
 
 ord <- match(rownames(mat), anno$MGI.symbol) # use anno$mgi_symbol if via biomaRt

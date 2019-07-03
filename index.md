@@ -38,13 +38,14 @@ title: June/July 2019 scRNA-Seq Workshop Home
 * [scRNAseq Analysis - PART4](scrnaseq_analysis/scRNA_Workshop-PART4.md)
 * [scRNAseq Analysis - PART5](scrnaseq_analysis/scRNA_Workshop-PART5.md)
 * [scRNAseq Analysis - PART6](scrnaseq_analysis/scRNA_Workshop-PART6.md)
-
-```
-download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
 ```
 
 #### Part 7 taught by [Dr. Gerald Quon](https://qlab.faculty.ucdavis.edu/)
 * [scRNAseq Analysis - PART7](scrnaseq_analysis/scRNA_Workshop-PART7.md)
+
+
+```
+download.file("https://raw.githubusercontent.com/ucdavis-bioinformatics-training/2019-single-cell-RNA-sequencing-Workshop-UCD_UCSF/master/scrnaseq_analysis/scRNA_Workshop-PART7.Rmd", "scRNA_Workshop-PART7.Rmd")
 
 
 [Closing thoughts](closing.md)

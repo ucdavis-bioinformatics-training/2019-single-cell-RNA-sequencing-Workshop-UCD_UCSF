@@ -27,7 +27,7 @@ experiment.aggregate
 ```r
 experiment.test <- experiment.aggregate
 set.seed(12345)
-rand.genes <- sample(1:nrow(experiment.test), 500,replace = F,)
+rand.genes <- sample(1:nrow(experiment.test), 500,replace = F)
 mat <- as.matrix(GetAssayData(experiment.test, slot="data"))
 mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] <- mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] + 0.18
 experiment.test = SetAssayData(experiment.test, slot="data", new.data= mat )
