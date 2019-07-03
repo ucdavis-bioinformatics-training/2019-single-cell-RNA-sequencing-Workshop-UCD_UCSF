@@ -85,6 +85,25 @@ rownames(tmp) <- colnames(mat)
 experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
 ```
 
+### Lets create a fake batch metadata (used in part 3), Here we determine UCD_Adj_VitE is from one batch and UCD_Adj_VitE/UCD_Adj_VitE are from a second battch
+
+Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
+```{r}
+samplename = experiment.aggregate@meta.data$orig.ident
+table(samplename)
+
+batchid = rep("Batch1",length(samplename))
+batchid[samplename %in% c("UCD_Adj_VitE")] = "Batch2"
+names(batchid) = rownames(experiment.aggregate@meta.data)
+
+experiment.aggregate <- AddMetaData(
+  object = experiment.aggregate,
+  metadata = batchid,
+  col.name = "batchid")
+
+table(experiment.aggregate$batchid)
+```
+
 ### Lets spend a little time getting to know the Seurat object.
 
 The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyses, etc. The R function slotNames can be used to view the slot names within an object.

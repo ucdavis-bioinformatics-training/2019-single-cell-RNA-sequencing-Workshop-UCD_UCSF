@@ -89,6 +89,40 @@ rownames(tmp) <- colnames(mat)
 experiment.aggregate <- AddMetaData(experiment.aggregate, tmp)
 ```
 
+### Lets create a fake batch metadata (used in part 3), Here we determine UCD_Adj_VitE is from one batch and UCD_Adj_VitE/UCD_Adj_VitE are from a second battch
+
+Here we build a new metadata variable 'batchid' which can be used to specify treatment groups.
+
+```r
+samplename = experiment.aggregate@meta.data$orig.ident
+table(samplename)
+```
+
+```
+## samplename
+##  UCD_Adj_VitE UCD_Supp_VitE  UCD_VitE_Def 
+##           904          1000           992
+```
+
+```r
+batchid = rep("Batch1",length(samplename))
+batchid[samplename %in% c("UCD_Adj_VitE")] = "Batch2"
+names(batchid) = rownames(experiment.aggregate@meta.data)
+
+experiment.aggregate <- AddMetaData(
+  object = experiment.aggregate,
+  metadata = batchid,
+  col.name = "batchid")
+
+table(experiment.aggregate$batchid)
+```
+
+```
+## 
+## Batch1 Batch2 
+##   1992    904
+```
+
 ### Lets spend a little time getting to know the Seurat object.
 
 The Seurat object is the center of each single cell analysis. It stores __all__ information associated with the dataset, including data, annotations, analyses, etc. The R function slotNames can be used to view the slot names within an object.
@@ -118,13 +152,13 @@ head(experiment.aggregate@meta.data)
 ## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE UCD_Adj_VitE       2795         1474
 ## ACATCGGGTCCATGCTC-UCD_Adj_VitE UCD_Adj_VitE       5372         2271
 ## ATACGGTAGTGACCAAG-UCD_Adj_VitE UCD_Adj_VitE        598          367
-##                                percent.mito cell.cycle
-## ACTCTAATGTGGGTATG-UCD_Adj_VitE     1.969612         G1
-## AGGCTGGTCAATCACAC-UCD_Adj_VitE     6.216378         G1
-## ATGACTAGCACATGACT-UCD_Adj_VitE     6.838768         G1
-## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE     4.221825         G1
-## ACATCGGGTCCATGCTC-UCD_Adj_VitE     7.557707         G1
-## ATACGGTAGTGACCAAG-UCD_Adj_VitE    11.371237         G1
+##                                percent.mito cell.cycle batchid
+## ACTCTAATGTGGGTATG-UCD_Adj_VitE     1.969612         G1  Batch2
+## AGGCTGGTCAATCACAC-UCD_Adj_VitE     6.216378         G1  Batch2
+## ATGACTAGCACATGACT-UCD_Adj_VitE     6.838768         G1  Batch2
+## AAGCGTCGTCTCTAAGG-UCD_Adj_VitE     4.221825         G1  Batch2
+## ACATCGGGTCCATGCTC-UCD_Adj_VitE     7.557707         G1  Batch2
+## ATACGGTAGTGACCAAG-UCD_Adj_VitE    11.371237         G1  Batch2
 ```
 
 #### Question(s)

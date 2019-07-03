@@ -18,7 +18,7 @@ experiment.test <- experiment.aggregate
 set.seed(12345)
 rand.genes <- sample(1:nrow(experiment.test), 500,replace = F)
 mat <- as.matrix(GetAssayData(experiment.test, slot="data"))
-mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] <- mat[rand.genes,experiment.test$orig.ident=="UCD_Supp_VitE"] + 0.18
+mat[rand.genes,experiment.test$batchid=="Batch2"] <- mat[rand.genes,experiment.test$batchid=="Batch2"] + 0.18
 experiment.test = SetAssayData(experiment.test, slot="data", new.data= mat )
 ```
 
@@ -37,8 +37,8 @@ experiment.test.noc <- ScaleData(object = experiment.test)
 ### Run PCA
 ```{r, fig.align="center", fig.caption="Uncorrected PCA plot"}
 experiment.test.noc <- RunPCA(object = experiment.test.noc)
-DimPlot(object = experiment.test.noc, reduction = "pca")
-DimPlot(object = experiment.test.noc, dims = c(2,3), reduction = "pca")
+DimPlot(object = experiment.test.noc, group.by = "batchid", reduction = "pca")
+DimPlot(object = experiment.test.noc, group.by = "batchid", dims = c(2,3), reduction = "pca")
 ```
 
 PCA Elbow plot to determine how many principal components to use in downstream analyses.  Components after the "elbow" in the plot generally explain little additional variability in the data.
@@ -53,7 +53,7 @@ We use 10 components in downstream analyses. Using more components more closely 
 ```{r, fig.align="center", fig.caption="Uncorrected TSNE plot"}
 pcs.use <- 10
 experiment.test.noc <- RunTSNE(object = experiment.test.noc, dims = 1:pcs.use)
-DimPlot(object = experiment.test.noc)
+DimPlot(object = experiment.test.noc,  group.by = "batchid")
 ```
 
 ## Correct for sample to sample differences (seurat)
@@ -61,17 +61,17 @@ DimPlot(object = experiment.test.noc)
 Use vars.to.regress to correct for the sample to sample differences and percent mitochondria
 ```{r, fig.align="center", fig.caption="Corrected PCA Plot"}
 experiment.test.regress <- ScaleData(object = experiment.test, 
-                    vars.to.regress = c("orig.ident"), model.use = "linear")
+                    vars.to.regress = c("batchid"), model.use = "linear")
 
 experiment.test.regress <- RunPCA(object =experiment.test.regress)
 
-DimPlot(object = experiment.test.regress, reduction.use = "pca")
+DimPlot(object = experiment.test.regress, group.by = "batchid", reduction.use = "pca")
 ```
 
 ### Corrected TSNE Plot
 ```{r, fig.align="center", fig.caption="Corrected TSNE Plot"}
 experiment.test.regress <- RunTSNE(object = experiment.test.regress, dims.use = 1:pcs.use)
-DimPlot(object = experiment.test.regress, reduction = "tsne")
+DimPlot(object = experiment.test.regress, group.by = "batchid", reduction = "tsne")
 ```
 
 ## COMBAT corrected, https://academic.oup.com/biostatistics/article-lookup/doi/10.1093/biostatistics/kxj037
@@ -94,13 +94,13 @@ experiment.test.combat = ScaleData(experiment.test.combat)
 ```{r, fig.cap = "PCA Plot, Combat adjusted"}
 experiment.test.combat <- RunPCA(object = experiment.test.combat)
 
-DimPlot(object = experiment.test.combat, reduction = "pca")
+DimPlot(object = experiment.test.combat, group.by = "batchid", reduction = "pca")
 ```
 
 TSNE plot on ComBat adjusted data
 ```{r, fig.cap = "TSNE plot, ComBat adjusted "}
 experiment.test.combat <- RunTSNE(object = experiment.test.combat, dims.use = 1:pcs.use)
-DimPlot(object = experiment.test.combat, reduction = "tsne")
+DimPlot(object = experiment.test.combat, group.by = "batchid", reduction = "tsne")
 ```
 
 #### Question(s)
