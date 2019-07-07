@@ -139,7 +139,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
 <tbody>
   <tr>
    <td style="text-align:center;"> G1 </td>
-   <td style="text-align:center;"> 2766 </td>
+   <td style="text-align:center;"> 2764 </td>
   </tr>
   <tr>
    <td style="text-align:center;"> G2M </td>
@@ -147,7 +147,7 @@ table(experiment.aggregate@meta.data$cell.cycle) %>% kable(caption = "Number of 
   </tr>
   <tr>
    <td style="text-align:center;"> S </td>
-   <td style="text-align:center;"> 33 </td>
+   <td style="text-align:center;"> 35 </td>
   </tr>
 </tbody>
 </table>

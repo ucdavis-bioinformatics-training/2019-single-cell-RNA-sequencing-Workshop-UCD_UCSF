@@ -33,6 +33,10 @@ experiment.merged
 ##  2 dimensional reductions calculated: pca, tsne
 ```
 
+```r
+Idents(experiment.merged) <- "RNA_snn_res.0.5"
+```
+
 
 #0. Setup
 Load the final Seurat object, load libraries (also see additional required packages for each example)
@@ -59,12 +63,12 @@ head(coef(fit)) # means in each sample for each gene
 
 ```
 ##        orig.identUCD_Adj_VitE orig.identUCD_Supp_VitE orig.identUCD_VitE_Def
-## Xkr4               0.00000000             0.000000000            0.007382649
-## Sox17              0.00000000             0.009641144            0.000000000
-## Mrpl15             0.10208017             0.050135903            0.100379172
-## Lypla1             0.17261455             0.169445627            0.267464330
-## Tcea1              0.22150229             0.221724283            0.259727729
-## Rgs20              0.05818767             0.104439319            0.076122862
+## Xkr4               0.00000000              0.00000000             0.01205985
+## Sox17              0.00000000              0.01640103             0.00000000
+## Mrpl15             0.08176912              0.03491121             0.09928512
+## Lypla1             0.19102070              0.14113531             0.27421545
+## Tcea1              0.20114933              0.20678820             0.19408342
+## Rgs20              0.08977786              0.16413658             0.12434977
 ```
 
 ```r
@@ -75,27 +79,27 @@ topTable(tmp, sort.by = "P", n = 20) # top 20 DE genes
 ```
 
 ```
-##              logFC   AveExpr         t      P.Value    adj.P.Val         B
-## Rpl21   -0.6295940 2.1675115 -6.904699 1.002068e-11 1.247575e-07 16.121644
-## Rpl39   -0.5023332 2.2658847 -6.104300 1.585680e-09 9.870858e-06 11.332145
-## Rpl23a  -0.5372573 2.2156351 -6.007236 2.824811e-09 1.172296e-05 10.787656
-## Rpl32   -0.5141010 2.5498295 -5.886385 5.732455e-09 1.784227e-05 10.120883
-## Tmsb4x  -0.3501370 3.3599509 -5.583192 3.202287e-08 7.973695e-05  8.502946
-## Rpl17   -0.5083811 2.0479434 -5.496973 5.147817e-08 1.003387e-04  8.057289
-## S100a10 -0.5279809 1.2947974 -5.458863 6.336631e-08 1.003387e-04  7.862350
-## Tmsb10  -0.4109434 3.3271754 -5.455672 6.447466e-08 1.003387e-04  7.846085
-## Rps11   -0.4656787 2.3489460 -5.374550 9.989407e-08 1.381868e-04  7.435558
-## Rps8    -0.4697608 2.5561078 -5.291931 1.551110e-07 1.931132e-04  7.023336
-## Pcp4    -0.6478194 1.3919370 -5.248194 1.953265e-07 2.210740e-04  6.807524
-## Hspa8   -0.4841140 2.1531037 -5.188601 2.666897e-07 2.766905e-04  6.516167
-## Fau     -0.3794717 2.7995759 -5.069733 4.917454e-07 4.568013e-04  5.944305
-## Rpl24   -0.4485520 2.1356508 -5.048071 5.490179e-07 4.568013e-04  5.841430
-## Rps24   -0.4678599 1.5957525 -5.047589 5.503630e-07 4.568013e-04  5.839145
-## Pfn1    -0.4760304 1.3429171 -5.016960 6.426726e-07 5.000796e-04  5.694403
-## Rpl10   -0.4202890 2.3551818 -5.000454 6.984432e-07 5.115069e-04  5.616744
-## Sncg    -0.4135446 3.2485368 -4.922839 1.029626e-06 6.804763e-04  5.254801
-## Ahsa2   -0.2772534 0.3017702 -4.921115 1.038478e-06 6.804763e-04  5.246822
-## Fxyd7   -0.4819690 1.0056997 -4.864036 1.376701e-06 8.569965e-04  4.984135
+##             logFC    AveExpr         t      P.Value    adj.P.Val        B
+## Rpl21  -0.7724848 2.14209018 -5.890378 7.159580e-09 0.0000851632 9.738313
+## Rpl23a -0.6865649 2.16173396 -5.447342 8.100825e-08 0.0004817966 7.531265
+## Pcp4   -0.8229684 1.93476081 -5.256214 2.197765e-07 0.0006546034 6.625881
+## Rpl17  -0.6834796 2.01758975 -5.255904 2.201273e-07 0.0006546034 6.624435
+## Tmsb10 -0.5450433 3.35838422 -5.050790 6.215190e-07 0.0014785938 5.684808
+## Rpl24  -0.5851214 2.09652619 -4.725294 3.005267e-06 0.0053603951 4.262728
+## H3f3b  -0.6036830 2.25676617 -4.714988 3.154499e-06 0.0053603951 4.219097
+## Rpl39  -0.5342677 2.23529589 -4.415747 1.239149e-05 0.0184246007 2.990268
+## Rps8   -0.5492130 2.51810086 -4.333518 1.780959e-05 0.0189443296 2.665539
+## Ndufa3 -0.4830157 0.75072369 -4.325111 1.847651e-05 0.0189443296 2.632655
+## Rpl32  -0.5540049 2.44843495 -4.323717 1.858932e-05 0.0189443296 2.627210
+## Zfp467 -0.2498323 0.16203051 -4.317371 1.911156e-05 0.0189443296 2.602431
+## Tshz2  -0.5507727 2.31127549 -4.247578 2.586002e-05 0.0236619148 2.332172
+## Rps15  -0.5515529 1.97711264 -4.207744 3.067469e-05 0.0250844004 2.179746
+## Tmsb4x -0.3744138 3.22966552 -4.200539 3.163228e-05 0.0250844004 2.152316
+## Alkal2 -0.1394787 0.05421123 -4.180105 3.450525e-05 0.0256524996 2.074765
+## Rpl10  -0.4858114 2.22403787 -4.042487 6.139313e-05 0.0429571322 1.561626
+## Rps24  -0.5126108 1.51587449 -4.002111 7.247695e-05 0.0465589355 1.414108
+## Rpl9   -0.4899921 2.44944433 -3.982811 7.842255e-05 0.0465589355 1.344080
+## Dbpht2 -0.4185910 0.61581149 -3.975239 8.087904e-05 0.0465589355 1.316694
 ```
 * logFC: log2 fold change (UCD_Supp_VitE/UCD_Adj_VitE)
 * AveExpr: Average expression, in log2 counts per million, across all cells included in analysis (i.e. those in cluster 0)
@@ -293,7 +297,7 @@ names(geneList) <- all.genes
 ## 
 ## 			 -- Elim Algorithm -- 
 ## 
-## 		 the algorithm is scoring 3209 nontrivial nodes
+## 		 the algorithm is scoring 2878 nontrivial nodes
 ## 		 parameters: 
 ## 			 test statistic: fisher
 ## 			 cutOff: 0.01
@@ -311,7 +315,7 @@ names(geneList) <- all.genes
 
 ```
 ## 
-## 	 Level 17:	2 nodes to be scored	(0 eliminated genes)
+## 	 Level 17:	1 nodes to be scored	(0 eliminated genes)
 ```
 
 ```
@@ -321,77 +325,77 @@ names(geneList) <- all.genes
 
 ```
 ## 
-## 	 Level 15:	17 nodes to be scored	(0 eliminated genes)
+## 	 Level 15:	15 nodes to be scored	(0 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 14:	35 nodes to be scored	(31 eliminated genes)
+## 	 Level 14:	32 nodes to be scored	(13 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 13:	83 nodes to be scored	(38 eliminated genes)
+## 	 Level 13:	73 nodes to be scored	(20 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 12:	127 nodes to be scored	(438 eliminated genes)
+## 	 Level 12:	110 nodes to be scored	(416 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 11:	205 nodes to be scored	(521 eliminated genes)
+## 	 Level 11:	180 nodes to be scored	(750 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 10:	296 nodes to be scored	(750 eliminated genes)
+## 	 Level 10:	256 nodes to be scored	(778 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 9:	365 nodes to be scored	(1173 eliminated genes)
+## 	 Level 9:	325 nodes to be scored	(1419 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 8:	419 nodes to be scored	(1515 eliminated genes)
+## 	 Level 8:	379 nodes to be scored	(1555 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 7:	510 nodes to be scored	(1848 eliminated genes)
+## 	 Level 7:	453 nodes to be scored	(2045 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 6:	493 nodes to be scored	(2308 eliminated genes)
+## 	 Level 6:	441 nodes to be scored	(2267 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 5:	344 nodes to be scored	(2815 eliminated genes)
+## 	 Level 5:	323 nodes to be scored	(2327 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 4:	196 nodes to be scored	(2818 eliminated genes)
+## 	 Level 4:	180 nodes to be scored	(2328 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 3:	89 nodes to be scored	(3074 eliminated genes)
+## 	 Level 3:	83 nodes to be scored	(2974 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 2:	19 nodes to be scored	(3589 eliminated genes)
+## 	 Level 2:	18 nodes to be scored	(3547 eliminated genes)
 ```
 
 ```
 ## 
-## 	 Level 1:	1 nodes to be scored	(3589 eliminated genes)
+## 	 Level 1:	1 nodes to be scored	(3547 eliminated genes)
 ```
 
 ```r
@@ -400,26 +404,26 @@ names(geneList) <- all.genes
 
 ```
 ##         GO.ID                                                            Term Annotated Significant Expected  Fisher
-## 1  GO:0006412                                                     translation       517          53     7.10 2.9e-22
-## 2  GO:0002181                                         cytoplasmic translation        77          19     1.06 3.6e-19
-## 3  GO:0000028                                ribosomal small subunit assembly        18           8     0.25 4.1e-11
-## 4  GO:0000027                                ribosomal large subunit assembly        29           7     0.40 9.8e-08
-## 5  GO:1902255 positive regulation of intrinsic apoptotic signaling pathway...         6           3     0.08 4.9e-05
-## 6  GO:0047497                       mitochondrion transport along microtubule        19           4     0.26 0.00011
-## 7  GO:0097214          positive regulation of lysosomal membrane permeability         2           2     0.03 0.00019
-## 8  GO:0006880                          intracellular sequestering of iron ion         3           2     0.04 0.00056
-## 9  GO:2000582 positive regulation of ATP-dependent microtubule motor activ...         3           2     0.04 0.00056
-## 10 GO:0000462 maturation of SSU-rRNA from tricistronic rRNA transcript (SS...        30           4     0.41 0.00071
-## 11 GO:1990090               cellular response to nerve growth factor stimulus        32           4     0.44 0.00091
-## 12 GO:0007409                                                    axonogenesis       353          15     4.85 0.00093
-## 13 GO:0016198                                   axon choice point recognition         4           2     0.05 0.00110
-## 14 GO:0050848                        regulation of calcium-mediated signaling        60           5     0.82 0.00136
-## 15 GO:0061844 antimicrobial humoral immune response mediated by antimicrob...        17           3     0.23 0.00150
-## 16 GO:0050774                   negative regulation of dendrite morphogenesis        18           3     0.25 0.00178
-## 17 GO:0050808                                            synapse organization       371          13     5.09 0.00180
-## 18 GO:0002227                                innate immune response in mucosa         5           2     0.07 0.00182
-## 19 GO:0071635 negative regulation of transforming growth factor beta produ...         5           2     0.07 0.00182
-## 20 GO:0048588                                       developmental cell growth       213           9     2.92 0.00268
+## 1  GO:0006412                                                     translation       517          48     5.73 9.1e-19
+## 2  GO:0002181                                         cytoplasmic translation        77          17     0.85 5.5e-18
+## 3  GO:0000028                                ribosomal small subunit assembly        18           7     0.20 5.0e-10
+## 4  GO:0000027                                ribosomal large subunit assembly        29           7     0.32 2.2e-08
+## 5  GO:0097214          positive regulation of lysosomal membrane permeability         2           2     0.02 0.00012
+## 6  GO:0000462 maturation of SSU-rRNA from tricistronic rRNA transcript (SS...        30           4     0.33 0.00032
+## 7  GO:0006880                          intracellular sequestering of iron ion         3           2     0.03 0.00036
+## 8  GO:0016198                                   axon choice point recognition         4           2     0.04 0.00072
+## 9  GO:0061844 antimicrobial humoral immune response mediated by antimicrob...        17           3     0.19 0.00081
+## 10 GO:0006605                                               protein targeting       230           9     2.55 0.00104
+## 11 GO:0071635 negative regulation of transforming growth factor beta produ...         5           2     0.06 0.00119
+## 12 GO:0002227                                innate immune response in mucosa         5           2     0.06 0.00119
+## 13 GO:0007409                                                    axonogenesis       353          13     3.91 0.00151
+## 14 GO:0002679                  respiratory burst involved in defense response         6           2     0.07 0.00178
+## 15 GO:1902255 positive regulation of intrinsic apoptotic signaling pathway...         6           2     0.07 0.00178
+## 16 GO:1905323                          telomerase holoenzyme complex assembly         6           2     0.07 0.00178
+## 17 GO:1904667        negative regulation of ubiquitin protein ligase activity         7           2     0.08 0.00247
+## 18 GO:0071637         regulation of monocyte chemotactic protein-1 production         7           2     0.08 0.00247
+## 19 GO:0048588                                       developmental cell growth       213           8     2.36 0.00254
+## 20 GO:0050808                                            synapse organization       371          11     4.11 0.00276
 ```
 * Annotated: number of genes (out of all.genes) that are annotated with that GO term
 * Significant: number of genes that are annotated with that GO term and meet our criteria for "expressed"

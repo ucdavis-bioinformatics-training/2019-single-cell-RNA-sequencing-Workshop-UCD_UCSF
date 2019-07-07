@@ -106,12 +106,48 @@ PlotClusterTree(experiment.aggregate)
 DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
+Merge Clustering results
 ```{r}
+experiment.merged = experiment.aggregate
+# originally set clusters to resolutionm 0.5
+Idents(experiment.merged) <- "RNA_snn_res.0.5"
+
+table(Idents(experiment.merged))
+
+# based on TSNE and Heirarchical tree
+# merge clusters 6 and 7 into 0 and cluster 9 into 13
 experiment.merged <- RenameIdents(
-  object = experiment.aggregate,
-  '2' = '0'
+  object = experiment.merged,
+  '6' = '0', '7' = '0', '9' = '13'
 )
+
+table(Idents(experiment.merged))
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
+
+experiment.examples <- experiment.merged
+# in order to reporder the clusters for plotting purposes
+# take a look at the levels, which indicates the ordering
+levels(experiment.examples@active.ident)
+# relevel setting 5 to the first factor
+experiment.examples@active.ident <- relevel(experiment.examples@active.ident, "5")
+levels(experiment.examples@active.ident)
+# now cluster 5 is the "first" factor
+
+# relevel all the factors to the order I want
+Idents(experiment.examples) <- factor(experiment.examples@active.ident, levels=c("5","13","1","2","3","0","4","8","11","12","10","14"))
+levels(experiment.examples@active.ident)
+
+DimPlot(object = experiment.examples, pt.size=0.5, label = T, reduction = "tsne")
+
+### Re-assign clustering result to resolution 4 for cells in cluster 0 (@ reslution 0.5) [adding a R prefix]
+newIdent = as.character(Idents(experiment.examples))
+newIdent[newIdent == '0'] = paste0("R",as.character(experiment.examples$RNA_snn_res.4[newIdent == '0']))
+
+Idents(experiment.examples) <- as.factor(newIdent)
+
+table(Idents(experiment.examples))
+
+DimPlot(object = experiment.examples, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
 Plot TSNE coloring by the slot 'orig.ident' (sample names) with alpha colors turned on.
@@ -123,6 +159,17 @@ p <- DimPlot(object = experiment.aggregate, group.by="orig.ident", pt.size=0.5, 
 alpha.use <- 2/5
 p$layers[[1]]$mapping$alpha <- alpha.use
 p + scale_alpha_continuous(range = alpha.use, guide = F)
+```
+
+Removing cells assigned to clusters from a plot, So here plot all clusters but clusters "3" and "5"
+```{r}
+# create a new tmp object with those removed 
+experiment.aggregate.tmp <- experiment.aggregate[,-which(Idents(experiment.aggregate) %in% c("3","5"))]
+
+dim(experiment.aggregate)
+dim(experiment.aggregate.tmp)
+
+DimPlot(object = experiment.aggregate.tmp, group.by="orig.ident", pt.size=0.5, do.label = TRUE, reduction = "tsne", label = T)
 ```
 
 ## Identifying Marker Genes
@@ -231,11 +278,14 @@ head(markers_all2)
 
 At this point in time you should use the tree, markers, domain knowledge, and goals to finalize your clusters. This may mean adjusting PCA to use, mergers clusters together, choosing a new resolutions, etc. When finished you can further name it cluster by something more informative. Ex.
 ```{r}
-experiment.clusters <- experiment.merged
+experiment.clusters <- experiment.aggregate
 experiment.clusters <- RenameIdents(
   object = experiment.clusters,
-  '0' = 'cell_type_A'
+  '0' = 'cell_type_A',
+  '1' = 'cell_type_B',
+  '2' = 'cell_type_C'
 )
+# and so on
 
 DimPlot(object = experiment.clusters, pt.size=0.5, label = T, reduction = "tsne")
 
@@ -243,6 +293,7 @@ experiment.merged$finalcluster <- Idents(experiment.merged)
 ```
 
 ## Subsetting samples
+If you want to look at the representation of just one sample, or sets of samples
 ```{r}
 experiment.sample2 <- subset(experiment.merged, orig.ident == "UCD_Supp_VitE")
 
@@ -250,6 +301,11 @@ DimPlot(object = experiment.sample2, group.by = "RNA_snn_res.0.5", pt.size=0.5, 
 
 FeaturePlot(experiment.sample2, features =c('Calca'), pt.size=0.5)
 FeaturePlot(experiment.sample2, features =c('Adcyap1'), pt.size=0.5)
+
+experiment.batch1 <- subset(experiment.merged, batchid == "Batch1")
+
+DimPlot(object = experiment.batch1, group.by = "RNA_snn_res.0.5", pt.size=0.5, label = TRUE, reduction = "tsne")
+
 ```
 
 ### Adding in a new metadata column representing samples within clusters
@@ -263,10 +319,8 @@ Idents(experiment.merged) <- "samplecluster"
 markers.comp <- FindMarkers(experiment.merged, ident.1 = "UCD_Adj_VitE-0", ident.2= c("UCD_Supp_VitE-0","UCD_VitE_Def-0"))
 
 markers.comp
-DoHeatmap(experiment.merged,
-          cells = rownames(experiment.merged@meta.data)[experiment.merged@meta.data$samplecluster %in% c( "UCD_Adj_VitE-0", "UCD_Supp_VitE-0" )],
-          features = rownames(markers.comp),
-          )
+experiment.subset <- subset(experiment.merged, samplecluster %in%  c( "UCD_Adj_VitE-0", "UCD_Supp_VitE-0" ))
+DoHeatmap(experiment.subset, features = rownames(markers.comp))
 
 Idents(experiment.merged) <- "finalcluster"
 ```

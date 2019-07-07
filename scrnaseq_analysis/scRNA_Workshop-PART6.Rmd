@@ -22,6 +22,7 @@ library(ggplot2)
 ```{r}
 load("clusters_seurat_object.RData")
 experiment.merged
+Idents(experiment.merged) <- "RNA_snn_res.0.5"
 ```
 
 

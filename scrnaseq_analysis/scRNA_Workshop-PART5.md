@@ -78,11 +78,11 @@ sapply(grep("res",colnames(experiment.aggregate@meta.data),value = TRUE),
 ## RNA_snn_res.0.25  RNA_snn_res.0.5 RNA_snn_res.0.75    RNA_snn_res.1 
 ##               10               14               15               16 
 ## RNA_snn_res.1.25  RNA_snn_res.1.5 RNA_snn_res.1.75    RNA_snn_res.2 
-##               17               21               24               24 
+##               18               21               24               24 
 ## RNA_snn_res.2.25  RNA_snn_res.2.5 RNA_snn_res.2.75    RNA_snn_res.3 
-##               25               26               27               28 
+##               25               26               26               27 
 ## RNA_snn_res.3.25  RNA_snn_res.3.5 RNA_snn_res.3.75    RNA_snn_res.4 
-##               28               28               28               29
+##               28               27               28               29
 ```
 
 ```r
@@ -98,18 +98,18 @@ table(Idents(experiment.aggregate),experiment.aggregate$orig.ident)
 ```
 ##     
 ##      UCD_Adj_VitE UCD_Supp_VitE UCD_VitE_Def
-##   0           155           173          158
-##   1            78           116          156
-##   2           115           123          105
-##   3            93            81           92
-##   4            57           101           67
-##   5            55            77           86
+##   0           157           174          161
+##   1           118           141          106
+##   2            77           115          155
+##   3            94            82           94
+##   4            55            77           86
+##   5            51            79           62
 ##   6            60            66           65
-##   7            48            49           45
+##   7            50            52           45
 ##   8            23            45           39
-##   9            35            33           37
-##   10           20            30           21
-##   11           31            19           17
+##   9            34            33           37
+##   10           20            30           20
+##   11           31            19           18
 ##   12           18            20           19
 ##   13           20            14           19
 ```
@@ -193,16 +193,107 @@ DimPlot(object = experiment.aggregate, pt.size=0.5, label = TRUE, reduction = "t
 
 ![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
+Merge Clustering results
 
 ```r
+experiment.merged = experiment.aggregate
+# originally set clusters to resolutionm 0.5
+Idents(experiment.merged) <- "RNA_snn_res.0.5"
+
+table(Idents(experiment.merged))
+```
+
+```
+## 
+##   0   1   2   3   4   5   6   7   8   9  10  11  12  13 
+## 492 365 347 270 218 192 191 147 107 104  70  68  57  53
+```
+
+```r
+# based on TSNE and Heirarchical tree
+# merge clusters 6 and 7 into 0 and cluster 9 into 13
 experiment.merged <- RenameIdents(
-  object = experiment.aggregate,
-  '2' = '0'
+  object = experiment.merged,
+  '6' = '0', '7' = '0', '9' = '13'
 )
+
+table(Idents(experiment.merged))
+```
+
+```
+## 
+##   0  13   1   2   3   4   5   8  10  11  12 
+## 830 157 365 347 270 218 192 107  70  68  57
+```
+
+```r
 DimPlot(object = experiment.merged, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
 ![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+```r
+experiment.examples <- experiment.merged
+# in order to reporder the clusters for plotting purposes
+# take a look at the levels, which indicates the ordering
+levels(experiment.examples@active.ident)
+```
+
+```
+##  [1] "0"  "13" "1"  "2"  "3"  "4"  "5"  "8"  "10" "11" "12"
+```
+
+```r
+# relevel setting 5 to the first factor
+experiment.examples@active.ident <- relevel(experiment.examples@active.ident, "5")
+levels(experiment.examples@active.ident)
+```
+
+```
+##  [1] "5"  "0"  "13" "1"  "2"  "3"  "4"  "8"  "10" "11" "12"
+```
+
+```r
+# now cluster 5 is the "first" factor
+
+# relevel all the factors to the order I want
+Idents(experiment.examples) <- factor(experiment.examples@active.ident, levels=c("5","13","1","2","3","0","4","8","11","12","10","14"))
+levels(experiment.examples@active.ident)
+```
+
+```
+##  [1] "5"  "13" "1"  "2"  "3"  "0"  "4"  "8"  "11" "12" "10"
+```
+
+```r
+DimPlot(object = experiment.examples, pt.size=0.5, label = T, reduction = "tsne")
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-15-2.png)<!-- -->
+
+```r
+### Re-assign clustering result to resolution 4 for cells in cluster 0 (@ reslution 0.5) [adding a R prefix]
+newIdent = as.character(Idents(experiment.examples))
+newIdent[newIdent == '0'] = paste0("R",as.character(experiment.examples$RNA_snn_res.4[newIdent == '0']))
+
+Idents(experiment.examples) <- as.factor(newIdent)
+
+table(Idents(experiment.examples))
+```
+
+```
+## 
+##   1  10  11  12  13   2   3   4   5   8  R1 R10 R12 R13 R15 R16 R21 R26 
+## 365  70  68  57 157 347 270 218 192 107 180   1  87  83  73   3  58   1 
+## R27 R28  R5  R7  R8  R9 
+##  35   1 151 118  37   2
+```
+
+```r
+DimPlot(object = experiment.examples, pt.size=0.5, label = T, reduction = "tsne")
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-15-3.png)<!-- -->
 
 Plot TSNE coloring by the slot 'orig.ident' (sample names) with alpha colors turned on.
 
@@ -221,6 +312,33 @@ p + scale_alpha_continuous(range = alpha.use, guide = F)
 ```
 
 ![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-16-2.png)<!-- -->
+
+Removing cells assigned to clusters from a plot, So here plot all clusters but clusters "3" and "5"
+
+```r
+# create a new tmp object with those removed 
+experiment.aggregate.tmp <- experiment.aggregate[,-which(Idents(experiment.aggregate) %in% c("3","5"))]
+
+dim(experiment.aggregate)
+```
+
+```
+## [1] 12811  2681
+```
+
+```r
+dim(experiment.aggregate.tmp)
+```
+
+```
+## [1] 12811  2219
+```
+
+```r
+DimPlot(object = experiment.aggregate.tmp, group.by="orig.ident", pt.size=0.5, do.label = TRUE, reduction = "tsne", label = T)
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 ## Identifying Marker Genes
 
@@ -243,12 +361,12 @@ head(markers)
 
 ```
 ##                  p_val avg_logFC pct.1 pct.2     p_val_adj
-## Baiap2l1 2.366963e-241 1.2648290 0.718 0.014 3.032316e-237
-## Cadps2   2.382879e-201 2.3820185 0.972 0.051 3.052706e-197
-## Tbx3os2  8.086208e-180 0.6629623 0.437 0.005 1.035924e-175
-## Cbln2    4.633891e-150 1.1834309 0.775 0.038 5.936478e-146
-## Ntng1    2.787527e-148 1.0695523 0.676 0.028 3.571101e-144
-## Ntrk2    3.276192e-146 2.0375267 0.958 0.074 4.197130e-142
+## Baiap2l1 7.352739e-235 1.1954540 0.714 0.014 9.419593e-231
+## Cadps2   4.448365e-198 2.3426788 0.971 0.051 5.698801e-194
+## Tbx3os2  1.753416e-182 0.6699683 0.443 0.005 2.246301e-178
+## Cbln2    1.849806e-152 1.1941476 0.786 0.038 2.369787e-148
+## Ntng1    1.302871e-150 1.0795688 0.686 0.028 1.669108e-146
+## Ntrk2    1.157467e-148 2.0506117 0.971 0.074 1.482831e-144
 ```
 
 ```r
@@ -256,7 +374,7 @@ dim(markers)
 ```
 
 ```
-## [1] 1499    5
+## [1] 1474    5
 ```
 
 ```r
@@ -266,7 +384,7 @@ table(markers$avg_logFC > 0)
 ```
 ## 
 ## FALSE  TRUE 
-##   698   801
+##   688   786
 ```
 
  
@@ -280,7 +398,7 @@ Can use a violin plot to visualize the expression pattern of some markers
 VlnPlot(object = experiment.merged, features = rownames(markers)[1:2], pt.size = 0.05)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
 Or a feature plot
 
@@ -293,7 +411,7 @@ FeaturePlot(
 )
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 ```r
 FeaturePlot(    
@@ -303,7 +421,7 @@ FeaturePlot(
 )
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-19-2.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-20-2.png)<!-- -->
 
 FindAllMarkers can be used to automate the process across all genes.
 __WARNING: TAKES A LONG TIME TO RUN__
@@ -323,7 +441,15 @@ markers_all <- FindAllMarkers(
 ```
 
 ```
+## Calculating cluster 13
+```
+
+```
 ## Calculating cluster 1
+```
+
+```
+## Calculating cluster 2
 ```
 
 ```
@@ -339,19 +465,7 @@ markers_all <- FindAllMarkers(
 ```
 
 ```
-## Calculating cluster 6
-```
-
-```
-## Calculating cluster 7
-```
-
-```
 ## Calculating cluster 8
-```
-
-```
-## Calculating cluster 9
 ```
 
 ```
@@ -366,16 +480,12 @@ markers_all <- FindAllMarkers(
 ## Calculating cluster 12
 ```
 
-```
-## Calculating cluster 13
-```
-
 ```r
 dim(markers_all)
 ```
 
 ```
-## [1] 6027    7
+## [1] 4140    7
 ```
 
 ```r
@@ -384,12 +494,12 @@ head(markers_all)
 
 ```
 ##                 p_val avg_logFC pct.1 pct.2     p_val_adj cluster    gene
-## Tac1    5.714341e-268 1.8979687 0.905 0.383 7.320642e-264       0    Tac1
-## Adcyap1 2.016326e-252 1.7727603 0.672 0.071 2.583116e-248       0 Adcyap1
-## Celf4   5.793510e-243 1.5786648 0.894 0.376 7.422065e-239       0   Celf4
-## Calca   3.802333e-222 1.3510992 0.941 0.371 4.871169e-218       0   Calca
-## Gal     2.792374e-204 1.8042863 0.497 0.023 3.577310e-200       0     Gal
-## Fgf13   7.264395e-199 0.9410338 0.982 0.833 9.306417e-195       0   Fgf13
+## Pcp4    1.850077e-112 0.9957707 0.630 0.197 2.370134e-108       0    Pcp4
+## Tac1     3.148614e-60 0.6683619 0.737 0.458  4.033689e-56       0    Tac1
+## Marcks   3.243647e-59 0.7666353 0.681 0.397  4.155436e-55       0  Marcks
+## Adcyap1  3.955847e-53 0.9475240 0.433 0.178  5.067836e-49       0 Adcyap1
+## Nrsn1    2.536293e-50 0.8374397 0.716 0.486  3.249245e-46       0   Nrsn1
+## Gal      1.310030e-48 0.8974830 0.324 0.100  1.678279e-44       0     Gal
 ```
 
 ```r
@@ -398,8 +508,8 @@ table(table(markers_all$gene))
 
 ```
 ## 
-##    1    2    3    4    5    6    7 
-## 1596  932  538  162   50    8    1
+##    1    2    3    4    5    6 
+## 1511  689  274   87   15    1
 ```
 
 ```r
@@ -409,7 +519,7 @@ dim(markers_all_single)
 ```
 
 ```
-## [1] 1596    7
+## [1] 1511    7
 ```
 
 ```r
@@ -419,7 +529,7 @@ table(table(markers_all_single$gene))
 ```
 ## 
 ##    1 
-## 1596
+## 1511
 ```
 
 ```r
@@ -428,8 +538,8 @@ table(markers_all_single$cluster)
 
 ```
 ## 
-##   0   1   3   4   5   6   7   8   9  10  11  12  13 
-##  91 103  81 133 126 244 365  44  59 163  14  89  84
+##   0  13   1   2   3   4   5   8  10  11  12 
+##  19 112  98 232 148 150 224  55 338  20 115
 ```
 
 ```r
@@ -437,20 +547,13 @@ head(markers_all_single)
 ```
 
 ```
-##                  p_val avg_logFC pct.1 pct.2     p_val_adj cluster
-## Adcyap1  2.016326e-252  1.772760 0.672 0.071 2.583116e-248       0
-## Gal      2.792374e-204  1.804286 0.497 0.023 3.577310e-200       0
-## Syt4     1.693291e-197  1.198862 0.954 0.769 2.169275e-193       0
-## Gpx3     7.901586e-161  1.464333 0.495 0.063 1.012272e-156       0
-## Nrsn1    7.388698e-141  1.225448 0.806 0.445 9.465661e-137       0
-## Cacna2d1 2.530465e-104  1.049548 0.749 0.491 3.241779e-100       0
-##              gene
-## Adcyap1   Adcyap1
-## Gal           Gal
-## Syt4         Syt4
-## Gpx3         Gpx3
-## Nrsn1       Nrsn1
-## Cacna2d1 Cacna2d1
+##                p_val avg_logFC pct.1 pct.2    p_val_adj cluster    gene
+## Nrsn1   2.536293e-50 0.8374397 0.716 0.486 3.249245e-46       0   Nrsn1
+## Gm13889 1.365278e-37 0.6624093 0.658 0.491 1.749057e-33       0 Gm13889
+## Ctnnd2  4.716368e-20 0.5710907 0.339 0.201 6.042138e-16       0  Ctnnd2
+## Cpeb2   3.676886e-11 0.4783811 0.500 0.444 4.710458e-07       0   Cpeb2
+## Nrip1   4.853869e-10 0.6027342 0.290 0.217 6.218291e-06       0   Nrip1
+## Gprasp1 7.501332e-10 0.4571512 0.408 0.328 9.609956e-06       0 Gprasp1
 ```
 
 Plot a heatmap of genes by cluster for the top 5 marker genes per cluster
@@ -482,7 +585,7 @@ dim(top5)
 ```
 
 ```
-## [1] 65  7
+## [1] 55  7
 ```
 
 ```r
@@ -495,10 +598,11 @@ DoHeatmap(
 ```
 ## Warning in DoHeatmap(object = experiment.merged, features = top5$gene): The
 ## following features were omitted as they were not found in the scale.data
-## slot for the RNA assay: Tusc2, Dusp15, Brap, Chd5, Nrsn1
+## slot for the RNA assay: Mest, Nwd2, Pik3r1, Nrip1, Cpeb2, Ctnnd2, Gm13889,
+## Nrsn1
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 
 ```r
@@ -523,19 +627,19 @@ head(markers_all2)
 
 ```
 ##                 p_val avg_logFC pct.1 pct.2     p_val_adj cluster    gene
-## Tac1    5.714341e-268 1.8979687 0.905 0.383 7.320642e-264       0    Tac1
-## Adcyap1 2.016326e-252 1.7727603 0.672 0.071 2.583116e-248       0 Adcyap1
-## Celf4   5.793510e-243 1.5786648 0.894 0.376 7.422065e-239       0   Celf4
-## Calca   3.802333e-222 1.3510992 0.941 0.371 4.871169e-218       0   Calca
-## Gal     2.792374e-204 1.8042863 0.497 0.023 3.577310e-200       0     Gal
-## Fgf13   7.264395e-199 0.9410338 0.982 0.833 9.306417e-195       0   Fgf13
+## Pcp4    1.850077e-112 0.9957707 0.630 0.197 2.370134e-108       0    Pcp4
+## Tac1     3.148614e-60 0.6683619 0.737 0.458  4.033689e-56       0    Tac1
+## Marcks   3.243647e-59 0.7666353 0.681 0.397  4.155436e-55       0  Marcks
+## Adcyap1  3.955847e-53 0.9475240 0.433 0.178  5.067836e-49       0 Adcyap1
+## Nrsn1    2.536293e-50 0.8374397 0.716 0.486  3.249245e-46       0   Nrsn1
+## Gal      1.310030e-48 0.8974830 0.324 0.100  1.678279e-44       0     Gal
 ##         mean.in.cluster mean.out.of.cluster
-## Tac1           2.816402          0.69991158
-## Adcyap1        1.526563          0.11242747
-## Celf4          2.407467          0.62606306
-## Calca          3.233145          0.95348629
-## Gal            1.150708          0.03477168
-## Fgf13          3.419593          2.14811956
+## Pcp4          1.6811115           0.4801027
+## Tac1          2.0261848           1.0531066
+## Marcks        1.5559093           0.7591471
+## Adcyap1       1.0159140           0.3406419
+## Nrsn1         1.7072675           0.9505800
+## Gal           0.7620386           0.2084508
 ```
 
 ## Finishing up clusters.
@@ -543,22 +647,26 @@ head(markers_all2)
 At this point in time you should use the tree, markers, domain knowledge, and goals to finalize your clusters. This may mean adjusting PCA to use, mergers clusters together, choosing a new resolutions, etc. When finished you can further name it cluster by something more informative. Ex.
 
 ```r
-experiment.clusters <- experiment.merged
+experiment.clusters <- experiment.aggregate
 experiment.clusters <- RenameIdents(
   object = experiment.clusters,
-  '0' = 'cell_type_A'
+  '0' = 'cell_type_A',
+  '1' = 'cell_type_B',
+  '2' = 'cell_type_C'
 )
+# and so on
 
 DimPlot(object = experiment.clusters, pt.size=0.5, label = T, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ```r
 experiment.merged$finalcluster <- Idents(experiment.merged)
 ```
 
 ## Subsetting samples
+If you want to look at the representation of just one sample, or sets of samples
 
 ```r
 experiment.sample2 <- subset(experiment.merged, orig.ident == "UCD_Supp_VitE")
@@ -566,19 +674,27 @@ experiment.sample2 <- subset(experiment.merged, orig.ident == "UCD_Supp_VitE")
 DimPlot(object = experiment.sample2, group.by = "RNA_snn_res.0.5", pt.size=0.5, label = TRUE, reduction = "tsne")
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Calca'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-2.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-2.png)<!-- -->
 
 ```r
 FeaturePlot(experiment.sample2, features =c('Adcyap1'), pt.size=0.5)
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-24-3.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-3.png)<!-- -->
+
+```r
+experiment.batch1 <- subset(experiment.merged, batchid == "Batch1")
+
+DimPlot(object = experiment.batch1, group.by = "RNA_snn_res.0.5", pt.size=0.5, label = TRUE, reduction = "tsne")
+```
+
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-4.png)<!-- -->
 
 ### Adding in a new metadata column representing samples within clusters
 
@@ -595,74 +711,67 @@ markers.comp
 ```
 
 ```
-##                      p_val  avg_logFC pct.1 pct.2    p_val_adj
-## Car8          6.108801e-14  0.3874529 0.163 0.021 7.825984e-10
-## Tmsb10        2.584463e-13  0.2793655 0.985 0.934 3.310956e-09
-## Rpl39         9.980978e-10  0.2625274 0.963 0.823 1.278663e-05
-## Rpl23a        1.635937e-09  0.2771557 0.948 0.782 2.095798e-05
-## Rpl21         2.019520e-09  0.3275539 0.937 0.775 2.587206e-05
-## Atp5e         1.350918e-08  0.3454480 0.685 0.470 1.730660e-04
-## Pcp4          1.742560e-07  0.4670440 0.615 0.442 2.232394e-03
-## Fxyd7         2.521184e-07  0.3478833 0.574 0.376 3.229889e-03
-## S100a10       3.765650e-07  0.2693872 0.730 0.510 4.824175e-03
-## Ahsa2         1.149068e-06  0.2569993 0.274 0.129 1.472071e-02
-## Ndufa3        1.532781e-06  0.2508090 0.522 0.326 1.963646e-02
-## Wdr89         2.577710e-06  0.2522381 0.244 0.113 3.302304e-02
-## Rps26         3.809858e-06  0.2594906 0.848 0.673 4.880809e-02
-## 1810058I24Rik 5.495249e-06  0.2733952 0.522 0.338 7.039964e-02
-## Acbd5         1.467241e-05  0.2575561 0.389 0.243 1.879683e-01
-## Actb          3.905710e-05 -0.3837563 0.996 0.975 5.003605e-01
-## S100a11       4.898904e-05  0.2824516 0.489 0.333 6.275986e-01
-## Necab1        5.999469e-04 -0.4273210 0.196 0.292 1.000000e+00
-## Wdfy1         7.853582e-04 -0.3043508 0.074 0.156 1.000000e+00
-## Kansl1        1.056426e-03  0.2649178 0.167 0.089 1.000000e+00
-## Polr2f        1.208560e-03  0.2707323 0.237 0.148 1.000000e+00
-## Chchd10       1.619698e-03  0.3004953 0.174 0.098 1.000000e+00
-## Erp29         3.306382e-03  0.2684310 0.274 0.186 1.000000e+00
-## Arf3          4.256416e-03 -0.3421780 0.537 0.553 1.000000e+00
-## Ptgir         1.345200e-02 -0.2951010 0.070 0.123 1.000000e+00
-## Plp1          1.792279e-02 -0.4266177 0.119 0.175 1.000000e+00
-## Cadm3         4.880916e-02 -0.2508777 0.133 0.181 1.000000e+00
-## Etv5          4.909260e-02 -0.3095786 0.178 0.225 1.000000e+00
-## Cbx3          5.095870e-02 -0.2695332 0.352 0.388 1.000000e+00
-## Nudcd3        6.616364e-02 -0.2527923 0.115 0.159 1.000000e+00
-## Aplp2         6.826221e-02 -0.2766304 0.607 0.562 1.000000e+00
-## Vdac1         8.265813e-02 -0.2782682 0.419 0.424 1.000000e+00
-## Aff4          9.796625e-02 -0.2534300 0.200 0.242 1.000000e+00
-## Vim           1.008757e-01 -0.3129994 0.156 0.193 1.000000e+00
-## Gpsm3         1.011990e-01 -0.2799424 0.119 0.154 1.000000e+00
-## Gng5          1.426415e-01 -0.2781454 0.178 0.211 1.000000e+00
-## Amer2         1.471798e-01 -0.2571606 0.163 0.193 1.000000e+00
-## Alkbh5        1.920259e-01 -0.3234712 0.181 0.209 1.000000e+00
-## Clasp2        2.003888e-01 -0.2811156 0.193 0.216 1.000000e+00
-## Nacc2         2.181322e-01 -0.2625106 0.356 0.354 1.000000e+00
-## Evi5          2.409357e-01 -0.2514888 0.189 0.209 1.000000e+00
-## Bhlhe41       2.659677e-01 -0.2678791 0.426 0.428 1.000000e+00
-## Pam           5.178273e-01 -0.5162452 0.589 0.540 1.000000e+00
-## Etv1          6.145764e-01 -0.2639596 0.163 0.168 1.000000e+00
-## Spry2         6.310345e-01 -0.2995632 0.193 0.195 1.000000e+00
-## Abhd2         6.328808e-01 -0.3177709 0.422 0.397 1.000000e+00
-## Rgs4          8.109231e-01 -0.3109885 0.452 0.422 1.000000e+00
+##                 p_val  avg_logFC pct.1 pct.2    p_val_adj
+## Actb     1.183758e-10 -0.5181553 0.993 0.972 1.516513e-06
+## Ndufa3   1.726235e-07  0.2771138 0.633 0.419 2.211479e-03
+## Pcp4     3.185979e-07  0.3935550 0.745 0.575 4.081557e-03
+## Tmsb10   4.479867e-07  0.2762000 0.948 0.897 5.739157e-03
+## Rpl21    6.119361e-07  0.3487513 0.861 0.716 7.839513e-03
+## Atp5e    1.245447e-05  0.2579366 0.727 0.570 1.595543e-01
+## Erp29    5.928481e-05  0.2908362 0.360 0.224 7.594977e-01
+## Dbpht2   1.636614e-04  0.2793749 0.303 0.181 1.000000e+00
+## Arhgap15 2.074370e-04  0.2892275 0.180 0.089 1.000000e+00
+## Gpx3     2.216773e-04  0.2730416 0.382 0.245 1.000000e+00
+## Wdfy1    1.831103e-03 -0.2644521 0.056 0.126 1.000000e+00
+## Itga6    3.983884e-03  0.2519751 0.112 0.055 1.000000e+00
+## Cbx3     4.043714e-03 -0.4100692 0.345 0.407 1.000000e+00
+## Cartpt   1.248596e-02  0.2926574 0.172 0.108 1.000000e+00
+## Mt2      1.512022e-02  0.2709658 0.187 0.123 1.000000e+00
+## Aff3     2.886276e-02 -0.2680419 0.105 0.156 1.000000e+00
+## Abhd2    3.420656e-02 -0.4601006 0.341 0.387 1.000000e+00
+## Birc6    3.474076e-02 -0.3123984 0.139 0.190 1.000000e+00
+## Plp1     4.093181e-02 -0.2754103 0.127 0.181 1.000000e+00
+## Hdlbp    4.918260e-02 -0.3744042 0.146 0.188 1.000000e+00
+## Cadm3    8.110966e-02 -0.2948876 0.210 0.247 1.000000e+00
+## Clasp2   8.530859e-02 -0.3256511 0.195 0.234 1.000000e+00
+## Lasp1    9.134266e-02 -0.2663812 0.165 0.204 1.000000e+00
+## Usp22    9.683177e-02 -0.2661925 0.288 0.325 1.000000e+00
+## Akap9    9.685074e-02 -0.2512918 0.161 0.201 1.000000e+00
+## Necab1   1.067273e-01 -0.3338435 0.131 0.167 1.000000e+00
+## Zhx1     1.369138e-01 -0.2584958 0.101 0.131 1.000000e+00
+## Fam168b  1.679998e-01 -0.2650448 0.176 0.202 1.000000e+00
+## Bhlhe41  1.791974e-01 -0.2964435 0.348 0.377 1.000000e+00
+## Aqp1     1.877121e-01 -0.2666116 0.356 0.380 1.000000e+00
+## Jup      1.933382e-01 -0.2724179 0.315 0.332 1.000000e+00
+## Ddhd1    2.063209e-01 -0.2885703 0.109 0.133 1.000000e+00
+## Gpsm3    2.149255e-01 -0.2692685 0.097 0.121 1.000000e+00
+## Mt1      2.226626e-01  0.2690128 0.464 0.407 1.000000e+00
+## Armc8    2.539710e-01 -0.2711362 0.172 0.195 1.000000e+00
+## Rtcb     2.887037e-01 -0.2647632 0.154 0.171 1.000000e+00
+## Pam      3.206657e-01 -0.3743205 0.509 0.490 1.000000e+00
+## Ythdf2   3.773664e-01 -0.2782778 0.311 0.307 1.000000e+00
+## Wtap     4.772890e-01 -0.2980818 0.348 0.343 1.000000e+00
+## Spry2    5.154505e-01 -0.2640849 0.213 0.217 1.000000e+00
+## Acpp     5.297953e-01 -0.2583925 0.195 0.197 1.000000e+00
+## Nsg2     6.207279e-01 -0.2622005 0.213 0.211 1.000000e+00
+## Setd3    8.494933e-01 -0.2720362 0.285 0.263 1.000000e+00
 ```
 
 ```r
-DoHeatmap(experiment.merged,
-          cells = rownames(experiment.merged@meta.data)[experiment.merged@meta.data$samplecluster %in% c( "UCD_Adj_VitE-0", "UCD_Supp_VitE-0" )],
-          features = rownames(markers.comp),
-          )
+experiment.subset <- subset(experiment.merged, samplecluster %in%  c( "UCD_Adj_VitE-0", "UCD_Supp_VitE-0" ))
+DoHeatmap(experiment.subset, features = rownames(markers.comp))
 ```
 
 ```
-## Warning in DoHeatmap(experiment.merged,
-## cells = rownames(experiment.merged@meta.data)
-## [experiment.merged@meta.data$samplecluster %in% : The following features
-## were omitted as they were not found in the scale.data slot for the RNA
-## assay: Evi5, Clasp2, Amer2, Gng5, Vim, Aff4, Vdac1, Nudcd3, Arf3, Erp29,
-## Polr2f, Kansl1, Wdfy1, Necab1, Acbd5, 1810058I24Rik, Rps26, Wdr89, Ndufa3,
-## Ahsa2, Atp5e, Rpl21, Rpl23a, Rpl39, Tmsb10
+## Warning in DoHeatmap(experiment.subset, features = rownames(markers.comp)):
+## The following features were omitted as they were not found in the
+## scale.data slot for the RNA assay: Setd3, Nsg2, Wtap, Ythdf2, Rtcb, Armc8,
+## Ddhd1, Jup, Aqp1, Fam168b, Zhx1, Necab1, Akap9, Usp22, Lasp1, Clasp2,
+## Hdlbp, Birc6, Aff3, Itga6, Wdfy1, Arhgap15, Erp29, Atp5e, Rpl21, Tmsb10,
+## Ndufa3
 ```
 
-![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](scRNA_Workshop-PART5_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 ```r
 Idents(experiment.merged) <- "finalcluster"
